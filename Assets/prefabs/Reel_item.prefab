@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -5}
-  m_SizeDelta: {x: 0, y: -10}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1752170212078670474
 CanvasRenderer:
@@ -163,47 +163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca72de36ec34567951f177051c4e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureArray:
-  - {fileID: 1216869050, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1927900960, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1008873539, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1933429542, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1989245471, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -261144029, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1020106256, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 423574989, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -2046630895, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 367578956, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 2116438196, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1998926111, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 169404660, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -976102936, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1987882318, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1693179305, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1541666751, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1961239576, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1129643393, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1003871454, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1263682249, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -995554260, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1514306775, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -783931083, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -974885937, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 17539625, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1945764281, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 528371020, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 263197794, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1825787421, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -264872657, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1870199982, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 174703817, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: -1002629697, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
-  - {fileID: 1389827155, guid: adfea0c1e457a4c6bb4f803ad4fad1ca, type: 3}
+  textureArray: []
   rendererDelegate: {fileID: 5886688115742584374}
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 120
+  AnimationSpeed: 10
   delayBetweenLoop: 0
   StartOnAwake: 1
   DestroyOnCompletion: 0
@@ -235,7 +200,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3792898709055268701}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -246,7 +211,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 180, y: 180}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &369327461371309736
 CanvasRenderer:
@@ -273,6 +238,8 @@ MonoBehaviour:
   pos: 0
   selfTransform: {fileID: 0}
   imageAnimation: {fileID: 1663238631186542038}
+  blastTransform: {fileID: 8776607247565644022}
+  boder: {fileID: 6955844111709485909}
 --- !u!1 &4009967154478860459
 GameObject:
   m_ObjectHideFlags: 0
