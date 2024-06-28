@@ -50,6 +50,7 @@ public class Reel_Controller : MonoBehaviour
         {
 
             //poolItems[i].transform.DOLocalMoveY(i * iconSize, minClearDuration * (i + 1)).SetEase(Ease.Linear);
+            //result.Count - 1 - i
             if (result[result.Count - 1 - i] == 13)
             {
                 int index = UnityEngine.Random.Range(0, slot_Controller.wildIconList.Length);
@@ -72,7 +73,7 @@ public class Reel_Controller : MonoBehaviour
 
             poolReelItems[i].image.sprite = slot_Controller.iconList[result[result.Count -1 -i]];
             poolReelItems[i].id = result[result.Count - 1 - i];
-            poolReelItems[i].pos = i;
+            poolReelItems[i].pos = 2-i;
             poolReelItems[i].transform.DOLocalMoveY(i * iconSize, minClearDuration * (i + 1)).SetEase(Ease.Linear);
             currentReelItems.Add(poolReelItems[i]);
             //poolItems[i] = null;
@@ -157,8 +158,9 @@ public class Reel_Controller : MonoBehaviour
                 if (currentReelItems[j] != null)
                 {
                     currentReelItems[j].transform.DOLocalMoveY(i * iconSize, minClearDuration).SetEase(Ease.Linear);
-                    currentReelItems[j].pos = i;
+                    //currentReelItems[j].pos = j;
                     currentReelItems[i] = currentReelItems[j];
+                    currentReelItems[i].pos= currentReelItems[j].pos;
                     currentReelItems[j] = null;
                     break;
                 }

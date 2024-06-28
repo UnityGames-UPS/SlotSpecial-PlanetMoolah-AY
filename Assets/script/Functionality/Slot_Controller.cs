@@ -277,18 +277,18 @@ public class Slot_Controller : MonoBehaviour
 
         socketIOManager.SubSpin(bet);
         yield return new WaitUntil(() => socketIOManager.isResultdone);
-        if (socketIOManager.resultData.iconsToFill != null)
+        if (socketIOManager.resultData.iconsToFill.Count == 0)
+            isSubSpin = false;
+        if (isSubSpin)
         {
+            iconsToRemove = ConvertListOfStringsToInts(socketIOManager.resultData.FinalsymbolsToEmit);
             print("triggered");
             //PrintMatrix(socketIOManager.resultData.iconsToFill);
-            iconsToRemove = ConvertListOfStringsToInts(socketIOManager.resultData.FinalsymbolsToEmit);
 
             yield return OnWIn();
             yield return new WaitForSeconds(1.3f);
         }
 
-        if (socketIOManager.resultData.iconsToFill.Count == 0)
-            isSubSpin = false;
 
         if (isSubSpin)
             yield return CheckWinCoroutine(iconsToRemove);
@@ -336,13 +336,17 @@ public class Slot_Controller : MonoBehaviour
         //}
         //PrintMatrix(socketIOManager.resultData.iconsToFill);
 
+        if (socketIOManager.resultData.iconsToFill?.Count > 0) {
 
-            for (int j = 0; j < reels.Length; j++)
+
+            for (int j = 0; j < socketIOManager.resultData.iconsToFill.Count; j++)
             {
-            Debug.Log("sala issue yehi hai" + socketIOManager.resultData.iconsToFill[j].Count );
                     if (socketIOManager.resultData.iconsToFill[j]?.Count > 0)
                     reels[j].Remove(socketIOManager.resultData.iconsToFill[j]);
             }
+
+        }
+
 
 
         yield return null;

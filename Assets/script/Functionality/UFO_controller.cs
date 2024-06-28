@@ -75,7 +75,7 @@ public class UFO_controller : MonoBehaviour
         {
             //pull = false;
             int posX = iconToShoot[i] >= 10 ? (iconToShoot[i] / 10) % 10 : 0;
-            int posY = (2 - (iconToShoot[i] >= 10 ? (iconToShoot[i] % 10) : iconToShoot[i]));
+            int posY = ( (iconToShoot[i] >= 10 ? (iconToShoot[i] % 10) : iconToShoot[i]));
             Vector2[] point;
 
             int ufoRandomIndex = GetRandomUfoWithrange(posX);
@@ -174,7 +174,7 @@ public class UFO_controller : MonoBehaviour
                         GameObject laserObject = Instantiate(laser_bullet, ufo_list[ufoRandomIndex].transform.parent);
                         laserObject.transform.localPosition = Vector2.zero;
                         iconShoot.Add(item);
-                        laserObject.transform.DOLocalMove(point[1], 0.5f);
+                        laserObject.transform.DOLocalMove(point[1], 0.5f).onComplete=()=>laserObject.SetActive(false);
                         laserList.Add(laserObject);
                     }
 
@@ -210,16 +210,20 @@ public class UFO_controller : MonoBehaviour
         foreach (var item in pullList)
         {
             item.gameObject.SetActive(true);
+            
         }
         print("icon to pull" + iconPull);
         foreach (var item in iconPull)
         {
             //item.transform.GetChild(1).gameObject.SetActive(true);
+            item.imageAnimation.AnimationSpeed = 60;
             item.imageAnimation.gameObject.SetActive(true);
+            item.imageAnimation.StartAnimation();
         }
         yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < iconPull.Length; i++)
         {
+            iconPull[i].imageAnimation.StopAnimation();
             iconPull[i].transform.GetChild(1).gameObject.SetActive(false);
             iconPull[i].gameObject.SetActive(false);
         }
@@ -242,7 +246,9 @@ public class UFO_controller : MonoBehaviour
         }
         foreach (var item in iconShoot)
         {
+            item.imageAnimation.AnimationSpeed = 10;
             item.imageAnimation.gameObject.SetActive(true);
+            item.imageAnimation.StartAnimation();
             item.blastTransform.offsetMin = Vector2.one *-100;
             item.blastTransform.offsetMax = Vector2.one * 100;
             item.transform.GetChild(0).gameObject.SetActive(false);
@@ -251,6 +257,7 @@ public class UFO_controller : MonoBehaviour
 
         for (int i = 0; i < iconShoot.Length; i++)
         {
+            iconShoot[i].imageAnimation.StopAnimation() ;
             iconShoot[i].imageAnimation.gameObject.SetActive(false);
             iconShoot[i].gameObject.SetActive(false);
             iconShoot[i].transform.GetChild(0).gameObject.SetActive(true);
