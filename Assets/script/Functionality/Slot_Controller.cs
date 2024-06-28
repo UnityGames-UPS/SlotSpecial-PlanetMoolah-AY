@@ -41,11 +41,14 @@ public class Slot_Controller : MonoBehaviour
     [SerializeField] private TMP_Text BetperLine_text;
     [SerializeField] private TMP_Text Balance_text;
     [SerializeField] private TMP_Text WinAmount_text;
+    [SerializeField] private TMP_Text detailed_text;
+    [SerializeField] private TMP_Text line_text;
 
     [SerializeField] private bool isSpinning;
     [SerializeField] private bool isAutoSpin;
     private Coroutine tweenroutine;
     private Coroutine autoSpinRoutine;
+    private Coroutine FreeSpinRoutine;
 
     //to be filled by backend
     public List<List<string>> initialData;
@@ -62,9 +65,14 @@ public class Slot_Controller : MonoBehaviour
     [SerializeField] private SocketIOManager socketIOManager;
     // Duration of the animation in seconds
     double bet = 1;
+    int line = 25;
     double balance = 0;
     int BetCounter = 0;
     bool isSubSpin=false;
+    bool IsFreeSpin = false;
+
+    int freeSpinCount = 0;
+
     private void Start()
     {
         if (spin_button) spin_button.onClick.RemoveAllListeners();
@@ -81,6 +89,8 @@ public class Slot_Controller : MonoBehaviour
 
         if (bet_minus_button) bet_minus_button.onClick.RemoveAllListeners();
         if (bet_minus_button) bet_minus_button.onClick.AddListener(delegate { ChangeBet(false); });
+
+        if (detailed_text) detailed_text.text = "";
 
         initialData = new List<List<string>>{
             new List<string> { "13", "8", "1","10" },
@@ -151,6 +161,36 @@ public class Slot_Controller : MonoBehaviour
         }
     }
 
+    //private IEnumerator FreeSpinCoroutine(int spinchances)
+    //{
+    //    int i = 0;
+    //    while (i < spinchances)
+    //    {
+    //        StartSlots(IsAutoSpin);
+    //        yield return tweenroutine;
+    //        i++;
+    //    }
+    //    ToggleButtonGrp(true);
+    //    IsFreeSpin = false;
+    //}
+
+    //internal void FreeSpin(int spins)
+    //{
+    //    if (!IsFreeSpin)
+    //    {
+
+    //        IsFreeSpin = true;
+    //        ToggleButtonGrp(false);
+
+    //        if (FreeSpinRoutine != null)
+    //        {
+    //            StopCoroutine(FreeSpinRoutine);
+    //            FreeSpinRoutine = null;
+    //        }
+    //        FreeSpinRoutine = StartCoroutine(FreeSpinCoroutine(spins));
+
+    //    }
+    //}
 
     private void StopAutoSpin()
     {
@@ -200,7 +240,8 @@ public class Slot_Controller : MonoBehaviour
 
     IEnumerator spinRoutine()
     {
-        isSpinning = true;
+        if (detailed_text) detailed_text.text = line_text.text+ "Lines x" + BetperLine_text.text + "=" + TotalBet_text.text + "Total bet";
+            isSpinning = true;
         ToggleButtonGrp(false);
         foreach (Reel_Controller item in reels)
         {
@@ -208,16 +249,18 @@ public class Slot_Controller : MonoBehaviour
 
         }
 
-        //try
-        //{
-        //    bet = double.Parse(TotalBet_text.text);
-        //    balance = double.Parse(Balance_text.text);
-        //}
-        //catch (Exception e)
-        //{
-        //    Debug.Log("Error while conversion " + e.Message);
-        //}
-        socketIOManager.AccumulateResult(bet);
+        try
+        {
+            bet = double.Parse(TotalBet_text.text);
+            line = int.Parse(BetperLine_text.text);
+            balance = double.Parse(Balance_text.text);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error while conversion " + e.Message);
+        }
+
+        socketIOManager.AccumulateResult(bet,line);
         yield return new WaitUntil(() => socketIOManager.isResultdone);
         result = TransposeMatrix(socketIOManager.resultData.ResultReel);
         yield return new WaitForSeconds(1.5f);
@@ -230,12 +273,18 @@ public class Slot_Controller : MonoBehaviour
         
 
         List<int> iconsToRemove = ConvertListOfStringsToInts(socketIOManager.resultData.FinalsymbolsToEmit);
-        SocketIOManager.PrintList(iconsToRemove);
+
+        if(iconsToRemove.Count>0)
         yield return CheckWinCoroutine(iconsToRemove);
         //socketIOManager.SubSpin(bet);
         //yield return new WaitUntil(()=>socketIOManager.isResultdone);
 
         if (WinAmount_text) WinAmount_text.text = socketIOManager.resultData.WinAmout.ToString();
+        if(detailed_text) detailed_text.text = "";
+        if (socketIOManager.resultData.WinAmout>0) {
+
+            detailed_text.text = "you won" + socketIOManager.resultData.WinAmout.ToString();
+        }
         isSpinning = false;
         if (!isAutoSpin)
             ToggleButtonGrp(true);
@@ -262,8 +311,11 @@ public class Slot_Controller : MonoBehaviour
             }
         }
 
-        if (TotalBet_text) TotalBet_text.text = socketIOManager.initialData.bets[BetCounter].ToString();
-        if (BetperLine_text) BetperLine_text.text = ((float)socketIOManager.initialData.bets[BetCounter] / 25f).ToString();
+
+
+        if (TotalBet_text) TotalBet_text.text = (socketIOManager.initialData.bets[BetCounter]*line).ToString();
+        if (BetperLine_text) BetperLine_text.text = ((float)socketIOManager.initialData.bets[BetCounter]).ToString();
+
     }
 
 
@@ -271,11 +323,13 @@ public class Slot_Controller : MonoBehaviour
     {
         //for (int i = 0; i < iconsToRemove.Count; i++)
         //{
+        yield return new WaitUntil(() => socketIOManager.isResultdone);
         yield return payline_Controller.TogglePayline(socketIOManager.resultData.linesToEmit,socketIOManager.resultData.FinalsymbolsToEmit);
+
         isSubSpin = true;
         yield return ufoController.LaserCoroutine(iconsToRemove);
 
-        socketIOManager.SubSpin(bet);
+        socketIOManager.SubSpin(bet,line);
         yield return new WaitUntil(() => socketIOManager.isResultdone);
         if (socketIOManager.resultData.iconsToFill.Count == 0)
             isSubSpin = false;
@@ -349,8 +403,6 @@ public class Slot_Controller : MonoBehaviour
             }
 
         }
-
-
 
         yield return null;
     }
@@ -526,6 +578,8 @@ public class Slot_Controller : MonoBehaviour
 
         return intList;
     }
+
+
 
     void PrintMatrix(List<List<int>> matrix)
     {

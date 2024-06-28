@@ -20,17 +20,18 @@ public class Payline_controller : MonoBehaviour
     internal IEnumerator TogglePayline(List<int> lineID,List<string> symbolstoEmmit) {
 
 
-        setIconActive(symbolstoEmmit);
-        yield return new WaitForSeconds(1f);
-        setIconInActive(symbolstoEmmit);
-        yield return new WaitForSeconds(0.5f);
+        //setIconActive(symbolstoEmmit);
+        //yield return new WaitForSeconds(1f);
+        //setIconInActive(symbolstoEmmit);
+        //yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < lineID.Count; i++)
         {
             //setIconActive(symbolstoEmmit[i == 0 ? 1 : i]);
-            paylines[lineID[i]].SetActive(true);
-            yield return new WaitForSeconds(1f);
-            paylines[lineID[i]].SetActive(false);
+            //paylines[lineID[i]].SetActive(true);
+            yield return StartCoroutine(blinkroutine(paylines[lineID[i]],3));
+            //yield return new WaitForSeconds(1f);
+            //paylines[lineID[i]].SetActive(false);
             //setIconInActive(symbolstoEmmit[i == 0 ? 1 : i]);
         }
 
@@ -69,6 +70,21 @@ public class Payline_controller : MonoBehaviour
             //if (slot_Controller.reels[reelIndex].currentReelItems[i].pos == posY)
             slot_Controller.reels[posX].currentReelItems[posY].transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
             //}
+
+        }
+
+    }
+
+    IEnumerator blinkroutine(GameObject objectToBlink, int repeatation)
+    {
+
+        print("triggered");
+        for (int i = 0; i < repeatation; i++)
+        {
+            yield return new WaitForSeconds(0.15f);
+            objectToBlink.SetActive(true);
+            yield return new WaitForSeconds(0.15f);
+            objectToBlink.SetActive(false);
 
         }
 

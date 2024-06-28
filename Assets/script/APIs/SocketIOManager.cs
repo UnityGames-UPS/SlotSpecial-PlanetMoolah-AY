@@ -16,7 +16,6 @@ public class SocketIOManager : MonoBehaviour
     [SerializeField]
     private Slot_Controller slotManager;
     [SerializeField] private UI_Controller uI_Controller;
-
     internal GameData initialData = null;
     internal UIData initUIData = null;
     internal GameData resultData = null;
@@ -32,7 +31,8 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     [SerializeField]
-    private string SocketURI;
+    private string SocketURI;//https://game-crm-rtp-backend-newbranch.onrender.com/
+    [SerializeField] private string Token;//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImRlc2lnbmF0aW9uIjoicGxheWVyIiwiaWF0IjoxNzE5NTczNjE4LCJleHAiOjE3MjAxNzg0MTh9.ZDpaxpilatQYJGczmyspZfYD_Ij_q6UW1ajBYiYEqe0
 
     protected string gameID = "SL-PM";
 
@@ -95,7 +95,8 @@ public class SocketIOManager : MonoBehaviour
         {
             return new
             {
-                token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllcjMiLCJkZXNpZ25hdGlvbiI6InBsYXllciIsImlhdCI6MTcxODk2NDY3NiwiZXhwIjoxNzE5NTY5NDc2fQ.aTiOtBmDSbrl2Wz22wGgqtuyc3fwCbmI71zfsbCose8"
+                token = Token
+                //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImRlc2lnbmF0aW9uIjoicGxheWVyIiwiaWF0IjoxNzE5NTczNjE4LCJleHAiOjE3MjAxNzg0MTh9.ZDpaxpilatQYJGczmyspZfYD_Ij_q6UW1ajBYiYEqe0"
             };
         };
         options.Auth = authFunction;
@@ -264,13 +265,13 @@ public class SocketIOManager : MonoBehaviour
         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
     }
 
-    internal void AccumulateResult(double currBet)
+    internal void AccumulateResult(double currBet, int courrentLine)
     {
         isResultdone = false;
         SendDataWithNamespace("SPIN", currBet, "message");
     }
 
-    internal void SubSpin(double currBet)
+    internal void SubSpin(double currBet, int courrentLine)
     {
         isResultdone = false;
         SendDataWithNamespace("checkMoolah", currBet, "message");
@@ -390,6 +391,7 @@ public class SocketIOManager : MonoBehaviour
 public class BetData
 {
     public double currentBet;
+    public double currentLines=20;
     //public double TotalLines;
 }
 
