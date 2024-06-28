@@ -237,7 +237,7 @@ public class UFO_controller : MonoBehaviour
     }
 
     IEnumerator ShootCoroutine(GameObject[] laserList, Reel_Item[] iconShoot) {
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.1f);
 
         foreach (var item in laserList)
         {

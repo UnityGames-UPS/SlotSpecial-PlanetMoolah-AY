@@ -287,11 +287,14 @@ public class Slot_Controller : MonoBehaviour
 
             yield return OnWIn();
             yield return new WaitForSeconds(1.3f);
+            yield return CheckWinCoroutine(iconsToRemove);
+        }
+        else {
+
+            yield return null;
         }
 
-
-        if (isSubSpin)
-            yield return CheckWinCoroutine(iconsToRemove);
+            
 
 
 

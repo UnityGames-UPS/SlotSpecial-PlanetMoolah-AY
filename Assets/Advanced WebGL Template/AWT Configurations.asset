@@ -71,13 +71,16 @@ MonoBehaviour:
   _playPongButtonFontSize: 13px
   _watchVideoButtonYoutubeLink: https://www.youtube.com/watch?v=FIpZ1h7LEos
   _disableMobileWarning: 1
-  _targetPath: /Users/underpinmacgamedev/Desktop/SlotsWebgl/VikingsLocal
-  _s11: "\n    \n    <title>Vikings</title>\n    \n    "
+  _targetPath: /Users/gamedev1/Builds/planet_moohlah
+  _s11: "\n    &&& title2019start &&&<title>%UNITY_WEB_NAME%</title>&&& title2019end
+    &&&\n    &&& title2020start &&&<title>Planet Moola</title>&&& title2020end &&&\n   
+    &&& UnityLoader1 &&& <script src=\"%UNITY_WEBGL_LOADER_URL%\"></script> &&& UnityLoader2
+    &&&\n    "
   _s21: "\n            applicationInstance = UnityLoader.instantiate(\"gameContainer\",
     \"%UNITY_WEBGL_BUILD_URL%\", {onProgress: UnityProgress});\n            "
-  _s31: "\n    var buildUrl = \"Build\";\n    var loaderUrl = buildUrl + \"/VikingsLocal.loader.js\";\n   
-    var config = {\n        dataUrl: buildUrl + \"/VikingsLocal.data.unityweb\",\n       
-    frameworkUrl: buildUrl + \"/VikingsLocal.framework.js.unityweb\",\n        codeUrl:
-    buildUrl + \"/VikingsLocal.wasm.unityweb\",\n        streamingAssetsUrl: \"StreamingAssets\",\n       
-    companyName: \"DefaultCompany\",\n        productName: \"Vikings\",\n       
-    productVersion: \"1.0\",\n    };\n"
+  _s31: "\n    var buildUrl = \"Build\";\n    var loaderUrl = buildUrl + \"/planet_moohlah.loader.js\";\n   
+    var config = {\n        dataUrl: buildUrl + \"/planet_moohlah.data.unityweb\",\n       
+    frameworkUrl: buildUrl + \"/planet_moohlah.framework.js.unityweb\",\n       
+    codeUrl: buildUrl + \"/planet_moohlah.wasm.unityweb\",\n        streamingAssetsUrl:
+    \"StreamingAssets\",\n        companyName: \"DefaultCompany\",\n        productName:
+    \"Planet Moola\",\n        productVersion: \"1.0\",\n    };\n"
