@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7913129178507997258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8442557104792054591}
+  - component: {fileID: 3317083917877292692}
+  - component: {fileID: 2146010147597264142}
+  - component: {fileID: 1745527564475242895}
+  m_Layer: 5
+  m_Name: pull_image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8442557104792054591
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7913129178507997258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 342, y: 342}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &3317083917877292692
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7913129178507997258}
+  m_CullTransparentMesh: 1
+--- !u!114 &2146010147597264142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7913129178507997258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: f1258d1e4aedb46a09d67119a049973e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1745527564475242895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7913129178507997258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceca72de36ec34567951f177051c4e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureArray:
+  - {fileID: 21300000, guid: 8a7a83ea5bc364020bbb573bc5c18498, type: 3}
+  - {fileID: 21300000, guid: 932a99abb30a34ea0a44c1aafc5dde6b, type: 3}
+  - {fileID: 21300000, guid: 09649b86b31a24a05aa28a539b745544, type: 3}
+  - {fileID: 21300000, guid: f1258d1e4aedb46a09d67119a049973e, type: 3}
+  - {fileID: 21300000, guid: 141581f5510c74a0881c95da3c64ff1d, type: 3}
+  - {fileID: 21300000, guid: a5047d94381f7420ca718ef11aa1d0e2, type: 3}
+  - {fileID: 21300000, guid: 37b529f9e980c4121a27e8cbc6adffce, type: 3}
+  - {fileID: 21300000, guid: fc5562d47305748e6826489065ac2369, type: 3}
+  - {fileID: 21300000, guid: 57ed53020b2e746be8e7a0038c2cb628, type: 3}
+  - {fileID: 21300000, guid: 626a18ac17e534f1bbf6e0b21ca19213, type: 3}
+  - {fileID: 21300000, guid: 523811a630fb24f649916f056045e917, type: 3}
+  - {fileID: 21300000, guid: 36e1fea75fb4b44199cc47b96e601f89, type: 3}
+  - {fileID: 21300000, guid: 77f35c9c31dd4428e96be849cccf37cc, type: 3}
+  - {fileID: 21300000, guid: 20937d93bf5c5446b9e90868f458cb27, type: 3}
+  - {fileID: 21300000, guid: a7c211580ad7443fda6933a4cb3211ed, type: 3}
+  - {fileID: 21300000, guid: 25d97f256b9bf4e84aa6ff7722954061, type: 3}
+  - {fileID: 21300000, guid: d49fb63c1041c4cad8d4853707bc2d85, type: 3}
+  - {fileID: 21300000, guid: 4594deb16cdc24ddca5b1df35d3834ee, type: 3}
+  rendererDelegate: {fileID: 2146010147597264142}
+  useSharedMaterial: 1
+  doLoopAnimation: 0
+  currentAnimationState: 0
+  AnimationSpeed: 12
+  delayBetweenLoop: 0
+  StartOnAwake: 1
+  DestroyOnCompletion: 0
+  isplaying: 0
+  OriginalSprite: {fileID: 0}
