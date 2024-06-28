@@ -271,7 +271,7 @@ public class Slot_Controller : MonoBehaviour
     {
         //for (int i = 0; i < iconsToRemove.Count; i++)
         //{
-        //yield return payline_Controller.TogglePayline(socketIOManager.resultData.linesToEmit,socketIOManager.resultData.FinalsymbolsToEmit);
+        yield return payline_Controller.TogglePayline(socketIOManager.resultData.linesToEmit,socketIOManager.resultData.FinalsymbolsToEmit);
         isSubSpin = true;
         yield return ufoController.LaserCoroutine(iconsToRemove);
 
