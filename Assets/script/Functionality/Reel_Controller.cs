@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using System.Linq;
 
 public class Reel_Controller : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class Reel_Controller : MonoBehaviour
     [SerializeField] private Slot_Controller slot_Controller;
     void Start()
     {
-        
+
     }
 
 
@@ -44,7 +45,7 @@ public class Reel_Controller : MonoBehaviour
         foreach (Reel_Item item in poolReelItems)
         {
             item.transform.localPosition = new Vector2(0, 5 * iconSize);
-            
+
         }
         for (int i = 0; i < 3; i++)
         {
@@ -71,9 +72,9 @@ public class Reel_Controller : MonoBehaviour
                 poolReelItems[i].imageAnimation.textureArray = slot_Controller.blastAnimationSprite;
             }
 
-            poolReelItems[i].image.sprite = slot_Controller.iconList[result[result.Count -1 -i]];
+            poolReelItems[i].image.sprite = slot_Controller.iconList[result[result.Count - 1 - i]];
             poolReelItems[i].id = result[result.Count - 1 - i];
-            poolReelItems[i].pos = 2-i;
+            poolReelItems[i].pos = 2 - i;
             poolReelItems[i].transform.DOLocalMoveY(i * iconSize, minClearDuration * (i + 1)).SetEase(Ease.Linear);
             currentReelItems.Add(poolReelItems[i]);
             //poolItems[i] = null;
@@ -83,7 +84,8 @@ public class Reel_Controller : MonoBehaviour
 
 
 
-    internal void populateReel(List<int> initialdata) {
+    internal void populateReel(List<int> initialdata)
+    {
         //Initiate();
         GameObject temp;
 
@@ -113,17 +115,18 @@ public class Reel_Controller : MonoBehaviour
                     reelItem.imageAnimation.textureArray = slot_Controller.wildAnimationSprite2;
 
             }
-            else {
+            else
+            {
 
-            reelItem.image.sprite = slot_Controller.iconList[initialdata[i]];
-            reelItem.imageAnimation.textureArray = slot_Controller.blastAnimationSprite;
+                reelItem.image.sprite = slot_Controller.iconList[initialdata[i]];
+                reelItem.imageAnimation.textureArray = slot_Controller.blastAnimationSprite;
             }
 
             currentReelItems.Add(reelItem);
         }
     }
 
-    internal void Remove( List<int>fillPos)
+    internal void Remove(List<int> fillPos)
     {
         if (isRemoving)
             return;
@@ -160,12 +163,23 @@ public class Reel_Controller : MonoBehaviour
                     currentReelItems[j].transform.DOLocalMoveY(i * iconSize, minClearDuration).SetEase(Ease.Linear);
                     //currentReelItems[j].pos = j;
                     currentReelItems[i] = currentReelItems[j];
-                    currentReelItems[i].pos= currentReelItems[j].pos;
+                    currentReelItems[i].pos = i;
                     currentReelItems[j] = null;
                     break;
                 }
             }
+        }
+        //currentReelItems.OrderBy(item => item?.pos).ToList();
+        //currentReelItems.Sort((item1, item2) =>
+        //{
+        //    if (item1 == null && item2 == null) return 0;
+        //    if (item1 == null) return 1; // Place nulls at the end
+        //    if (item2 == null) return -1; // Place nulls at the end
+        //    return item1.pos.CompareTo(item2.pos);
+        //});
 
+        for (int i = 0; i < 3; i++)
+        {
             if (currentReelItems[i] == null && poolReelItems.Count > 0)
             {
                 poolReelItems[poolReelItems.Count - 1].image.sprite = slot_Controller.iconList[fillPos[poolReelItems.Count - 1]];

@@ -58,7 +58,7 @@ public class UFO_controller : MonoBehaviour
 
 
 
-    internal IEnumerator LaserCoroutine(List<int> iconToShoot = null)
+    internal IEnumerator LaserCoroutine(List<int> iconToShoot = null, int count = 0)
     {
         //0: 0,-4
         //2: 2,-2
@@ -66,19 +66,32 @@ public class UFO_controller : MonoBehaviour
         //4: 4,0
 
         SocketIOManager.PrintList(iconToShoot);
-        bool pull=false;
+        bool pull = false;
         List<GameObject> laserList = new List<GameObject>();
         List<Reel_Item> iconPull = new List<Reel_Item>();
         List<Reel_Item> iconShoot = new List<Reel_Item>();
         List<GameObject> pullList = new List<GameObject>();
+        GameObject tempObject;
+        int posX = 0;
+        int posY = 0;
+        int ufoRandomIndex;
+        Vector2[] point;
+        Image imgTemp;
+
         for (int i = 0; i < iconToShoot.Count; i++)
         {
             //pull = false;
-            int posX = iconToShoot[i] >= 10 ? (iconToShoot[i] / 10) % 10 : 0;
-            int posY = ( (iconToShoot[i] >= 10 ? (iconToShoot[i] % 10) : iconToShoot[i]));
-            Vector2[] point;
+            posX = iconToShoot[i] >= 10 ? (iconToShoot[i] / 10) % 10 : 0;
+            posY = ((iconToShoot[i] >= 10 ? (iconToShoot[i] % 10) : iconToShoot[i]));
+            if (count > 0)
+            {
+                posX = 4 - posX;
+                posY = 2 - posY;
 
-            int ufoRandomIndex = GetRandomUfoWithrange(posX);
+            }
+            //Vector2[] point;
+
+            ufoRandomIndex = GetRandomUfoWithrange(posX);
             point = new Vector2[] { Vector2.zero, Vector2.zero };
 
             //for (int j = 0; j < slot_Controller.reels[posX].currentReelItems.Count; j++)
@@ -132,7 +145,7 @@ public class UFO_controller : MonoBehaviour
 
             for (int j = 0; j < slot_Controller.reels[posX].currentReelItems.Count; j++)
             {
-                if (slot_Controller.reels[posX].currentReelItems[j] !=null && slot_Controller.reels[posX].currentReelItems[j]?.pos == posY )
+                if (slot_Controller.reels[posX].currentReelItems[j] != null && slot_Controller.reels[posX].currentReelItems[j]?.pos == posY)
                 {
                     Reel_Item item = slot_Controller.reels[posX].currentReelItems[j];
                     item.id = slot_Controller.reels[posX].currentReelItems[j].id;
@@ -142,8 +155,8 @@ public class UFO_controller : MonoBehaviour
                     {
                         pull = true;
                         ufoRandomIndex = posX;
-                    print("id" + slot_Controller.reels[posX].currentReelItems[j].id);
                     }
+
                     item.transform.parent = ufo_list[ufoRandomIndex].transform.parent.transform;
                     point[1] = new Vector2(item.transform.localPosition.x, item.transform.localPosition.y);
                     item.transform.parent = slot_Controller.reels[posX].transform;
@@ -152,30 +165,37 @@ public class UFO_controller : MonoBehaviour
                     Debug.Log("pull" + pull);
                     if (pull)
                     {
-                        GameObject pullobject = Instantiate(pullImage, ufo_list[ufoRandomIndex].transform.parent);
-                        pullobject.SetActive(false);
-                        Image img = pullobject.GetComponent<Image>();
-                        if (posY == 0)
-                            img.rectTransform.sizeDelta = new Vector2(342, 650);
-                        else if (posY == 1)
-                            img.rectTransform.sizeDelta = new Vector2(342, 500);
-                        else if (posY == 2)
-                            img.rectTransform.sizeDelta = new Vector2(342, 200);
+                        tempObject = Instantiate(pullImage, ufo_list[ufoRandomIndex].transform.parent);
+                        tempObject.SetActive(false);
+                        imgTemp = tempObject.GetComponent<Image>();
+                        switch (posY)
+                        {
+                            case 0: imgTemp.rectTransform.sizeDelta = new Vector2(342, 650); break;
+                            case 1: imgTemp.rectTransform.sizeDelta = new Vector2(342, 500); break;
+                            case 2: imgTemp.rectTransform.sizeDelta = new Vector2(342, 200); break;
+                        }
+                        //if (posY == 0)
+                        //    imgTemp.rectTransform.sizeDelta = new Vector2(342, 650);
+                        //else if (posY == 1)
+                        //    imgTemp.rectTransform.sizeDelta = new Vector2(342, 500);
+                        //else if (posY == 2)
+                        //    imgTemp.rectTransform.sizeDelta = new Vector2(342, 200);
 
-                        pullobject.transform.localPosition = new Vector2(0, -35); ;
+                        tempObject.transform.localPosition = new Vector2(0, -35); ;
                         iconPull.Add(item);
                         //point[1].y += 50;
-                        pullList.Add(pullobject);
+                        pullList.Add(tempObject);
 
                     }
                     else
                     {
 
-                        GameObject laserObject = Instantiate(laser_bullet, ufo_list[ufoRandomIndex].transform.parent);
-                        laserObject.transform.localPosition = Vector2.zero;
+                        tempObject = Instantiate(laser_bullet, ufo_list[ufoRandomIndex].transform.parent);
+                        tempObject.transform.localPosition = new Vector2(0, -70);
+                        Debug.Log("pos +" + item.pos);
                         iconShoot.Add(item);
-                        laserObject.transform.DOLocalMove(point[1], 0.5f).onComplete=()=>laserObject.SetActive(false);
-                        laserList.Add(laserObject);
+                        tempObject.transform.DOLocalMove(point[1], 0.5f).onComplete = () => tempObject.SetActive(false);
+                        laserList.Add(tempObject);
                     }
 
                     tweeners[ufoRandomIndex].Pause();
@@ -189,8 +209,8 @@ public class UFO_controller : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
-        if (iconPull.Count>0)
-        StartCoroutine( PullCoroutine(pullList.ToArray(),iconPull.ToArray()));
+        if (iconPull.Count > 0)
+            StartCoroutine(PullCoroutine(pullList.ToArray(), iconPull.ToArray()));
 
         yield return ShootCoroutine(laserList.ToArray(), iconShoot.ToArray());
 
@@ -200,28 +220,34 @@ public class UFO_controller : MonoBehaviour
             item.Play();
         }
 
-        yield return null;
 
-        
+
     }
 
-    IEnumerator PullCoroutine(GameObject[] pullList,Reel_Item[] iconPull) {
+    IEnumerator PullCoroutine(GameObject[] pullList, Reel_Item[] iconPull)
+    {
 
-        foreach (var item in pullList)
-        {
-            item.gameObject.SetActive(true);
-            
-        }
-        print("icon to pull" + iconPull);
-        foreach (var item in iconPull)
-        {
-            //item.transform.GetChild(1).gameObject.SetActive(true);
-            item.imageAnimation.AnimationSpeed = 60;
-            item.imageAnimation.gameObject.SetActive(true);
-            item.imageAnimation.StartAnimation();
-        }
-        yield return new WaitForSeconds(1.5f);
+        //foreach (var item in pullList)
+        //{
+        //    item.gameObject.SetActive(true);
+
+        //}
         for (int i = 0; i < iconPull.Length; i++)
+        {
+            pullList[i].SetActive(true);
+            iconPull[i].imageAnimation.AnimationSpeed = 70;
+            iconPull[i].imageAnimation.gameObject.SetActive(true);
+            iconPull[i].imageAnimation.StartAnimation();
+        }
+        //foreach (var item in iconPull)
+        //{
+        //    //item.transform.GetChild(1).gameObject.SetActive(true);
+        //    item.imageAnimation.AnimationSpeed = 60;
+        //    item.imageAnimation.gameObject.SetActive(true);
+        //    item.imageAnimation.StartAnimation();
+        //}
+        yield return new WaitForSeconds(1.4f);
+        for (int i = 0; i < pullList.Length; i++)
         {
             iconPull[i].imageAnimation.StopAnimation();
             iconPull[i].transform.GetChild(1).gameObject.SetActive(false);
@@ -236,28 +262,34 @@ public class UFO_controller : MonoBehaviour
 
     }
 
-    IEnumerator ShootCoroutine(GameObject[] laserList, Reel_Item[] iconShoot) {
+    IEnumerator ShootCoroutine(GameObject[] laserList, Reel_Item[] iconShoot)
+    {
         yield return new WaitForSeconds(0.1f);
 
-        foreach (var item in laserList)
-        {
-            Destroy(item.gameObject);
+        //foreach (var item in laserList)
+        //{
+        //    Destroy(item.gameObject);
 
-        }
-        foreach (var item in iconShoot)
+        //}
+        for (int i = 0; i < iconShoot.Length; i++)
         {
-            item.imageAnimation.AnimationSpeed = 10;
-            item.imageAnimation.gameObject.SetActive(true);
-            item.imageAnimation.StartAnimation();
-            item.blastTransform.offsetMin = Vector2.one *-100;
-            item.blastTransform.offsetMax = Vector2.one * 100;
-            item.transform.GetChild(0).gameObject.SetActive(false);
+            Destroy(laserList[i].gameObject);
+            iconShoot[i].imageAnimation.AnimationSpeed = 10;
+            iconShoot[i].imageAnimation.gameObject.SetActive(true);
+            iconShoot[i].imageAnimation.StartAnimation();
+            iconShoot[i].blastTransform.offsetMin = Vector2.one * -100;
+            iconShoot[i].blastTransform.offsetMax = Vector2.one * 100;
+            iconShoot[i].transform.GetChild(0).gameObject.SetActive(false);
         }
+        //foreach (var item in iconShoot)
+        //{
+
+        //}
         yield return new WaitForSeconds(1.5f);
 
         for (int i = 0; i < iconShoot.Length; i++)
         {
-            iconShoot[i].imageAnimation.StopAnimation() ;
+            iconShoot[i].imageAnimation.StopAnimation();
             iconShoot[i].imageAnimation.gameObject.SetActive(false);
             iconShoot[i].gameObject.SetActive(false);
             iconShoot[i].transform.GetChild(0).gameObject.SetActive(true);
@@ -279,36 +311,60 @@ public class UFO_controller : MonoBehaviour
     int GetRandomUfoWithrange(int posX)
     {
         int[] range = new int[2];
-        if (posX == 0)
+        switch (posX)
         {
+            case 0:
+                range[0] = 1;
+                range[1] = 2;
+                break;
+            case 1:
+                range[0] = 0;
+                range[1] = 2;
+                break;
+            case 2:
+                range[0] = 2;
+                range[1] = 4;
+                break;
+            case 3:
+                range[0] = 2;
+                range[1] = 4;
+                break;
+            case 4:
+                range[0] = 2;
+                range[1] = 3;
+                break;
 
-            range[0] = 1;
-            range[1] = 2;
         }
-        else if (posX == 1)
-        {
+        //if (posX == 0)
+        //{
+        //    range[0] = 1;
+        //    range[1] = 2;
 
-            range[0] = 0;
-            range[1] = 2;
-        }
-        else if (posX == 2)
-        {
+        //}
+        //else if (posX == 1)
+        //{
+        //    range[0] = 0;
+        //    range[1] = 2;
 
-            range[0] = 1;
-            range[1] = 3;
-        }
-        else if (posX == 3)
-        {
+        //}
+        //else if (posX == 2)
+        //{
 
-            range[0] = 2;
-            range[1] = 4;
-        }
-        else if (posX == 4)
-        {
+        //    range[0] = 1;
+        //    range[1] = 3;
+        //}
+        //else if (posX == 3)
+        //{
 
-            range[0] = 2;
-            range[1] = 3;
-        }
+        //    range[0] = 2;
+        //    range[1] = 4;
+        //}
+        //else if (posX == 4)
+        //{
+
+        //    range[0] = 2;
+        //    range[1] = 3;
+        //}
 
         return range[Random.Range(0, range.Length)];
     }
