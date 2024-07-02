@@ -81,9 +81,9 @@ public class Payline_controller : MonoBehaviour
         print("triggered");
         for (int i = 0; i < repeatation; i++)
         {
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.1f);
             objectToBlink.SetActive(true);
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.1f);
             objectToBlink.SetActive(false);
 
         }

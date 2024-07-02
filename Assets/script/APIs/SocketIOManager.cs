@@ -31,8 +31,8 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     [SerializeField]
-    private string SocketURI;//https://game-crm-rtp-backend-newbranch.onrender.com/
-    [SerializeField] private string Token;//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImRlc2lnbmF0aW9uIjoicGxheWVyIiwiaWF0IjoxNzE5NTczNjE4LCJleHAiOjE3MjAxNzg0MTh9.ZDpaxpilatQYJGczmyspZfYD_Ij_q6UW1ajBYiYEqe0
+    private string SocketURI;
+    [SerializeField] private string Token;
 
     protected string gameID = "SL-PM";
 

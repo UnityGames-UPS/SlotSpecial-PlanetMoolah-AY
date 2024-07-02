@@ -240,8 +240,8 @@ public class Slot_Controller : MonoBehaviour
 
     IEnumerator spinRoutine()
     {
-        if (detailed_text) detailed_text.text = line_text.text+ "Lines x" + BetperLine_text.text + "=" + TotalBet_text.text + "Total bet";
-            isSpinning = true;
+        if (detailed_text) detailed_text.text = line_text.text+ " Lines x " + BetperLine_text.text + "= " + TotalBet_text.text + " Total bet "+ TotalBet_text.text;
+        isSpinning = true;
         ToggleButtonGrp(false);
         foreach (Reel_Controller item in reels)
         {
@@ -251,8 +251,8 @@ public class Slot_Controller : MonoBehaviour
 
         try
         {
-            bet = double.Parse(TotalBet_text.text);
-            line = int.Parse(BetperLine_text.text);
+            bet = double.Parse(BetperLine_text.text);
+            line = int.Parse(line_text.text);
             balance = double.Parse(Balance_text.text);
         }
         catch (Exception e)
@@ -274,17 +274,19 @@ public class Slot_Controller : MonoBehaviour
 
         List<int> iconsToRemove = ConvertListOfStringsToInts(socketIOManager.resultData.FinalsymbolsToEmit);
 
-        if(iconsToRemove.Count>0)
+        if (WinAmount_text) WinAmount_text.text = socketIOManager.resultData.WinAmout.ToString();
+        if (detailed_text) detailed_text.text = "better luck next time !";
+        if (socketIOManager.resultData.WinAmout > 0)
+        {
+
+            detailed_text.text = "you won" + socketIOManager.resultData.WinAmout.ToString();
+        }
+        if (iconsToRemove.Count>0)
         yield return CheckWinCoroutine(iconsToRemove);
         //socketIOManager.SubSpin(bet);
         //yield return new WaitUntil(()=>socketIOManager.isResultdone);
 
-        if (WinAmount_text) WinAmount_text.text = socketIOManager.resultData.WinAmout.ToString();
-        if(detailed_text) detailed_text.text = "";
-        if (socketIOManager.resultData.WinAmout>0) {
 
-            detailed_text.text = "you won" + socketIOManager.resultData.WinAmout.ToString();
-        }
         isSpinning = false;
         if (!isAutoSpin)
             ToggleButtonGrp(true);
@@ -319,20 +321,34 @@ public class Slot_Controller : MonoBehaviour
     }
 
 
-    IEnumerator CheckWinCoroutine(List<int> iconsToRemove)
+    IEnumerator CheckWinCoroutine(List<int> iconsToRemove, int count=-1)
     {
         //for (int i = 0; i < iconsToRemove.Count; i++)
         //{
-        yield return new WaitUntil(() => socketIOManager.isResultdone);
+        //yield return new WaitUntil(() => socketIOManager.isResultdone);
         yield return payline_Controller.TogglePayline(socketIOManager.resultData.linesToEmit,socketIOManager.resultData.FinalsymbolsToEmit);
 
         isSubSpin = true;
-        yield return ufoController.LaserCoroutine(iconsToRemove);
+        yield return ufoController.LaserCoroutine(iconsToRemove, count);
 
         socketIOManager.SubSpin(bet,line);
         yield return new WaitUntil(() => socketIOManager.isResultdone);
+
+        if (socketIOManager.resultData.WinAmout > 0)
+        {
+            if (WinAmount_text) WinAmount_text.text = socketIOManager.resultData.WinAmout.ToString();
+
+            if (detailed_text) detailed_text.text = "you won " + socketIOManager.resultData.WinAmout.ToString();
+        }
+        else {
+
+            if (detailed_text) detailed_text.text = "better luck next time!";
+
+        }
+
         if (socketIOManager.resultData.iconsToFill.Count == 0)
             isSubSpin = false;
+
         if (isSubSpin)
         {
             iconsToRemove = ConvertListOfStringsToInts(socketIOManager.resultData.FinalsymbolsToEmit);
@@ -341,7 +357,7 @@ public class Slot_Controller : MonoBehaviour
 
             yield return OnWIn();
             yield return new WaitForSeconds(1.3f);
-            yield return CheckWinCoroutine(iconsToRemove);
+            yield return CheckWinCoroutine(iconsToRemove,1);
         }
         else {
 
@@ -516,8 +532,9 @@ public class Slot_Controller : MonoBehaviour
         //    sprites.Add(iconList[int.Parse(initialData[i][j])]);
         //}
         reels[reelNo].populateReel(icons);
-        if (TotalBet_text) TotalBet_text.text = socketIOManager.initialData.bets[BetCounter].ToString();
-        if (BetperLine_text) BetperLine_text.text = ((float)socketIOManager.initialData.bets[BetCounter] / 25f).ToString();
+        if (TotalBet_text) TotalBet_text.text = (socketIOManager.initialData.bets[BetCounter] * line).ToString();
+        if (BetperLine_text) BetperLine_text.text = (socketIOManager.initialData.bets[BetCounter]).ToString();
+        if (line_text) line_text.text = socketIOManager.initialData.Lines.Count.ToString();
         //sprites.Clear();
         //}
     }
