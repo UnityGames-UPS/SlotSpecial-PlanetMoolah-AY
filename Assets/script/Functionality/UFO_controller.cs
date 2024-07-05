@@ -161,7 +161,7 @@ public class UFO_controller : MonoBehaviour
                     point[1] = new Vector2(item.transform.localPosition.x, item.transform.localPosition.y);
                     item.transform.parent = slot_Controller.reels[posX].transform;
 
-
+                    ufo_list[ufoRandomIndex].StartAnimation();
                     Debug.Log("pull" + pull);
                     if (pull)
                     {
@@ -209,6 +209,10 @@ public class UFO_controller : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
+        foreach (var item in ufo_list)
+        {
+            item.StartAnimation();
+        }
         if (iconPull.Count > 0)
             StartCoroutine(PullCoroutine(pullList.ToArray(), iconPull.ToArray()));
 

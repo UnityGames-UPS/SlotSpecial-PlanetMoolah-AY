@@ -14971,7 +14971,7 @@ MonoBehaviour:
   uI_Controller: {fileID: 472703971}
   bonusdata: []
   _jsManager: {fileID: 5466068318372908429}
-  SocketURI: https://game-crm-rtp-backend-newbranch.onrender.com/
+  SocketURI: http://localhost:5000
   Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBsYXllciIsImRlc2lnbmF0aW9uIjoicGxheWVyIiwiaWF0IjoxNzE5NTczNjE4LCJleHAiOjE3MjAxNzg0MTh9.ZDpaxpilatQYJGczmyspZfYD_Ij_q6UW1ajBYiYEqe0
 --- !u!82 &7506316773636419696
 AudioSource:
