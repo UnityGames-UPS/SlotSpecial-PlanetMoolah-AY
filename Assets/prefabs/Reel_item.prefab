@@ -30,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 781355518758623923}
+  m_Father: {fileID: 810574354391051268}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -93,7 +93,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8776607247565644022
 RectTransform:
   m_ObjectHideFlags: 0
@@ -111,7 +111,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7916836009559251232
 CanvasRenderer:
@@ -163,14 +163,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca72de36ec34567951f177051c4e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureArray: []
+  textureArray:
+  - {fileID: -1414555365, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -864273050, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 10884046, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -1493916483, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -1076412256, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -990843327, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 1035130420, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -2082538389, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 781134088, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 373270809, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -1953099787, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -1242234903, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 1243587067, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 1663074921, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: -1250157853, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  - {fileID: 745821427, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
   rendererDelegate: {fileID: 5886688115742584374}
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
   AnimationSpeed: 10
   delayBetweenLoop: 0
-  StartOnAwake: 1
+  StartOnAwake: 0
   DestroyOnCompletion: 0
   isplaying: 0
   OriginalSprite: {fileID: 0}
@@ -184,7 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 810574354391051268}
   - component: {fileID: 369327461371309736}
-  - component: {fileID: 91468713520558437}
+  - component: {fileID: 4501733769673720766}
   m_Layer: 5
   m_Name: Reel_item
   m_TagString: Untagged
@@ -205,6 +221,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 781355518758623923}
+  - {fileID: 5953434736615245977}
   - {fileID: 8776607247565644022}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -221,7 +238,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3792898709055268701}
   m_CullTransparentMesh: 1
---- !u!114 &91468713520558437
+--- !u!114 &4501733769673720766
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,16 +247,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3792898709055268701}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c27341a5738849a292d365fd3f82344, type: 3}
+  m_Script: {fileID: 11500000, guid: 75db09a203d4843b8b88dbfabee9d827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 7148313473337414764}
   id: 0
   pos: 0
-  selfTransform: {fileID: 0}
-  imageAnimation: {fileID: 1663238631186542038}
-  blastTransform: {fileID: 8776607247565644022}
+  ownAnim: {fileID: 8625549340734860103}
+  blastAnim: {fileID: 1663238631186542038}
   boder: {fileID: 6955844111709485909}
+  wildVariation: -1
 --- !u!1 &4009967154478860459
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +268,7 @@ GameObject:
   - component: {fileID: 781355518758623923}
   - component: {fileID: 6907082867611016965}
   - component: {fileID: 7148313473337414764}
+  - component: {fileID: 8625549340734860103}
   m_Layer: 5
   m_Name: icon
   m_TagString: Untagged
@@ -269,8 +287,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5953434736615245977}
+  m_Children: []
   m_Father: {fileID: 810574354391051268}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -316,3 +333,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8625549340734860103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4009967154478860459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceca72de36ec34567951f177051c4e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textureArray: []
+  rendererDelegate: {fileID: 7148313473337414764}
+  useSharedMaterial: 1
+  doLoopAnimation: 0
+  currentAnimationState: 0
+  AnimationSpeed: 111
+  delayBetweenLoop: 0
+  StartOnAwake: 0
+  DestroyOnCompletion: 0
+  isplaying: 0
+  OriginalSprite: {fileID: 0}

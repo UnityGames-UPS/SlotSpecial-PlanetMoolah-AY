@@ -153,8 +153,8 @@ public class UI_Controller : MonoBehaviour
         {
             settings_button.gameObject.SetActive(true);
             info_button.gameObject.SetActive(true);
-            settings_button.DOLocalMoveY(-100, 0.2f);
-            info_button.DOLocalMoveY(-200, 0.5f);
+            settings_button.transform.DOLocalMoveY(-135, 0.2f);
+            info_button.transform.DOLocalMoveY(-270, 0.5f);
             isMenuOpen = true;
         }
         else
@@ -258,53 +258,53 @@ public class UI_Controller : MonoBehaviour
     {
 
 
-        for (int i = 0; i < paylines.symbols.Count; i++)
-        {
-            if (i <=4)
-                continue;
+        // for (int i = 0; i < paylines.symbols.Count; i++)
+        // {
+        //     if (i <=4)
+        //         continue;
 
-            string text = null;
-            if (paylines.symbols[i].multiplier._5x != 0)
-            {
-                text += "5x - " + paylines.symbols[i].multiplier._5x;
-            }
-            if (paylines.symbols[i].multiplier._4x != 0)
-            {
-                text += "\n4x - " + paylines.symbols[i].multiplier._4x;
-            }
-            if (paylines.symbols[i].multiplier._3x != 0)
-            {
-                text += "\n3x - " + paylines.symbols[i].multiplier._3x;
-            }
-            if (paylines.symbols[i].multiplier._2x != 0)
-            {
-                text += "\n2x - " + paylines.symbols[i].multiplier._2x;
-            }
+        //     string text = null;
+        //     if (paylines.symbols[i].multiplier._5x != 0)
+        //     {
+        //         text += "5x - " + paylines.symbols[i].multiplier._5x;
+        //     }
+        //     if (paylines.symbols[i].multiplier._4x != 0)
+        //     {
+        //         text += "\n4x - " + paylines.symbols[i].multiplier._4x;
+        //     }
+        //     if (paylines.symbols[i].multiplier._3x != 0)
+        //     {
+        //         text += "\n3x - " + paylines.symbols[i].multiplier._3x;
+        //     }
+        //     if (paylines.symbols[i].multiplier._2x != 0)
+        //     {
+        //         text += "\n2x - " + paylines.symbols[i].multiplier._2x;
+        //     }
 
-            if (major_symbol_texts[i-5]) major_symbol_texts[i-5].text = text;
+        //     if (major_symbol_texts[i-5]) major_symbol_texts[i-5].text = text;
 
-        }
+        // }
 
 
 
-        string text1 = null;
-        if (paylines.symbols[0].multiplier._5x != 0)
-        {
-            text1 += "5x - " + paylines.symbols[0].multiplier._5x;
-        }
-        if (paylines.symbols[0].multiplier._4x != 0)
-        {
-            text1 += "\n4x - " + paylines.symbols[0].multiplier._4x;
-        }
-        if (paylines.symbols[0].multiplier._3x != 0)
-        {
-            text1 += "\n3x - " + paylines.symbols[0].multiplier._3x;
-        }
-        if (paylines.symbols[0].multiplier._2x != 0)
-        {
-            text1 += "\n2x - " + paylines.symbols[0].multiplier._2x;
-        }
-        if (minor_symbol_text) minor_symbol_text.text = text1;
+        // string text1 = null;
+        // if (paylines.symbols[0].multiplier._5x != 0)
+        // {
+        //     text1 += "5x - " + paylines.symbols[0].multiplier._5x;
+        // }
+        // if (paylines.symbols[0].multiplier._4x != 0)
+        // {
+        //     text1 += "\n4x - " + paylines.symbols[0].multiplier._4x;
+        // }
+        // if (paylines.symbols[0].multiplier._3x != 0)
+        // {
+        //     text1 += "\n3x - " + paylines.symbols[0].multiplier._3x;
+        // }
+        // if (paylines.symbols[0].multiplier._2x != 0)
+        // {
+        //     text1 += "\n2x - " + paylines.symbols[0].multiplier._2x;
+        // }
+        // if (minor_symbol_text) minor_symbol_text.text = text1;
 
 
 

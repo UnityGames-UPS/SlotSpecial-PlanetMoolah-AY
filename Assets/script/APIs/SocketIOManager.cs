@@ -170,9 +170,9 @@ public class SocketIOManager : MonoBehaviour
     private void InitRequest(string eventName)
     {
         InitData message = new InitData();
-        message.Data = new AuthData();
-        message.Data.GameID = gameID;
-        message.id = "Auth";
+        // message.Data = new AuthData();
+        // message.Data.GameID = gameID;
+        // message.id = "Auth";
         // Serialize message data to JSON
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
@@ -395,12 +395,12 @@ public class BetData
     //public double TotalLines;
 }
 
-[Serializable]
-public class AuthData
-{
-    public string GameID;
-    //public double TotalLines;
-}
+// [Serializable]
+// public class AuthData
+// {
+//     public string GameID;
+//     //public double TotalLines;
+// }
 
 [Serializable]
 public class MessageData
@@ -412,7 +412,7 @@ public class MessageData
 [Serializable]
 public class InitData
 {
-    public AuthData Data;
+    // public AuthData Data;
     public string id;
 }
 
@@ -462,27 +462,27 @@ public class Root
     public Message message { get; set; }
 }
 
-[Serializable]
-public class UIData
-{
-    public Paylines paylines { get; set; }
-    public List<string> spclSymbolTxt { get; set; }
-    public AbtLogo AbtLogo { get; set; }
-    public string ToULink { get; set; }
-    public string PopLink { get; set; }
-}
+// [Serializable]
+// public class UIData
+// {
+//     public Paylines paylines { get; set; }
+//     public List<string> spclSymbolTxt { get; set; }
+//     public AbtLogo AbtLogo { get; set; }
+//     public string ToULink { get; set; }
+//     public string PopLink { get; set; }
+// }
 
-[Serializable]
-public class Paylines
-{
-    public List<Symbol> symbols { get; set; }
-}
+// [Serializable]
+// public class Paylines
+// {
+//     public List<Symbol> symbols { get; set; }
+// }
 
-[Serializable]
-public class Symbol
-{
-    public Multiplier multiplier { get; set; }
-}
+// [Serializable]
+// public class Symbol
+// {
+//     public Multiplier multiplier { get; set; }
+// }
 
 [Serializable]
 public class Multiplier
@@ -500,13 +500,13 @@ public class Multiplier
     public double _2x { get; set; }
 }
 
-[Serializable]
-public class PlayerData
-{
-    public double Balance { get; set; }
-    public double haveWon { get; set; }
-    public double currentWinings { get; set; }
-}
+// [Serializable]
+// public class PlayerData
+// {
+//     public double Balance { get; set; }
+//     public double haveWon { get; set; }
+//     public double currentWinings { get; set; }
+// }
 
 
 

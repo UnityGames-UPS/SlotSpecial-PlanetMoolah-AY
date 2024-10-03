@@ -243,11 +243,11 @@ public class Slot_Controller : MonoBehaviour
         if (detailed_text) detailed_text.text = line_text.text+ " Lines x " + BetperLine_text.text + "= " + TotalBet_text.text + " Total bet "+ TotalBet_text.text;
         isSpinning = true;
         ToggleButtonGrp(false);
-        foreach (Reel_Controller item in reels)
-        {
-            item.ClearReel(UnityEngine.Random.Range(0, 0.2f));
+        // foreach (Reel_Controller item in reels)
+        // {
+        //     item.ClearReel(UnityEngine.Random.Range(0, 0.2f));
 
-        }
+        // }
 
         try
         {
@@ -264,11 +264,11 @@ public class Slot_Controller : MonoBehaviour
         yield return new WaitUntil(() => socketIOManager.isResultdone);
         result = TransposeMatrix(socketIOManager.resultData.ResultReel);
         yield return new WaitForSeconds(1.5f);
-        for (int i = 0; i < reels.Length; i++)
-        {
-            reels[i].FillReel(result[i]);
-            yield return new WaitForSeconds(0.2f);
-        }
+        // for (int i = 0; i < reels.Length; i++)
+        // {
+        //     reels[i].FillReel(result[i]);
+        //     yield return new WaitForSeconds(0.2f);
+        // }
 
         
 
@@ -329,7 +329,7 @@ public class Slot_Controller : MonoBehaviour
         yield return payline_Controller.TogglePayline(socketIOManager.resultData.linesToEmit,socketIOManager.resultData.FinalsymbolsToEmit);
 
         isSubSpin = true;
-        yield return ufoController.LaserCoroutine(iconsToRemove, count);
+        // yield return ufoController.LaserCoroutine(iconsToRemove, count);
 
         socketIOManager.SubSpin(bet,line);
         yield return new WaitUntil(() => socketIOManager.isResultdone);
@@ -531,7 +531,7 @@ public class Slot_Controller : MonoBehaviour
         //{
         //    sprites.Add(iconList[int.Parse(initialData[i][j])]);
         //}
-        reels[reelNo].populateReel(icons);
+        // reels[reelNo].populateReel(icons);
         if (TotalBet_text) TotalBet_text.text = (socketIOManager.initialData.bets[BetCounter] * line).ToString();
         if (BetperLine_text) BetperLine_text.text = (socketIOManager.initialData.bets[BetCounter]).ToString();
         if (line_text) line_text.text = socketIOManager.initialData.Lines.Count.ToString();

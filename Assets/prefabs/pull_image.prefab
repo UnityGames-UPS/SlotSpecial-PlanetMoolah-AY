@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 342, y: 342}
+  m_SizeDelta: {x: 342, y: 260}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3317083917877292692
 CanvasRenderer:
@@ -111,7 +111,7 @@ MonoBehaviour:
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 12
+  AnimationSpeed: 7
   delayBetweenLoop: 0
   StartOnAwake: 1
   DestroyOnCompletion: 0
