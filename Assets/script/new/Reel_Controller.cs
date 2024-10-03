@@ -189,6 +189,7 @@ public class Reel_Controller : MonoBehaviour
     }
     internal void HandleWildSymbols(List<string> symbolsToEmit)
     {
+        //TODO: PM Check wild Animation
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
         for (int i = 0; i < symbolsToEmit.Count; i++)
@@ -208,8 +209,8 @@ public class Reel_Controller : MonoBehaviour
                     slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray = wildAnimationSprite1.ToList();
                 else if (slot_matrix[yPos[i]].row[xPos[i]].wildVariation == 2)
                     slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray = wildAnimationSprite2.ToList();
-                slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation();
 
+                slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation();
         }
 
 
