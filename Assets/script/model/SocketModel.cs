@@ -36,13 +36,14 @@ public class InitGameData
     public bool canSwitchLines { get; set; }
     public List<int> LinesCount { get; set; }
     public List<int> autoSpin { get; set; }
+
+    public List<List<int>> lineData {get; set;}
 }
 
 [Serializable]
 public class ResultGameData
 {
     public List<List<int>> ResultReel { get; set; }
-
     public List<Cascading> cascadeData{get; set;}
     public List<int> autoSpin { get; set; }
     public List<int> linesToEmit { get; set; }
@@ -128,8 +129,4 @@ public class Cascading
     public double currentWinning{get; set;}
 
 
-}
-
-public class T
-{
 }

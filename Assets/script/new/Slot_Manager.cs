@@ -11,42 +11,56 @@ public class Slot_Manager : MonoBehaviour
     [SerializeField] private UFO_controller uFO_Controller;
     [SerializeField] private SocketController socketManager;
     [SerializeField] private AudioController audioController;
+    [SerializeField] private Payline_controller payline_Controller;
 
+    [Header("Buttons")]
     [SerializeField] private Button start_Button;
+    [SerializeField] private Button autoStart_Button;
+    [SerializeField] private Button autoStop_Button;
 
+    [SerializeField] private bool isAutoSpin;
+    [SerializeField] private bool isSpinning;
     public List<List<string>> resultData;
     public List<List<int>> iconsToFill;
 
     void Start()
     {
         reel_Controller.PopulateSlot();
-        resultData = new List<List<string>> {
-            new List<string> { "2", "4", "13","7","3" },
-            new List<string> { "5", "1", "4","6","4" },
-            new List<string> { "1", "1", "13","0","4" },
-        };
 
-        iconsToFill = new List<List<int>>{
-
-            new List<int> {4 },
-            new List<int> {2,5},
-            new List<int> {3,1 },
-            new List<int> {},
-            new List<int> {},
-            };
-
-        // SymbolsToEmit = new List<string> { "0,2", "1,2", "2,2", "1,1", "2,0" };
         start_Button.onClick.AddListener(() => StartCoroutine(SpinRoutine()));
+        autoStart_Button.onClick.AddListener(()=>StartCoroutine(AutoSpinRoutine()));
+        autoStop_Button.onClick.AddListener(()=>{isAutoSpin=false;
+        
+                autoStop_Button.gameObject.SetActive(false);
+        autoStart_Button.gameObject.SetActive(true);
+        });
     }
+
+    IEnumerator AutoSpinRoutine(){
+
+        if(isSpinning || isAutoSpin)
+        yield break;
+        isAutoSpin=true;
+        autoStop_Button.gameObject.SetActive(true);
+        autoStart_Button.gameObject.SetActive(false);
+        while(isAutoSpin){
+
+            yield return SpinRoutine();
+            yield return new WaitForSeconds(1f);
+        }
+
+    }
+
 
     void OnSpinStart()
     {
 
 
         reel_Controller.ClearReel();
+
+        ToggleButtonGrp(false);
         var spinData = new { data = new { currentBet = 0, currentLines = 25, spins = 1 }, id = "SPIN" };
         socketManager.SendData("message", spinData);
-
     }
 
     void OnSpin(List<List<int>> resultData)
@@ -55,6 +69,8 @@ public class Slot_Manager : MonoBehaviour
     }
     void OnSpinEnd()
     {
+        ToggleButtonGrp(true);
+
         // uFO_Controller.Shoot(SymbolsToEmit);
         // reel_Controller.DeleteWinSymbols(SymbolsToEmit);
         // reel_Controller.ReArrangeMatrix();
@@ -64,24 +80,37 @@ public class Slot_Manager : MonoBehaviour
     IEnumerator SpinRoutine()
     {
         OnSpinStart();
+        isSpinning=true;
         yield return new WaitForSeconds(1.6f);
         yield return new WaitUntil(() => socketManager.isResultdone);
         OnSpin(socketManager.socketModel.resultGameData.ResultReel);
+        List<ImageAnimation> pullingAnimList = new List<ImageAnimation>();
+        List<string> SymbolsToEmit;
+        List<string>[] symbols= new List<string>[2];
+        int lineId=-1; 
+        var cascadeData = socketManager.socketModel.resultGameData.cascadeData;
         yield return new WaitForSeconds(1.6f);
-        if (socketManager.socketModel.resultGameData.cascadeData.Count > 0)
-        {
 
-            for (int k = 0; k < socketManager.socketModel.resultGameData.cascadeData.Count; k++)
+        if (cascadeData.Count > 0)
+        {
+            audioController.PlayWLAudio();
+
+            for (int k = 0; k < cascadeData.Count; k++)
             {
 
-                List<ImageAnimation> pullingAnimList = new List<ImageAnimation>();
-                List<string> SymbolsToEmit = Helper.Flatten2DList(socketManager.socketModel.resultGameData.cascadeData[k].winingSymbols);
+                SymbolsToEmit = Helper.Flatten2DList(cascadeData[k].winingSymbols);
+                 symbols= SeparateSymbols(SymbolsToEmit);
 
-                List<string>[] symbols = SeparateSymbols(SymbolsToEmit);
-                audioController.PlayWLAudio();
-                reel_Controller.GeneratePayline(socketManager.socketModel.resultGameData.cascadeData[k].lineToEmit);
-                yield return new WaitForSeconds(0.5f);
-                reel_Controller.ResetPayline();
+                for (int i = 0; i < cascadeData[k].lineToEmit.Count; i++)
+                {
+                    lineId=cascadeData[k].lineToEmit[i]-1;
+                    Color borderColor=payline_Controller.GeneratePayline(lineId);
+                    reel_Controller.HighlightIcon(socketManager.socketModel.initGameData.lineData[lineId],SymbolsToEmit,borderColor);
+                    yield return new WaitForSeconds(0.5f);
+                    reel_Controller.StopHighlightIcon(socketManager.socketModel.initGameData.lineData[lineId]);
+                    payline_Controller.DestroyPayline(lineId);
+                    yield return new WaitForSeconds(0.5f);
+                }
 
                 if (symbols[1].Count > 0)
                 {
@@ -117,14 +146,15 @@ public class Slot_Manager : MonoBehaviour
                 }
                 pullingAnimList.Clear();
                 yield return new WaitForSeconds(0.2f);
-                reel_Controller.ReArrangeMatrix(socketManager.socketModel.resultGameData.cascadeData[k].symbolsToFill);
+                reel_Controller.ReArrangeMatrix(cascadeData[k].symbolsToFill);
 
                 yield return new WaitForSeconds(1f);
             }
 
         }
         OnSpinEnd();
-        // }
+        isSpinning=false;
+
 
 
     }
@@ -138,7 +168,6 @@ public class Slot_Manager : MonoBehaviour
         for (int i = 0; i < SymbolsToEmit.Count; i++)
         {
             int[] pos = Helper.ConvertSymbolPos(SymbolsToEmit[i]);
-            Debug.Log("pos" + JsonConvert.SerializeObject(pos));
             if (reel_Controller.CheckIfWild(pos))
             {
                 wildSymbol.Add(SymbolsToEmit[i]);
@@ -154,6 +183,14 @@ public class Slot_Manager : MonoBehaviour
         symboltypes[1] = symbol;
 
         return symboltypes;
+
+    }
+
+    void ToggleButtonGrp(bool toggle)
+    {
+
+        start_Button.interactable = toggle;
+        autoStart_Button.interactable = toggle;
 
     }
 

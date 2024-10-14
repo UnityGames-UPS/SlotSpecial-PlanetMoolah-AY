@@ -10,7 +10,6 @@ public class Slot_Item : MonoBehaviour
 {
     [SerializeField] internal Image image;
     [SerializeField] internal int id;
-    [SerializeField] internal int pos;
     [SerializeField] internal ImageAnimation ownAnim;
     [SerializeField] internal ImageAnimation blastAnim;
     [SerializeField] internal Image boder;

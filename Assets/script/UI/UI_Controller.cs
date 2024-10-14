@@ -9,7 +9,7 @@ public class UI_Controller : MonoBehaviour
 {
 
 
-    [SerializeField] private SocketIOManager socketIOManager;
+    // [SerializeField] private SocketIOManager socketIOManager;
 
     [Header("Menu UI")]
     [SerializeField] private Transform settings_button;

@@ -265,6 +265,7 @@ public class SocketController : MonoBehaviour
         {
             socketModel.uIData = message["UIData"].ToObject<UIData>();
             socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
+            socketModel.initGameData.lineData=gameData["linesApiData"].ToObject<List<List<int>>>();
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // TODO: PM multiple parsheet
 
@@ -276,7 +277,6 @@ public class SocketController : MonoBehaviour
             // socketModel.resultGameData.linesToEmit = gameData["linestoemit"].ToObject<List<int>>();
 
             isResultdone = true;
-            print("result data: " + JsonConvert.SerializeObject(socketModel.resultGameData.cascadeData));
 
         }
     }

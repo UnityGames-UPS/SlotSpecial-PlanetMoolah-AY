@@ -59,6 +59,7 @@ public class Helper
         {
             foreach (var item in sublist)
             {
+                if(!flatList.Contains(item))
                 flatList.Add(item);
             }
         }

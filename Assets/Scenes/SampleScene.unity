@@ -1888,17 +1888,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152120146}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1702135794}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -119}
-  m_SizeDelta: {x: 971, y: 233}
+  m_AnchoredPosition: {x: 0, y: 69.6}
+  m_SizeDelta: {x: 1010.9, y: 278.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &152120148
 MonoBehaviour:
@@ -4356,6 +4356,13 @@ MonoBehaviour:
   laserMaterial: {fileID: 0}
   ufoController: {fileID: 0}
   socketIOManager: {fileID: 7162882107958535566}
+  bet: 1
+  line: 25
+  balance: 0
+  BetCounter: 0
+  isSubSpin: 0
+  IsFreeSpin: 0
+  freeSpinCount: 0
 --- !u!4 &370087063
 Transform:
   m_ObjectHideFlags: 0
@@ -4861,7 +4868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf35609696994112abfb50e0e4234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI3NjcyMjIyLCJleHAiOjE3MjgyNzcwMjJ9.J_7vDDIs0krgl8F3Ypu10a45AcipEWTKOTXA0CJB0FM
+  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI4ODg2Njk4LCJleHAiOjE3Mjk0OTE0OTh9.XyM60i5edJx6QnwNTK3Qy_nN0s_Op_rdn7l08LPRR08
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0
@@ -4906,7 +4913,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6bdeb18cb33847438f6b41c0588ebac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  socketIOManager: {fileID: 0}
   settings_button: {fileID: 1856196673}
   info_button: {fileID: 533277077}
   Menu_Button: {fileID: 2047777919}
@@ -6191,8 +6197,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 75}
-  m_SizeDelta: {x: 971, y: 395}
+  m_AnchoredPosition: {x: 0, y: -22.1}
+  m_SizeDelta: {x: 1019.1, y: 477.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &702632139
 MonoBehaviour:
@@ -6951,8 +6957,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 78}
-  m_SizeDelta: {x: 971, y: 181}
+  m_AnchoredPosition: {x: 0, y: 112.5}
+  m_SizeDelta: {x: 1034.7, y: 225.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &789044148
 MonoBehaviour:
@@ -7602,7 +7608,6 @@ MonoBehaviour:
   minClearDuration: 0.3
   iconSize: 200
   isRemoving: 0
-  slot_Controller: {fileID: 370087062}
   slot_matrix:
   - row:
     - {fileID: 2124859203}
@@ -8825,8 +8830,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -103}
-  m_SizeDelta: {x: 971, y: 181}
+  m_AnchoredPosition: {x: 0, y: -131.3}
+  m_SizeDelta: {x: 1005.3, y: 237.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1075914346
 MonoBehaviour:
@@ -8878,7 +8883,7 @@ GameObject:
   - component: {fileID: 1081590419}
   - component: {fileID: 1081590418}
   m_Layer: 5
-  m_Name: 19
+  m_Name: 18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9218,17 +9223,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145735277}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1702135794}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 112.09}
-  m_SizeDelta: {x: 971, y: 233}
+  m_AnchoredPosition: {x: 0, y: -119.5}
+  m_SizeDelta: {x: 1005.4, y: 284.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1145735279
 MonoBehaviour:
@@ -9280,7 +9285,7 @@ GameObject:
   - component: {fileID: 1148314454}
   - component: {fileID: 1148314453}
   m_Layer: 5
-  m_Name: 18
+  m_Name: 19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9378,7 +9383,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 971, y: 363}
+  m_SizeDelta: {x: 971, y: 383.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1154155667
 MonoBehaviour:
@@ -9633,7 +9638,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 971, y: 359}
+  m_SizeDelta: {x: 995.3, y: 441.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1287982732
 MonoBehaviour:
@@ -9860,7 +9865,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 971, y: 451}
+  m_SizeDelta: {x: 971, y: 527.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1327069614
 MonoBehaviour:
@@ -10189,7 +10194,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -8}
-  m_SizeDelta: {x: 971, y: 359}
+  m_SizeDelta: {x: 971, y: 415.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1345741841
 MonoBehaviour:
@@ -10545,8 +10550,8 @@ RectTransform:
   m_Children:
   - {fileID: 1029364603}
   - {fileID: 544919939}
-  - {fileID: 916090864}
   - {fileID: 1702135794}
+  - {fileID: 916090864}
   - {fileID: 1025042291}
   - {fileID: 911879602}
   m_Father: {fileID: 188432400}
@@ -10833,7 +10838,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -845196861, guid: e7f1b096f366d4a9797a08ad6554de04, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -11124,7 +11129,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -14}
-  m_SizeDelta: {x: 971, y: 381}
+  m_SizeDelta: {x: 1030.6, y: 453}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1414718855
 MonoBehaviour:
@@ -11210,7 +11215,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 971, y: 381}
+  m_SizeDelta: {x: 1010.2, y: 444.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1419317224
 MonoBehaviour:
@@ -11285,7 +11290,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 971, y: 363}
+  m_SizeDelta: {x: 1034.6, y: 388.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1446629298
 MonoBehaviour:
@@ -11688,32 +11693,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paylines:
-  - {fileID: 259065593}
-  - {fileID: 1805973699}
-  - {fileID: 319544641}
-  - {fileID: 1345741839}
-  - {fileID: 1287982730}
-  - {fileID: 1419317222}
-  - {fileID: 1414718853}
-  - {fileID: 1154155665}
-  - {fileID: 1446629296}
-  - {fileID: 152120146}
-  - {fileID: 1145735277}
-  - {fileID: 1110051159}
-  - {fileID: 1407288018}
-  - {fileID: 440071579}
-  - {fileID: 1369112448}
-  - {fileID: 789044146}
-  - {fileID: 1075914344}
-  - {fileID: 1148314451}
-  - {fileID: 1081590416}
-  - {fileID: 439270642}
-  - {fileID: 1327069612}
-  - {fileID: 1826429926}
-  - {fileID: 2008393417}
-  - {fileID: 702632137}
-  - {fileID: 1616295571}
-  slot_Controller: {fileID: 370087062}
+  - {fileID: 259065595}
+  - {fileID: 1805973701}
+  - {fileID: 319544643}
+  - {fileID: 1345741841}
+  - {fileID: 1287982732}
+  - {fileID: 1419317224}
+  - {fileID: 1414718855}
+  - {fileID: 1154155667}
+  - {fileID: 1446629298}
+  - {fileID: 152120148}
+  - {fileID: 1145735279}
+  - {fileID: 1110051161}
+  - {fileID: 1407288020}
+  - {fileID: 440071581}
+  - {fileID: 1369112450}
+  - {fileID: 789044148}
+  - {fileID: 1075914346}
+  - {fileID: 1081590418}
+  - {fileID: 1148314453}
+  - {fileID: 439270644}
+  - {fileID: 1327069614}
+  - {fileID: 2008393419}
+  - {fileID: 1826429928}
+  - {fileID: 702632139}
+  - {fileID: 1616295573}
+  paylineColor:
+  - {r: 0.85882354, g: 0.5019608, b: 0.019607844, a: 1}
+  - {r: 1, g: 0.2509804, b: 0.2509804, a: 1}
+  - {r: 0.6981132, g: 0.6784551, b: 0.049394794, a: 1}
+  - {r: 0.78431374, g: 0.003921569, b: 0.003921569, a: 1}
+  - {r: 0.9245283, g: 0.8147406, b: 0, a: 1}
+  - {r: 0.8, g: 0.30980393, b: 0, a: 1}
+  - {r: 0.8773585, g: 0.63502604, b: 0, a: 1}
+  - {r: 1, g: 0.23137255, b: 0.23137255, a: 1}
+  - {r: 0.98039216, g: 0.9019608, b: 0.3019608, a: 1}
+  - {r: 0.6901961, g: 0.105882354, b: 0, a: 1}
+  - {r: 0.9529412, g: 0.81960785, b: 0.19215687, a: 1}
+  - {r: 0.93333334, g: 0.49411765, b: 0.16470589, a: 1}
+  - {r: 0.40758276, g: 0, b: 0.509434, a: 1}
+  - {r: 0.85882354, g: 0.45490196, b: 0.09411765, a: 1}
+  - {r: 0.44736814, g: 0.6415094, b: 0, a: 1}
+  - {r: 0.18431373, g: 0.6509804, b: 1, a: 0.972549}
+  - {r: 0, g: 0.8022842, b: 0.8584906, a: 1}
+  - {r: 0.78431374, g: 0.047058824, b: 0.7058824, a: 1}
+  - {r: 0.43529412, g: 0.90588236, b: 0.15686275, a: 1}
+  - {r: 0.8784314, g: 0.1764706, b: 0.8392157, a: 1}
+  - {r: 0.36078432, g: 0.8117647, b: 0.1254902, a: 1}
+  - {r: 0.8901961, g: 0.34117648, b: 0.9137255, a: 1}
+  - {r: 0.42745098, g: 0.8117647, b: 0.20392157, a: 1}
+  - {r: 0.3529412, g: 0.6156863, b: 0.9254902, a: 1}
+  - {r: 0.21176471, g: 0.3372549, b: 1, a: 1}
 --- !u!4 &1516539625
 Transform:
   m_ObjectHideFlags: 0
@@ -12495,8 +12525,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -39}
-  m_SizeDelta: {x: 971, y: 395}
+  m_AnchoredPosition: {x: 0, y: 18.6}
+  m_SizeDelta: {x: 999.7, y: 487.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1616295573
 MonoBehaviour:
@@ -13399,7 +13429,9 @@ MonoBehaviour:
   uFO_Controller: {fileID: 1539866207}
   socketManager: {fileID: 470718018}
   audioController: {fileID: 6984997773427038770}
+  payline_Controller: {fileID: 1516539624}
   start_Button: {fileID: 749966877}
+  autoStart_Button: {fileID: 2005597593}
 --- !u!4 &1695218391
 Transform:
   m_ObjectHideFlags: 0
@@ -13460,12 +13492,12 @@ RectTransform:
   - {fileID: 1369112449}
   - {fileID: 789044147}
   - {fileID: 1075914345}
-  - {fileID: 1148314452}
   - {fileID: 1081590417}
+  - {fileID: 1148314452}
   - {fileID: 439270643}
   - {fileID: 1327069613}
-  - {fileID: 1826429927}
   - {fileID: 2008393418}
+  - {fileID: 1826429927}
   - {fileID: 702632138}
   - {fileID: 1616295572}
   m_Father: {fileID: 1378420899}
@@ -14482,7 +14514,7 @@ GameObject:
   - component: {fileID: 1826429929}
   - component: {fileID: 1826429928}
   m_Layer: 5
-  m_Name: 22
+  m_Name: 23
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15848,7 +15880,7 @@ GameObject:
   - component: {fileID: 2008393420}
   - component: {fileID: 2008393419}
   m_Layer: 5
-  m_Name: 23
+  m_Name: 22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17937,12 +17969,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6dee67c9fb64b7bbed44da112a7af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotManager: {fileID: 370087062}
   uI_Controller: {fileID: 472703971}
+  initialData:
+    <bets>k__BackingField: 
+    <canSwitchLines>k__BackingField: 0
+    <LinesCount>k__BackingField: 
+    <autoSpin>k__BackingField: 
+    <linesToEmit>k__BackingField: 
+    <WinAmout>k__BackingField: 0
+    <freeSpins>k__BackingField: 0
+    <FinalsymbolsToEmit>k__BackingField: []
+    <FinalResultReel>k__BackingField: []
+    <jackpot>k__BackingField: 0
+    <isBonus>k__BackingField: 0
+    <BonusStopIndex>k__BackingField: 0
+  initUIData:
+    <paylines>k__BackingField:
+      <symbols>k__BackingField: []
+    <spclSymbolTxt>k__BackingField: []
+    <ToULink>k__BackingField: 
+    <PopLink>k__BackingField: 
+  resultData:
+    <bets>k__BackingField: 
+    <canSwitchLines>k__BackingField: 0
+    <LinesCount>k__BackingField: 
+    <autoSpin>k__BackingField: 
+    <linesToEmit>k__BackingField: 
+    <WinAmout>k__BackingField: 0
+    <freeSpins>k__BackingField: 0
+    <FinalsymbolsToEmit>k__BackingField: []
+    <FinalResultReel>k__BackingField: []
+    <jackpot>k__BackingField: 0
+    <isBonus>k__BackingField: 0
+    <BonusStopIndex>k__BackingField: 0
+  playerdata:
+    <Balance>k__BackingField: 0
+    <HaveWon>k__BackingField: 0
+    <CurrentWining>k__BackingField: 0
   bonusdata: []
+  isResultdone: 0
   _jsManager: {fileID: 5466068318372908429}
   SocketURI: http://localhost:5000
   Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI3MDY2MzgyLCJleHAiOjE3Mjc2NzExODJ9.nne0auixxZflvlvKtuPSeJyYho9DDKXrCrrA5JTVrpI
+  gameID: SL-PM
+  myAuth: 
 --- !u!1 &7773627691785079787
 GameObject:
   m_ObjectHideFlags: 0
