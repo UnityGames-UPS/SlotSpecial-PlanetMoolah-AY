@@ -17,24 +17,16 @@ public class Reel_Controller : MonoBehaviour
     [SerializeField] private Sprite[] wildAnimationSprite1;
     [SerializeField] private Sprite[] wildAnimationSprite2;
 
-    [SerializeField] private GameObject[] paylines;
-
-    [SerializeField] internal List<Slot_Item> currentReelItems;
-    [SerializeField] internal List<Slot_Item> poolReelItems;
     [SerializeField] private float minClearDuration;
     [SerializeField] private int iconSize;
-    [SerializeField] internal bool isRemoving = false;
 
     [SerializeField] private List<Slot_col> slot_matrix;
 
-    List<int> yPos = new List<int>();
-    List<int> xPos = new List<int>();
     public Sprite empty;
 
     [Serializable]
     public class Slot_col
     {
-
         public List<Slot_Item> row;
 
     }
@@ -99,8 +91,6 @@ public class Reel_Controller : MonoBehaviour
 
     internal void ReArrangeMatrix(List<List<int>> iconsToFill)
     {
-
-
         for (int i = 0; i < slot_matrix.Count; i++)
         {
             var negativeOnes = slot_matrix[i].row.Where(x => x.id == -1).ToList();
@@ -201,7 +191,7 @@ public class Reel_Controller : MonoBehaviour
     }
     internal void HandleWildSymbols(List<string> symbolsToEmit)
     {
-        //TODO: PM Check wild Animation
+        //[x]: PM Check wild Animation
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
         for (int i = 0; i < symbolsToEmit.Count; i++)
@@ -220,8 +210,7 @@ public class Reel_Controller : MonoBehaviour
             else if (slot_matrix[yPos[i]].row[xPos[i]].wildVariation == 2)
                 slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray = wildAnimationSprite2.ToList();
 
-                slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation();
-
+                if(slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray.Count>0)  slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation() ;
 
         }
 
@@ -238,15 +227,15 @@ public class Reel_Controller : MonoBehaviour
     {
 
 
-
-        for (int i = 0; i < slot_matrix.Count; i++)
+        // [x]: PM adding highlight
+        for (int i = 0; i < symbols.Count; i++)
         {
-            string cord = $"{i},{payline[i]}";
-            if (symbols.Contains(cord))
-            {
+            // string cord = $"{i},{payline[i]}";
+            // if (symbols.Contains(cord))
+            // {
                 slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
                 slot_matrix[i].row[payline[i]].boder.color = highlightColor;
-            }
+            // }
 
         }
     }

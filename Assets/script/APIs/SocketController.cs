@@ -44,7 +44,7 @@ public class SocketController : MonoBehaviour
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-    internal Action InitGameData=null;
+    internal Action<List<Symbol>,PlayerData> InitiateUI;
     internal Action ShowDisconnectionPopUp=null;
     internal Action ShowAnotherDevicePopUp=null;
     private void Awake()
@@ -59,7 +59,7 @@ public class SocketController : MonoBehaviour
     private void Start()
     {
         //OpenWebsocket();
-        OpenSocket();
+        // OpenSocket();
     }
 
 
@@ -263,9 +263,12 @@ public class SocketController : MonoBehaviour
 
         if (messageId == "InitData")
         {
-            socketModel.uIData = message["UIData"].ToObject<UIData>();
+            socketModel.uIData.symbols = message["UIData"]["paylines"]["symbols"].ToObject<List<Symbol>>();
             socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
             socketModel.initGameData.lineData=gameData["linesApiData"].ToObject<List<List<int>>>();
+            InitiateUI?.Invoke(socketModel.uIData.symbols,socketModel.playerData);
+
+            Debug.Log(JsonConvert.SerializeObject(socketModel.uIData.symbols));
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // TODO: PM multiple parsheet
 

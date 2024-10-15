@@ -4,6 +4,9 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using System;
+using Newtonsoft.Json.Linq;
 
 public class UI_Controller : MonoBehaviour
 {
@@ -83,9 +86,13 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private int currentPage = 0;
 
     [Header("Info UI")]
-    [SerializeField] private TMP_Text minor_symbol_text;
-    [SerializeField] private TMP_Text[] major_symbol_texts;
-    [SerializeField] private TMP_Text[] special_symbol_texts;
+    [SerializeField] private TMP_Text[] symbol_texts;
+    [SerializeField] private TMP_Text wild_text;
+    [SerializeField] private TMP_Text jackpot_texts;
+
+    [Header("player Info")]
+    [SerializeField]  private TMP_Text playerBalance;
+    [SerializeField]  private TMP_Text playerWinning;
 
     private void Start()
     {
@@ -146,7 +153,12 @@ public class UI_Controller : MonoBehaviour
 
     }
 
+    internal void UpdatePlayerInfo(PlayerData playerData){
 
+        playerBalance.text=playerData.Balance.ToString();
+        playerWinning.text=playerData.CurrentWining.ToString();
+
+    }
     private void OpenMenu()
     {
         if (!isMenuOpen)
@@ -254,8 +266,14 @@ public class UI_Controller : MonoBehaviour
     }
 
 
-    internal void InitUI(Paylines paylines)
+    internal void InitUI(List<Symbol> symbolInfo)
     {
+
+        for (int i = 0; i < symbol_texts.Length; i++)
+        {
+
+            SetSymboltext(symbolInfo[i],symbol_texts[i]);
+        }
 
 
         // for (int i = 0; i < paylines.symbols.Count; i++)
@@ -310,5 +328,15 @@ public class UI_Controller : MonoBehaviour
 
     }
 
+
+    void SetSymboltext(Symbol symbolInfo,TMP_Text minor_symbol_text){
+            minor_symbol_text.text="";
+            string info="";
+            for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
+            {
+                info+=$"{5-i}X - "+symbolInfo.Multiplier[i][0].ToString()+"\n";
+            }
+            minor_symbol_text.text=info;
+    }
 
 }

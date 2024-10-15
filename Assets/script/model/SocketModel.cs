@@ -60,50 +60,45 @@ public class PlayerData
 {
     public double Balance { get; set; }
     public int HaveWon { get; set; }
-    public int CurrentWining { get; set; }
+    public double CurrentWining { get; set; }
 }
 
 [Serializable]
 public class UIData
 {
-    public Paylines paylines { get; set; }
-    public List<string> spclSymbolTxt { get; set; }
-    public string ToULink { get; set; }
-    public string PopLink { get; set; }
+    public List<Symbol> symbols { get; set; }
+
 }
 
-[Serializable]
-public class Paylines
-{
-    public List<Symbol> symbols { get; set; }
-}
+
 
 [Serializable]
 public class Symbol
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    public JToken Multiplier { get; set;}
 
-    [JsonProperty("multiplier")]
-    public object MultiplierObject { get; set; }
+    // [JsonProperty("multiplier")]
+    // public object MultiplierObject { get; set; }
 
-    [JsonIgnore]
-    public List<List<int>> Multiplier { get; set; }
+    // [JsonIgnore]
+    // public List<List<int>> Multiplier { get; set; }
 
-    [OnDeserialized]
-    internal void OnDeserializedMethod(StreamingContext context)
-    {
+    // [OnDeserialized]
+    // internal void OnDeserializedMethod(StreamingContext context)
+    // {
  
-        if (MultiplierObject is JObject)
-        {
-            Multiplier = new List<List<int>>();
-        }
-        else
-        {
+    //     if (MultiplierObject is JObject)
+    //     {
+    //         Multiplier = new List<List<int>>();
+    //     }
+    //     else
+    //     {
 
-            Multiplier = JsonConvert.DeserializeObject<List<List<int>>>(MultiplierObject.ToString());
-        }
-    }
+    //         Multiplier = JsonConvert.DeserializeObject<List<List<int>>>(MultiplierObject.ToString());
+    //     }
+    // }
     public object defaultAmount { get; set; }
     public object symbolsCount { get; set; }
     public object increaseValue { get; set; }

@@ -111,7 +111,7 @@ MonoBehaviour:
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 7
+  AnimationSpeed: 8.25
   delayBetweenLoop: 0
   StartOnAwake: 1
   DestroyOnCompletion: 0

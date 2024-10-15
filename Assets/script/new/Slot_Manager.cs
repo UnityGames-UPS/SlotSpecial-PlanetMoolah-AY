@@ -12,6 +12,7 @@ public class Slot_Manager : MonoBehaviour
     [SerializeField] private SocketController socketManager;
     [SerializeField] private AudioController audioController;
     [SerializeField] private Payline_controller payline_Controller;
+    [SerializeField] private UI_Controller uI_Controller;
 
     [Header("Buttons")]
     [SerializeField] private Button start_Button;
@@ -23,15 +24,25 @@ public class Slot_Manager : MonoBehaviour
     public List<List<string>> resultData;
     public List<List<int>> iconsToFill;
 
+    void Awake(){
+        socketManager.InitiateUI=InitiateUI;
+        socketManager.OpenSocket();
+    }
     void Start()
-    {
+    {   
+        uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData);
+
+
+
         reel_Controller.PopulateSlot();
+
+
+
 
         start_Button.onClick.AddListener(() => StartCoroutine(SpinRoutine()));
         autoStart_Button.onClick.AddListener(()=>StartCoroutine(AutoSpinRoutine()));
         autoStop_Button.onClick.AddListener(()=>{isAutoSpin=false;
-        
-                autoStop_Button.gameObject.SetActive(false);
+        autoStop_Button.gameObject.SetActive(false);
         autoStart_Button.gameObject.SetActive(true);
         });
     }
@@ -54,11 +65,11 @@ public class Slot_Manager : MonoBehaviour
 
     void OnSpinStart()
     {
-
-
         reel_Controller.ClearReel();
 
         ToggleButtonGrp(false);
+        socketManager.socketModel.playerData.CurrentWining=0;
+        uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData);
         var spinData = new { data = new { currentBet = 0, currentLines = 25, spins = 1 }, id = "SPIN" };
         socketManager.SendData("message", spinData);
     }
@@ -70,6 +81,7 @@ public class Slot_Manager : MonoBehaviour
     void OnSpinEnd()
     {
         ToggleButtonGrp(true);
+        uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData);
 
         // uFO_Controller.Shoot(SymbolsToEmit);
         // reel_Controller.DeleteWinSymbols(SymbolsToEmit);
@@ -105,7 +117,7 @@ public class Slot_Manager : MonoBehaviour
                 {
                     lineId=cascadeData[k].lineToEmit[i]-1;
                     Color borderColor=payline_Controller.GeneratePayline(lineId);
-                    reel_Controller.HighlightIcon(socketManager.socketModel.initGameData.lineData[lineId],SymbolsToEmit,borderColor);
+                    reel_Controller.HighlightIcon(socketManager.socketModel.initGameData.lineData[lineId],cascadeData[k].winingSymbols[i],borderColor);
                     yield return new WaitForSeconds(0.5f);
                     reel_Controller.StopHighlightIcon(socketManager.socketModel.initGameData.lineData[lineId]);
                     payline_Controller.DestroyPayline(lineId);
@@ -186,6 +198,11 @@ public class Slot_Manager : MonoBehaviour
 
     }
 
+    void InitiateUI(List<Symbol> uiData, PlayerData playerData){
+
+        uI_Controller.UpdatePlayerInfo(playerData);
+        uI_Controller.InitUI(uiData);
+    }
     void ToggleButtonGrp(bool toggle)
     {
 
