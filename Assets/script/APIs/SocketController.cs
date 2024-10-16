@@ -201,7 +201,6 @@ public class SocketController : MonoBehaviour
 
     private void OnListenEvent(string data)
     {
-        Debug.Log("Received some_event with data: " + data);
         ParseResponse(data);
     }
 
@@ -239,6 +238,9 @@ public class SocketController : MonoBehaviour
     internal void CloseSocket()
     {
         SendData("EXIT");
+        
+        Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+
         DOVirtual.DelayedCall(0.1f, () =>
         {
             if (this.manager != null)
@@ -268,7 +270,6 @@ public class SocketController : MonoBehaviour
             socketModel.initGameData.lineData=gameData["linesApiData"].ToObject<List<List<int>>>();
             InitiateUI?.Invoke(socketModel.uIData.symbols,socketModel.playerData);
 
-            Debug.Log(JsonConvert.SerializeObject(socketModel.uIData.symbols));
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // TODO: PM multiple parsheet
 

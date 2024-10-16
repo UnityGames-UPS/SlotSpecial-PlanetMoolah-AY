@@ -78,27 +78,6 @@ public class Symbol
     public int ID { get; set; }
     public string Name { get; set; }
     public JToken Multiplier { get; set;}
-
-    // [JsonProperty("multiplier")]
-    // public object MultiplierObject { get; set; }
-
-    // [JsonIgnore]
-    // public List<List<int>> Multiplier { get; set; }
-
-    // [OnDeserialized]
-    // internal void OnDeserializedMethod(StreamingContext context)
-    // {
- 
-    //     if (MultiplierObject is JObject)
-    //     {
-    //         Multiplier = new List<List<int>>();
-    //     }
-    //     else
-    //     {
-
-    //         Multiplier = JsonConvert.DeserializeObject<List<List<int>>>(MultiplierObject.ToString());
-    //     }
-    // }
     public object defaultAmount { get; set; }
     public object symbolsCount { get; set; }
     public object increaseValue { get; set; }
@@ -120,8 +99,7 @@ public class Cascading
     public List<List<int>> symbolsToFill{get; set;}
     public List<List<string>> winingSymbols {get; set;}
     public List<int> lineToEmit{get; set;}
-    
-    public double currentWinning{get; set;}
+    public double currentWining{get; set;}
 
 
 }

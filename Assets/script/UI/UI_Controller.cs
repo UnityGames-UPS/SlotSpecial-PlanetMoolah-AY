@@ -7,6 +7,7 @@ using TMPro;
 using System.Linq;
 using System;
 using Newtonsoft.Json.Linq;
+using Unity.VisualScripting;
 
 public class UI_Controller : MonoBehaviour
 {
@@ -18,28 +19,26 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private Transform settings_button;
     [SerializeField] private Transform info_button;
     [SerializeField] private Button Menu_Button;
-    [SerializeField]
-    private Button Terms_Button;
-    [SerializeField]
-    private Button Privacy_Button;
 
-    [SerializeField]
-    private Button Exit_Button;
-    [SerializeField]
-    private GameObject Exit_Object;
-    [SerializeField]
-    private RectTransform Exit_RT;
-
-
-    [SerializeField]
-    private GameObject Paytable_Object;
-    [SerializeField]
-    private RectTransform Paytable_RT;
+    [Header("Bet info")]
+    [SerializeField] private TMP_Text betPerLineText;
+    [SerializeField] private TMP_Text totalBetText;
 
     [Header("Popus UI")]
     [SerializeField]
     private GameObject MainPopup_Object;
+    [Header("win Popup")]
+    [SerializeField] private GameObject winPopUpObject;
+    [SerializeField] private TMP_Text winTitle;
+    [SerializeField] private TMP_Text winAmountText;
 
+    [Header("disconnection Popup")]
+    [SerializeField] private GameObject disconnectPopupObject;
+    [SerializeField] private Button disconnectCloseButton;
+
+    [Header("Low balance Popup")]
+    [SerializeField] private GameObject lowBalPopupObject;
+    [SerializeField] private Button lowbalCloseButton;
 
     [Header("Paytable Popup")]
     [SerializeField] private GameObject PaytablePopup_Object;
@@ -91,9 +90,12 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private TMP_Text jackpot_texts;
 
     [Header("player Info")]
-    [SerializeField]  private TMP_Text playerBalance;
-    [SerializeField]  private TMP_Text playerWinning;
+    [SerializeField] private TMP_Text playerBalance;
+    [SerializeField] private TMP_Text playerWinning;
 
+    [SerializeField] GameObject currentPopup = null;
+
+    internal Action Exitgame;
     private void Start()
     {
 
@@ -103,13 +105,13 @@ public class UI_Controller : MonoBehaviour
         if (Paytable_Button) Paytable_Button.onClick.AddListener(delegate { OpenPopup(PaytablePopup_Object); });
 
         if (PaytableExit_Button) PaytableExit_Button.onClick.RemoveAllListeners();
-        if (PaytableExit_Button) PaytableExit_Button.onClick.AddListener(delegate { ClosePopup(PaytablePopup_Object); });
+        if (PaytableExit_Button) PaytableExit_Button.onClick.AddListener(delegate { ClosePopup(); });
 
         if (Settings_Button) Settings_Button.onClick.RemoveAllListeners();
         if (Settings_Button) Settings_Button.onClick.AddListener(delegate { OpenPopup(SettingsPopup_Object); });
 
         if (SettingsExit_Button) SettingsExit_Button.onClick.RemoveAllListeners();
-        if (SettingsExit_Button) SettingsExit_Button.onClick.AddListener(delegate { ClosePopup(SettingsPopup_Object); });
+        if (SettingsExit_Button) SettingsExit_Button.onClick.AddListener(delegate { ClosePopup(); });
 
         if (prev) prev.onClick.RemoveAllListeners();
         if (prev) prev.onClick.AddListener(delegate { TogglePage(true); });
@@ -135,7 +137,10 @@ public class UI_Controller : MonoBehaviour
         if (SoundOff_Object) SoundOff_Object.SetActive(false);
 
         if (GameExit_Button) GameExit_Button.onClick.RemoveAllListeners();
-        if (GameExit_Button) GameExit_Button.onClick.AddListener(CallOnExitFunction);
+        if (GameExit_Button) GameExit_Button.onClick.AddListener(() =>
+        {
+            Exitgame();
+        });
 
         //if (FreeSpin_Button) FreeSpin_Button.onClick.RemoveAllListeners();
         //if (FreeSpin_Button) FreeSpin_Button.onClick.AddListener(delegate { StartFreeSpins(FreeSpins); });
@@ -151,12 +156,27 @@ public class UI_Controller : MonoBehaviour
         if (Music_Button) Music_Button.onClick.RemoveAllListeners();
         if (Music_Button) Music_Button.onClick.AddListener(ToggleMusic);
 
+        if (disconnectCloseButton) disconnectCloseButton.onClick.RemoveAllListeners();
+        if (disconnectCloseButton) disconnectCloseButton.onClick.AddListener(() =>
+        {
+            Exitgame();
+        });
+
+        if (lowbalCloseButton) lowbalCloseButton.onClick.RemoveAllListeners();
+        if (lowbalCloseButton) lowbalCloseButton.onClick.AddListener(() =>
+        {
+            Exitgame();
+        });
+
     }
 
-    internal void UpdatePlayerInfo(PlayerData playerData){
-
-        playerBalance.text=playerData.Balance.ToString();
-        playerWinning.text=playerData.CurrentWining.ToString();
+    internal void UpdatePlayerInfo(double currentWinning = -1, double balance =-1)
+    {
+        Debug.Log("balance "+balance);
+        if (balance >= 0)
+            playerBalance.text = balance.ToString();
+        if (currentWinning >= 0)
+            playerWinning.text = currentWinning.ToString();
 
     }
     private void OpenMenu()
@@ -190,23 +210,61 @@ public class UI_Controller : MonoBehaviour
     private void CallOnExitFunction()
     {
         //slotManager.CallCloseSocket();
-        Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+
     }
 
     private void OpenPopup(GameObject Popup)
     {
         //if (audioController) audioController.PlayButtonAudio();
+
+        if (currentPopup != null)
+        {
+
+            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP" || currentPopup.name.ToUpper() == "LOWBALANCEPOPUP")
+                return;
+            currentPopup.SetActive(false);
+        }
+
+        currentPopup = Popup;
         if (Popup) Popup.SetActive(true);
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
+
     }
 
-    private void ClosePopup(GameObject Popup)
+    private void ClosePopup()
     {
         //if (audioController) audioController.PlayButtonAudio();
-        if (Popup) Popup.SetActive(false);
-        if (MainPopup_Object) MainPopup_Object.SetActive(false);
+        if (currentPopup != null)
+        {
+            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP" || currentPopup.name.ToUpper() == "LOWBALANCEPOPUP")
+                return;
+
+            currentPopup.SetActive(false);
+            currentPopup = null;
+            // if (Popup) Popup.SetActive(false);
+            if (MainPopup_Object) MainPopup_Object.SetActive(false);
+        }
+
+
     }
 
+    internal void UpdateBetInfo(double betPerline, double totaleBet){
+
+        betPerLineText.text=betPerline.ToString();
+        totalBetText.text=totaleBet.ToString();
+
+    }
+
+    internal void ShowDisconnectPopup()
+    {
+
+        OpenPopup(disconnectPopupObject);
+
+    }
+
+    internal void ShowLowBalPopup(){
+        OpenPopup(lowBalPopupObject);
+    }
     private void ToggleMusic()
     {
         print("triggered");
@@ -243,6 +301,35 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
+    internal IEnumerator ShowWinPopup(int type, double amount)
+    {
+
+        switch (type)
+        {
+            case 0:
+                winTitle.text = "Big win";
+                break;
+            case 1:
+                winTitle.text = "Huge win";
+                break;
+            case 2:
+                winTitle.text = "Mega win";
+                break;
+            case 3:
+                winTitle.text = "Jackpot";
+                break;
+            default:
+                yield break;
+
+        }
+
+        winAmountText.text = amount.ToString();
+
+        OpenPopup(winPopUpObject);
+        yield return new WaitForSeconds(3f);
+        ClosePopup();
+
+    }
     void TogglePage(bool decrease)
     {
 
@@ -272,7 +359,7 @@ public class UI_Controller : MonoBehaviour
         for (int i = 0; i < symbol_texts.Length; i++)
         {
 
-            SetSymboltext(symbolInfo[i],symbol_texts[i]);
+            SetSymboltext(symbolInfo[i], symbol_texts[i]);
         }
 
 
@@ -329,14 +416,15 @@ public class UI_Controller : MonoBehaviour
     }
 
 
-    void SetSymboltext(Symbol symbolInfo,TMP_Text minor_symbol_text){
-            minor_symbol_text.text="";
-            string info="";
-            for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
-            {
-                info+=$"{5-i}X - "+symbolInfo.Multiplier[i][0].ToString()+"\n";
-            }
-            minor_symbol_text.text=info;
+    void SetSymboltext(Symbol symbolInfo, TMP_Text minor_symbol_text)
+    {
+        minor_symbol_text.text = "";
+        string info = "";
+        for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
+        {
+            info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString() + "\n";
+        }
+        minor_symbol_text.text = info;
     }
 
 }
