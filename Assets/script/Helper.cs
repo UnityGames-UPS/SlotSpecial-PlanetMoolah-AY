@@ -35,7 +35,7 @@ public class Helper
     {
         List<int> randomIndex = new List<int>() { 0, 1, 2, 3, 4 };
         randomIndex.Remove(exception);
-        int index = UnityEngine.Random.Range(0, randomIndex.Count);
+        int index = randomIndex[UnityEngine.Random.Range(0, randomIndex.Count)];
         return index;
 
     }

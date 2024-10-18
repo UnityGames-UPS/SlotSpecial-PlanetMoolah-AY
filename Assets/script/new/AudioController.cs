@@ -71,6 +71,7 @@ public class AudioController : MonoBehaviour
             audioPlayer_Spin.Pause();
             audioPlayer_shoot_effect.Pause();
             audioPlayer_pull_effect.Pause();
+            audioPlayer_blast_effect.Pause();
         }
         else
         {
@@ -80,7 +81,7 @@ public class AudioController : MonoBehaviour
             audioPlayer_Spin.UnPause();
             audioPlayer_shoot_effect.UnPause();
             audioPlayer_pull_effect.UnPause();
-
+            audioPlayer_blast_effect.UnPause();
 
         }
     }
@@ -95,7 +96,7 @@ public class AudioController : MonoBehaviour
         StopBgAudio();
         if (bg_adudio)
         {
-            if (type == "bonus")
+            if (type == "FP")
                 bg_adudio.clip = FreeSpinBg_Audio;
             else
                 bg_adudio.clip = NormalBg_Audio;
@@ -154,35 +155,25 @@ public class AudioController : MonoBehaviour
 
     }
 
-    internal void ToggleMute(float value, string type = "all")
+    internal void ToggleMute(bool toggle, string type )
     {
 
         switch (type)
         {
             case "bg":
-                    bg_adudio.mute = value <0.1;
-                    bg_adudio.volume = value;
+                    bg_adudio.mute = toggle;
                 break;
             case "button":
-                audioPlayer_button.mute = value<0.1;
-                audioPlayer_Spin.mute=value<0.1;
-
-                audioPlayer_button.volume = value;
-                audioPlayer_Spin.volume = value;
+                audioPlayer_button.mute = toggle;
+                audioPlayer_Spin.mute=toggle;
                 break;
             case "wl":
-                audioPlayer_wl.mute = value<0.1;
-                audioPlayer_wl.volume = value;
+                audioPlayer_wl.mute = toggle;
+                audioPlayer_pull_effect.mute=toggle;
+                audioPlayer_shoot_effect.mute=toggle;
+                audioPlayer_blast_effect.mute=toggle;
                 break;
-            case "all":
-                audioPlayer_wl.mute = value<0.1;
-                bg_adudio.mute = value<0.1;
-                audioPlayer_button.mute = value<0.1;
-                
-                audioPlayer_wl.volume = value;
-                bg_adudio.volume = value;
-                audioPlayer_button.volume = value;
-                break;
+
         }
     }
 

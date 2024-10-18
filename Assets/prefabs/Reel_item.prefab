@@ -163,24 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca72de36ec34567951f177051c4e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureArray:
-  - {fileID: 745821427, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1414555365, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -864273050, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 10884046, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1493916483, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1076412256, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -990843327, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 1035130420, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -2082538389, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 781134088, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 373270809, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1953099787, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1242234903, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 1243587067, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 1663074921, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: -1250157853, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
-  - {fileID: 745821427, guid: 8d7a292cab29e4aa1b99598d7de30913, type: 3}
+  textureArray: []
   rendererDelegate: {fileID: 5886688115742584374}
   useSharedMaterial: 1
   doLoopAnimation: 0
@@ -190,7 +173,6 @@ MonoBehaviour:
   StartOnAwake: 0
   DestroyOnCompletion: 0
   isplaying: 0
-  OriginalSprite: {fileID: 0}
 --- !u!1 &3792898709055268701
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,8 +274,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_AnchoredPosition: {x: 0, y: -1.5}
+  m_SizeDelta: {x: -20, y: -7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6907082867611016965
 CanvasRenderer:
@@ -350,9 +332,8 @@ MonoBehaviour:
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 111
+  AnimationSpeed: 6
   delayBetweenLoop: 0
   StartOnAwake: 0
   DestroyOnCompletion: 0
   isplaying: 0
-  OriginalSprite: {fileID: 0}

@@ -36,30 +36,24 @@ public class InitGameData
     public bool canSwitchLines { get; set; }
     public List<int> LinesCount { get; set; }
     public List<int> autoSpin { get; set; }
-
     public List<List<int>> lineData {get; set;}
+    public List<List<int>> freeSpinData {get; set;}
 }
 
 [Serializable]
 public class ResultGameData
 {
-    public List<List<int>> ResultReel { get; set; }
-    public List<Cascading> cascadeData{get; set;}
-    public List<int> autoSpin { get; set; }
-    public List<int> linesToEmit { get; set; }
-    public List<List<string>> symbolsToEmit { get; set; }
-    public double WinAmout { get; set; }
-    public double freeSpins { get; set; }
+    public List<List<int>> resultSymbols { get; set; }
+    public List<Cascading> cascading{get; set;}
+    public bool isFreeSpin {get; set;}
+    public int freeSpinCount { get; set; }
     public double jackpot { get; set; }
-    public bool isBonus { get; set; }
-    public double BonusStopIndex { get; set; }
 }
 
 [Serializable]
 public class PlayerData
 {
     public double Balance { get; set; }
-    public int HaveWon { get; set; }
     public double CurrentWining { get; set; }
 }
 
@@ -81,6 +75,7 @@ public class Symbol
     public object defaultAmount { get; set; }
     public object symbolsCount { get; set; }
     public object increaseValue { get; set; }
+    public object description { get; set; }
     public int freeSpin { get; set; }
 }
 

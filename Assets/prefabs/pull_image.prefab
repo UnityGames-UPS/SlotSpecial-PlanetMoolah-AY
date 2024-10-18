@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1258d1e4aedb46a09d67119a049973e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 366a037d4a5ba48ed92880acf76330dd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textureArray:
+  - {fileID: 21300000, guid: 366a037d4a5ba48ed92880acf76330dd, type: 3}
   - {fileID: 21300000, guid: 7961fa2f7cb594f60935714acdcc15c5, type: 3}
   - {fileID: 21300000, guid: b41efcd4b790e4061b55e328178e2c4b, type: 3}
   - {fileID: 21300000, guid: e604d7fe75ffa4d85a81fe7c05287fcb, type: 3}
@@ -111,7 +112,7 @@ MonoBehaviour:
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 8.25
+  AnimationSpeed: 11
   delayBetweenLoop: 0
   StartOnAwake: 1
   DestroyOnCompletion: 0

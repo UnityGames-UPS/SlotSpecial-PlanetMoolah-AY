@@ -59,12 +59,12 @@ public class Reel_Controller : MonoBehaviour
 
     }
 
-    internal void FillReel1(List<List<int>> result)
+    internal IEnumerator FillReel1(List<List<int>> result)
     {
 
-        for (int j = slot_matrix[0].row.Count - 1; j >= 0; j--)
+        for (int i = 0; i < 5; i++)
         {
-            for (int i = 0; i < 5; i++)
+            for (int j = slot_matrix[i].row.Count - 1; j >= 0; j--)
             {
                 slot_matrix[i].row[j].transform.localPosition = new Vector2(0, 5 * iconSize);
                 int id = result[j][i];
@@ -85,7 +85,10 @@ public class Reel_Controller : MonoBehaviour
                 slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration * (2 - j + 1)).SetEase(Ease.Linear);
             }
 
+            yield return new WaitForSeconds(0.25f);
+
         }
+        yield return new WaitForSeconds(0.25f);
     }
 
 
@@ -140,6 +143,7 @@ public class Reel_Controller : MonoBehaviour
     {
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
+
         for (int i = 0; i < symbolsToEmit.Count; i++)
         {
             int[] values = Helper.ConvertSymbolPos(symbolsToEmit[i]);
@@ -194,6 +198,7 @@ public class Reel_Controller : MonoBehaviour
         //[x]: PM Check wild Animation
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
+
         for (int i = 0; i < symbolsToEmit.Count; i++)
         {
             int[] values = Helper.ConvertSymbolPos(symbolsToEmit[i]);
@@ -201,6 +206,7 @@ public class Reel_Controller : MonoBehaviour
             yPos.Add(values[0]);
             xPos.Add(values[1]);
         }
+
         for (int i = 0; i < yPos.Count; i++)
         {
             if (slot_matrix[yPos[i]].row[xPos[i]].wildVariation == 0)
@@ -210,7 +216,7 @@ public class Reel_Controller : MonoBehaviour
             else if (slot_matrix[yPos[i]].row[xPos[i]].wildVariation == 2)
                 slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray = wildAnimationSprite2.ToList();
 
-                if(slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray.Count>0)  slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation() ;
+            if (slot_matrix[yPos[i]].row[xPos[i]].ownAnim.textureArray.Count > 0) slot_matrix[yPos[i]].row[xPos[i]].ownAnim.StartAnimation();
 
         }
 
@@ -233,8 +239,8 @@ public class Reel_Controller : MonoBehaviour
             // string cord = $"{i},{payline[i]}";
             // if (symbols.Contains(cord))
             // {
-                slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
-                slot_matrix[i].row[payline[i]].boder.color = highlightColor;
+            slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+            slot_matrix[i].row[payline[i]].boder.color = highlightColor;
             // }
 
         }

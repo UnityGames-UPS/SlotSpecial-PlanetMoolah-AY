@@ -40,8 +40,7 @@ public class ImageAnimation : MonoBehaviour
 
 	[SerializeField] internal bool isplaying;
 
-	[SerializeField]
-	private Sprite OriginalSprite;
+
 
 	private void Awake()
 	{
@@ -51,10 +50,7 @@ public class ImageAnimation : MonoBehaviour
 		}
 	}
 
-	private void Start()
-	{
-		OriginalSprite = rendererDelegate.sprite;
-	}
+
 
 	private void OnEnable()
 	{

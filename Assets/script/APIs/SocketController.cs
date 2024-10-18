@@ -35,18 +35,21 @@ public class SocketController : MonoBehaviour
     [SerializeField]
     private string TestToken;
 
-    // TODO: PM to be added
-    protected string gameID = "";
-    // protected string gameID = "SL-PM";
+    // [x]: PM to be added
+    // protected string gameID = "";
+    protected string gameID = "SL-PM";
 
     internal bool isLoading;
     internal bool SetInit = false;
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-    internal Action<List<Symbol>,PlayerData> InitiateUI;
+    internal Action<List<Symbol>,List<List<int>>,PlayerData> InitiateUI;
     internal Action ShowDisconnectionPopUp=null;
     internal Action ShowAnotherDevicePopUp=null;
+
+    internal bool isExit;
+
     private void Awake()
     {
         isLoading = true;
@@ -190,6 +193,7 @@ public class SocketController : MonoBehaviour
     {
         Debug.Log("Disconnected from the server");
         StopAllCoroutines();
+        if(!isExit)
         ShowDisconnectionPopUp?.Invoke();
         // uIManager.DisconnectionPopup();
     }
@@ -237,6 +241,7 @@ public class SocketController : MonoBehaviour
 
     internal void CloseSocket()
     {
+        isExit=true;
         SendData("EXIT");
         
         Application.ExternalCall("window.parent.postMessage", "onExit", "*");
@@ -268,41 +273,24 @@ public class SocketController : MonoBehaviour
             socketModel.uIData.symbols = message["UIData"]["paylines"]["symbols"].ToObject<List<Symbol>>();
             socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
             socketModel.initGameData.lineData=gameData["linesApiData"].ToObject<List<List<int>>>();
-            InitiateUI?.Invoke(socketModel.uIData.symbols,socketModel.playerData);
+            socketModel.initGameData.freeSpinData=gameData["freeSpinData"].ToObject<List<List<int>>>();
+            InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData,socketModel.playerData);
 
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
-            // TODO: PM multiple parsheet
+            // [x]: PM multiple parsheet
 
         }
         else if (messageId == "ResultData")
         {
-            socketModel.resultGameData.ResultReel = gameData["resultSymbols"].ToObject<List<List<int>>>();
-            socketModel.resultGameData.cascadeData = gameData["cascading"].ToObject<List<Cascading>>();
+            socketModel.resultGameData = gameData.ToObject<ResultGameData>();
+            // socketModel.resultGameData.cascadeData = gameData["cascading"].ToObject<List<Cascading>>();
+            // socketModel.resultGameData.isFreeSpin
             // socketModel.resultGameData.linesToEmit = gameData["linestoemit"].ToObject<List<int>>();
-
             isResultdone = true;
 
         }
     }
 
-    // private void RefreshUI()
-    // {
-    //     uIManager.InitialiseUIData(initUIData.AbtLogo.link, initUIData.AbtLogo.logoSprite, initUIData.ToULink, initUIData.PopLink, initUIData.paylines);
-    // }
-
-    // private void PopulateSlotSocket(List<string> slotPop, List<string> LineIds)
-    // {
-    //     slotManager.shuffleInitialMatrix();
-    //     for (int i = 0; i < LineIds.Count; i++)
-    //     {
-    //         slotManager.FetchLines(LineIds[i], i);
-    //     }
-
-    //     // slotManager.SetInitialUI();
-    //     isLoading = false;
-
-    //     // Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
-    // }
 
     internal void SendData(string eventName, object message = null)
     {
