@@ -6042,7 +6042,7 @@ GameObject:
   - component: {fileID: 470718019}
   - component: {fileID: 470718018}
   m_Layer: 0
-  m_Name: SocketController
+  m_Name: SocketManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
