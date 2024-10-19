@@ -23,16 +23,17 @@ public class UI_Controller : MonoBehaviour
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
     [SerializeField] private TMP_Text totalBetText;
-
     [SerializeField] private TMP_Text totalLineText;
 
     [Header("Popus UI")]
-    [SerializeField]
-    private GameObject MainPopup_Object;
+    [SerializeField] private GameObject MainPopup_Object;
     [Header("win Popup")]
     [SerializeField] private GameObject winPopUpObject;
     [SerializeField] private TMP_Text winTitle;
     [SerializeField] private TMP_Text winAmountText;
+
+    [Header("Free Spin Info")]
+    [SerializeField] private TMP_Text[] freeSpinCounters;
 
     [Header("Free Spin Popup")]
     [SerializeField] private GameObject freeSpinObject;
@@ -190,8 +191,9 @@ public class UI_Controller : MonoBehaviour
 
         });
 
-        if(Sound_Button) Sound_Button.onClick.RemoveAllListeners();
-        if(Sound_Button) Sound_Button.onClick.AddListener(delegate{
+        if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
+        if (Sound_Button) Sound_Button.onClick.AddListener(delegate
+        {
             ToggleSound();
             OnPlayButton("default");
         });
@@ -334,7 +336,7 @@ public class UI_Controller : MonoBehaviour
     internal void SetFreeSpinUI()
     {
         ClosePopup();
-        freeSpinText.text="";
+        freeSpinText.text = "";
         bg.sprite = freeSpinBG;
         reeelBg.sprite = freeSpinReel;
         foreach (var item in planets)
@@ -355,8 +357,8 @@ public class UI_Controller : MonoBehaviour
     }
     internal void UpdateBetInfo(double betPerline, double totaleBet, int totalLine)
     {
-        totalLineText.text=totalLine.ToString();
-        
+        totalLineText.text = totalLine.ToString();
+
         betPerLineText.text = betPerline.ToString();
         totalBetText.text = totaleBet.ToString();
 
@@ -376,7 +378,7 @@ public class UI_Controller : MonoBehaviour
 
     internal void ShowFreeSpinPopup(int value)
     {
-        freeSpinText.text=$"You are awarded {value} free plays Press start to play.";
+        freeSpinText.text = $"You are awarded {value} free plays Press start to play.";
         OpenPopup(freeSpinObject);
     }
     private void ToggleMusic()
@@ -443,20 +445,37 @@ public class UI_Controller : MonoBehaviour
         }
 
         OpenPopup(winPopUpObject);
-        double currentValue=0;
-                DOTween.To(() => currentValue, x => currentValue = x, amount, 2.25f)
-            .OnUpdate(() =>
-            {
-                winAmountText.text = currentValue.ToString("f3"); 
-            })
-            .OnComplete(() =>
-            {
-                winAmountText.text = amount.ToString();
-            });
-        
+        double currentValue = 0;
+        DOTween.To(() => currentValue, x => currentValue = x, amount, 2f)
+    .OnUpdate(() =>
+    {
+        winAmountText.text = currentValue.ToString("f3");
+    })
+    .OnComplete(() =>
+    {
+        winAmountText.text = amount.ToString();
+    });
+
 
         yield return new WaitForSeconds(3f);
         ClosePopup();
+
+    }
+
+    internal void DeductBalance(double bet)
+    {
+
+        double balance = Double.Parse(playerBalance.text);
+        double currentValue = balance;
+        DOTween.To(() => currentValue, x => currentValue = x, (balance - bet), 0.4f)
+        .OnUpdate(() =>
+        {
+            playerBalance.text = currentValue.ToString("f3");
+        })
+        .OnComplete(() =>
+        {
+            playerBalance.text = (balance - bet).ToString();
+        });
 
     }
     void TogglePage(bool decrease)
@@ -491,6 +510,11 @@ public class UI_Controller : MonoBehaviour
             SetSymboltext(symbolInfo[i], i);
         }
 
+        for (int i = 0; i < freeSpinCounters.Length; i++)
+        {
+            freeSpinCounters[i].text = freeSpinInfo[i][0].ToString();
+        }
+
         for (int i = 0; i < freeSpinInfo.Count; i++)
         {
             if (i == 0)
@@ -507,7 +531,6 @@ public class UI_Controller : MonoBehaviour
     {
         if (symbolInfo.Name.ToUpper() == "JACKPOT")
         {
-            Debug.Log("dsds" + symbolInfo.description);
             jackPotText.text = symbolInfo.description.ToString();
             return;
         }
@@ -539,15 +562,17 @@ public class UI_Controller : MonoBehaviour
         Music_Button.interactable = toggle;
     }
 
-    internal Tweener HighLightWin(){
+    internal Tweener HighLightWin()
+    {
 
-        Tweener winTween=playerWinning.transform.DOScale(1.2f,1f).SetLoops(-1,LoopType.Yoyo);
+        Tweener winTween = playerWinning.transform.DOScale(1.2f, 1f).SetLoops(-1, LoopType.Yoyo);
 
         return winTween;
 
     }
 
-    internal void ResetWin(){
-        playerWinning.transform.localScale=Vector3.one;
+    internal void ResetWin()
+    {
+        playerWinning.transform.localScale = Vector3.one;
     }
 }

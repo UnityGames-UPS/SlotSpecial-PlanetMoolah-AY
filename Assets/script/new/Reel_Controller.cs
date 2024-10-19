@@ -85,7 +85,7 @@ public class Reel_Controller : MonoBehaviour
                 slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration * (2 - j + 1)).SetEase(Ease.Linear);
             }
 
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(minClearDuration);
 
         }
         yield return new WaitForSeconds(0.25f);

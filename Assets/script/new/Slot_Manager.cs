@@ -132,6 +132,7 @@ public class Slot_Manager : MonoBehaviour
 
             yield return new WaitForSeconds(0.4f);
             reel_Controller.ClearReel();
+            uI_Controller.DeductBalance(currentTotalBet);
             // audioController.StopButtonAudio();
             audioController.PlaySpinAudio();
             if (!start)
@@ -182,7 +183,7 @@ public class Slot_Manager : MonoBehaviour
         var cascadeData = socketManager.socketModel.resultGameData.cascading;
         Color borderColor;
         yield return reel_Controller.FillReel1(resultData);
-        yield return new WaitForSeconds(0.5f);
+        // yield return new WaitForSeconds(0.5f);
         if (cascadeData.Count > 0)
         {
 
@@ -409,6 +410,8 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.ToggleBtnGrp(toggle);
 
     }
+
+
 
 
 }
