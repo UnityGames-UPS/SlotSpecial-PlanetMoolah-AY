@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 342, y: 342}
+  m_SizeDelta: {x: 342, y: 260}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3317083917877292692
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1258d1e4aedb46a09d67119a049973e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 366a037d4a5ba48ed92880acf76330dd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89,29 +89,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textureArray:
-  - {fileID: 21300000, guid: 8a7a83ea5bc364020bbb573bc5c18498, type: 3}
-  - {fileID: 21300000, guid: 932a99abb30a34ea0a44c1aafc5dde6b, type: 3}
-  - {fileID: 21300000, guid: 09649b86b31a24a05aa28a539b745544, type: 3}
-  - {fileID: 21300000, guid: f1258d1e4aedb46a09d67119a049973e, type: 3}
-  - {fileID: 21300000, guid: 141581f5510c74a0881c95da3c64ff1d, type: 3}
-  - {fileID: 21300000, guid: a5047d94381f7420ca718ef11aa1d0e2, type: 3}
-  - {fileID: 21300000, guid: 37b529f9e980c4121a27e8cbc6adffce, type: 3}
-  - {fileID: 21300000, guid: fc5562d47305748e6826489065ac2369, type: 3}
-  - {fileID: 21300000, guid: 57ed53020b2e746be8e7a0038c2cb628, type: 3}
-  - {fileID: 21300000, guid: 626a18ac17e534f1bbf6e0b21ca19213, type: 3}
-  - {fileID: 21300000, guid: 523811a630fb24f649916f056045e917, type: 3}
-  - {fileID: 21300000, guid: 36e1fea75fb4b44199cc47b96e601f89, type: 3}
-  - {fileID: 21300000, guid: 77f35c9c31dd4428e96be849cccf37cc, type: 3}
-  - {fileID: 21300000, guid: 20937d93bf5c5446b9e90868f458cb27, type: 3}
-  - {fileID: 21300000, guid: a7c211580ad7443fda6933a4cb3211ed, type: 3}
-  - {fileID: 21300000, guid: 25d97f256b9bf4e84aa6ff7722954061, type: 3}
-  - {fileID: 21300000, guid: d49fb63c1041c4cad8d4853707bc2d85, type: 3}
-  - {fileID: 21300000, guid: 4594deb16cdc24ddca5b1df35d3834ee, type: 3}
+  - {fileID: 21300000, guid: 366a037d4a5ba48ed92880acf76330dd, type: 3}
+  - {fileID: 21300000, guid: 7961fa2f7cb594f60935714acdcc15c5, type: 3}
+  - {fileID: 21300000, guid: b41efcd4b790e4061b55e328178e2c4b, type: 3}
+  - {fileID: 21300000, guid: e604d7fe75ffa4d85a81fe7c05287fcb, type: 3}
+  - {fileID: 21300000, guid: 7a69a93d9b1254a58863de092b078617, type: 3}
+  - {fileID: 21300000, guid: 90d5d6f6860814735bea3cba3032028b, type: 3}
+  - {fileID: 21300000, guid: 9b476fb0f218c4448a5ae207582b4236, type: 3}
+  - {fileID: 21300000, guid: 537e7f8bbe7c7476aa690ee8e65804da, type: 3}
+  - {fileID: 21300000, guid: c98cb2f173f784aa2a316df8d39681db, type: 3}
+  - {fileID: 21300000, guid: 5720d8a04bb504da994ae86e6c95d8dc, type: 3}
+  - {fileID: 21300000, guid: 283cdaff7c7ee454dae3044f57eb7ed0, type: 3}
+  - {fileID: 21300000, guid: de735ab69fc484e72ab4cd5b7e3c0dd2, type: 3}
+  - {fileID: 21300000, guid: 0dd15edc4dca648029419ace79b5e26d, type: 3}
+  - {fileID: 21300000, guid: 58e2dc7c882f24a21b49b9ce402a53f8, type: 3}
+  - {fileID: 21300000, guid: e26970b9ded83476bbbb1be2045bbfec, type: 3}
+  - {fileID: 21300000, guid: 282f0d9e13c1147cc99d5cdfa85fe475, type: 3}
+  - {fileID: 21300000, guid: 93102483499144f749445532c5650940, type: 3}
+  - {fileID: 21300000, guid: cc6a4f3e217e2413ab7f57128549cc63, type: 3}
+  - {fileID: 21300000, guid: 366a037d4a5ba48ed92880acf76330dd, type: 3}
   rendererDelegate: {fileID: 2146010147597264142}
   useSharedMaterial: 1
   doLoopAnimation: 0
   currentAnimationState: 0
-  AnimationSpeed: 12
+  AnimationSpeed: 11
   delayBetweenLoop: 0
   StartOnAwake: 1
   DestroyOnCompletion: 0
