@@ -29,8 +29,8 @@ public class SocketController : MonoBehaviour
     protected string SocketURI = null;
 
     // TODO: PM to be changed
-    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-    // protected string TestSocketURI = "http://localhost:5000";
+    // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+    protected string TestSocketURI = "http://localhost:5000";
     //protected string SocketURI = "http://localhost:5000";
 
     [SerializeField]

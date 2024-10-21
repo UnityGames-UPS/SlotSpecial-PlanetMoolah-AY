@@ -93,7 +93,7 @@ public class Slot_Manager : MonoBehaviour
         autoStop_Button.gameObject.SetActive(true);
         autoStart_Button.gameObject.SetActive(false);
         autoStart_Button.interactable=false;
-        while (isAutoSpin && !isSpinning)
+        while (isAutoSpin)
         {
 
             yield return SpinRoutine();
@@ -101,7 +101,9 @@ public class Slot_Manager : MonoBehaviour
         }
         isAutoSpin = false;
         isSpinning=false;
-
+        // autoStop_Button.gameObject.SetActive(false);
+        // autoStart_Button.gameObject.SetActive(true);
+        // ToggleButtonGrp(true);
         // if (!isFreeSpin)
 
     }
