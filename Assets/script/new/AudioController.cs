@@ -94,6 +94,7 @@ public class AudioController : MonoBehaviour
 
         //int randomIndex = UnityEngine.Random.Range(0, Bg_Audio.Length);
         StopBgAudio();
+        bg_adudio.loop=true;
         if (bg_adudio)
         {
             if (type == "FP")

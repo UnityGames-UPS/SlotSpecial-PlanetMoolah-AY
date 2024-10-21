@@ -92,7 +92,7 @@ public class Reel_Controller : MonoBehaviour
     }
 
 
-    internal void ReArrangeMatrix(List<List<int>> iconsToFill)
+    internal IEnumerator ReArrangeMatrix(List<List<int>> iconsToFill)
     {
         for (int i = 0; i < slot_matrix.Count; i++)
         {
@@ -134,6 +134,7 @@ public class Reel_Controller : MonoBehaviour
                 slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration).SetEase(Ease.InOutQuad);
             }
         }
+        yield return new WaitForSeconds(0.1f);
 
     }
 
