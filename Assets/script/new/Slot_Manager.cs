@@ -41,6 +41,7 @@ public class Slot_Manager : MonoBehaviour
     public bool isNewAdded;
 
     [SerializeField] private Coroutine freeSpinRoutine;
+    [SerializeField] private Coroutine autoSpinCoroutine;
 
     private Tween winHighlight=null;
 
@@ -62,12 +63,19 @@ public class Slot_Manager : MonoBehaviour
         reel_Controller.PopulateSlot();
 
         start_Button.onClick.AddListener(() => StartCoroutine(SpinRoutine()));
-        autoStart_Button.onClick.AddListener(() => StartCoroutine(AutoSpinRoutine()));
+        autoStart_Button.onClick.AddListener(() =>{
+            if(!isAutoSpin && !isFreeSpin && !isSpinning)
+            autoSpinCoroutine=StartCoroutine(AutoSpinRoutine());
+        
+        });
         autoStop_Button.onClick.AddListener(() =>
         {
+            if(isAutoSpin){
+
             isAutoSpin = false;
-            autoStop_Button.gameObject.SetActive(false);
-            autoStart_Button.gameObject.SetActive(true);
+            autoStop_Button.interactable=false;
+            StartCoroutine(AutoSpinStopRoutine());
+            }
         });
 
         freeSpin_Button.onClick.AddListener(() =>
@@ -81,21 +89,35 @@ public class Slot_Manager : MonoBehaviour
     IEnumerator AutoSpinRoutine()
     {
 
-        if (isSpinning || isAutoSpin || isFreeSpin)
-            yield break;
-
         isAutoSpin = true;
         autoStop_Button.gameObject.SetActive(true);
         autoStart_Button.gameObject.SetActive(false);
-        while (isAutoSpin)
+        autoStart_Button.interactable=false;
+        while (isAutoSpin && !isSpinning)
         {
 
             yield return SpinRoutine();
             yield return new WaitForSeconds(1f);
         }
         isAutoSpin = false;
-        if (!isFreeSpin)
-            ToggleButtonGrp(true);
+        isSpinning=false;
+
+        // if (!isFreeSpin)
+
+    }
+
+    IEnumerator AutoSpinStopRoutine(){
+
+
+        yield return new WaitUntil(()=>!isSpinning);
+        // ToggleButtonGrp(true);
+        if(autoSpinCoroutine!=null)
+        StopCoroutine(autoSpinCoroutine);
+        
+        autoStop_Button.gameObject.SetActive(false);
+        autoStop_Button.interactable=true;
+        autoStart_Button.gameObject.SetActive(true);
+        autoStart_Button.interactable=true;;
 
     }
 
@@ -110,17 +132,16 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.SetFreeSpinUI();
         while (freeSpinCount > 0)
         {
+            freeSpinCount--;
             yield return SpinRoutine();
             yield return new WaitForSeconds(1f);
 
-            freeSpinCount--;
         }
-
+        isSpinning=false;
         isFreeSpin = false;
         uI_Controller.SetDefaultUI();
+        freeSpinRoutine=null;
         ToggleButtonGrp(true);
-
-
 
     }
 
@@ -129,24 +150,23 @@ public class Slot_Manager : MonoBehaviour
         bool start = OnSpinStart();
         if (start)
         {
-
-            yield return new WaitForSeconds(0.4f);
+            var spinData = new { data = new { currentBet = betCounter, currentLines = totalLines, spins = 1 }, id = "SPIN" };
+             socketManager.SendData("message", spinData);
+            // yield return new WaitForSeconds(0.4f);
             reel_Controller.ClearReel();
-            uI_Controller.DeductBalance(currentTotalBet);
             // audioController.StopButtonAudio();
             audioController.PlaySpinAudio();
-            if (!start)
-                yield break;
-            isSpinning = true;
+            // if (!start)
+            //     yield break;
             yield return new WaitForSeconds(1.6f);
 
             yield return new WaitUntil(() => socketManager.isResultdone);
 
             yield return OnSpin(socketManager.socketModel.resultGameData.resultSymbols);
 
-            isSpinning = false;
         }
         yield return OnSpinEnd();
+
 
 
 
@@ -154,6 +174,9 @@ public class Slot_Manager : MonoBehaviour
 
     bool OnSpinStart()
     {
+      
+        isSpinning = true;
+
         spinInfoText.text = "Good Luck";
         audioController.PlayButtonAudio("spin");
         uI_Controller.SetFreeSpinCount(-1);
@@ -164,11 +187,15 @@ public class Slot_Manager : MonoBehaviour
         if (currentBalance < currentTotalBet && !isFreeSpin)
         {
             uI_Controller.ShowLowBalPopup();
+            isSpinning = false;
             return false;
         }
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
-        var spinData = new { data = new { currentBet = betCounter, currentLines = totalLines, spins = 1 }, id = "SPIN" };
-        socketManager.SendData("message", spinData);
+
+        if(!isFreeSpin)
+        uI_Controller.DeductBalance(currentTotalBet);
+
+
         return true;
     }
 
@@ -200,7 +227,9 @@ public class Slot_Manager : MonoBehaviour
 
                 uI_Controller.UpdatePlayerInfo(cascadeData[k].currentWining);
 
-                spinInfoText.text = $"You Won {cascadeData[k].currentWining} !";
+                spinInfoText.text = $"You Won {cascadeData[k].currentWining} ";
+                if(isFreeSpin)
+                spinInfoText.text+=$" free spin left {freeSpinCount}";
                 for (int i = 0; i < cascadeData[k].lineToEmit.Count; i++)
                 {
                     lineId = cascadeData[k].lineToEmit[i] - 1;
@@ -258,10 +287,13 @@ public class Slot_Manager : MonoBehaviour
                 }
                 pullingAnimList.Clear();
                 yield return new WaitForSeconds(0.2f);
-                reel_Controller.ReArrangeMatrix(cascadeData[k].symbolsToFill);
+                yield return reel_Controller.ReArrangeMatrix(cascadeData[k].symbolsToFill);
                 uI_Controller.SetFreeSpinCount(k);
                 yield return new WaitForSeconds(1f);
             }
+                yield return new WaitForSeconds(1f);
+
+
         }
 
 
@@ -292,10 +324,7 @@ public class Slot_Manager : MonoBehaviour
 
         else if (winAmount >= currentTotalBet * 20) winType = 2;
 
-        yield return uI_Controller.ShowWinPopup(winType, winAmount);
-
-        if (!isAutoSpin && !isFreeSpin)
-            ToggleButtonGrp(true);
+        yield return uI_Controller.ShowWinPopup(winType, winAmount);            
 
         if (socketManager.socketModel.resultGameData.isFreeSpin)
         {
@@ -307,18 +336,26 @@ public class Slot_Manager : MonoBehaviour
                 isFreeSpin = false;
                 StopCoroutine(freeSpinRoutine);
                 freeSpinRoutine = null;
+                uI_Controller.ShowFreeSpinPopup(freeSpinCount,false);
+                yield return new WaitForSeconds(3f);
                 freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
 
             }
             else
             {
-
                 uI_Controller.ShowFreeSpinPopup(freeSpinCount);
+
+                
             }
 
         }
 
         uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData.CurrentWining, socketManager.socketModel.playerData.Balance);
+        if(!isAutoSpin && !isFreeSpin){
+
+        isSpinning = false;
+        ToggleButtonGrp(true);
+        }
 
     }
 
