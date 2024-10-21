@@ -115,7 +115,7 @@ public class Slot_Manager : MonoBehaviour
         // ToggleButtonGrp(true);
         if(autoSpinCoroutine!=null)
         StopCoroutine(autoSpinCoroutine);
-        
+        ToggleButtonGrp(true);
         autoStop_Button.gameObject.SetActive(false);
         autoStop_Button.interactable=true;
         autoStart_Button.gameObject.SetActive(true);
