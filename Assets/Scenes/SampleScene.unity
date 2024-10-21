@@ -2816,12 +2816,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 60
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 60
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -6138,7 +6138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf35609696994112abfb50e0e4234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI4ODg2Njk4LCJleHAiOjE3Mjk0OTE0OTh9.XyM60i5edJx6QnwNTK3Qy_nN0s_Op_rdn7l08LPRR08
+  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI5NDg0NTgwLCJleHAiOjE3MzAwODkzODB9.qu9JIAuYedip3aYAQPdHNK--26GYok6-YIwtJEI5reQ
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0
@@ -6214,11 +6214,13 @@ MonoBehaviour:
   - {fileID: 1994352313}
   - {fileID: 1583511189}
   - {fileID: 1279834106}
+  - {fileID: 1838180108}
   - {fileID: 1204527507}
   - {fileID: 804788180}
   - {fileID: 597811054}
   - {fileID: 345977321}
   freeSpinColor: {r: 0.99215686, g: 0.58431375, b: 0.58431375, a: 1}
+  freeSpinStartButton: {fileID: 134042196}
   disconnectPopupObject: {fileID: 840525048}
   disconnectCloseButton: {fileID: 1261396483}
   lowBalPopupObject: {fileID: 40465590}
@@ -17794,7 +17796,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
