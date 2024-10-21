@@ -140,6 +140,7 @@ public class Slot_Manager : MonoBehaviour
         isSpinning=false;
         isFreeSpin = false;
         uI_Controller.SetDefaultUI();
+        freeSpinRoutine=null;
         ToggleButtonGrp(true);
 
     }
@@ -440,7 +441,7 @@ public class Slot_Manager : MonoBehaviour
     {
 
         start_Button.interactable = toggle;
-        // autoStart_Button.interactable = toggle;
+        autoStart_Button.interactable = toggle;
         betMinus_Button.interactable = toggle;
         betPlus_Button.interactable = toggle;
         uI_Controller.ToggleBtnGrp(toggle);
