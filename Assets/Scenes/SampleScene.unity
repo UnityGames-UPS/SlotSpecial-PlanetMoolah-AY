@@ -2713,7 +2713,6 @@ RectTransform:
   - {fileID: 1378420899}
   - {fileID: 968475194}
   - {fileID: 558952415}
-  - {fileID: 313279933}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4285,11 +4284,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 188432400}
+  m_Father: {fileID: 510321538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -915, y: 371}
+  m_AnchoredPosition: {x: -920, y: 789}
   m_SizeDelta: {x: 94, y: 118}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &313279934
@@ -6221,6 +6220,7 @@ MonoBehaviour:
   - {fileID: 345977321}
   freeSpinColor: {r: 0.99215686, g: 0.58431375, b: 0.58431375, a: 1}
   freeSpinStartButton: {fileID: 134042196}
+  freeSpinCounterObject: {fileID: 911879601}
   disconnectPopupObject: {fileID: 840525048}
   disconnectCloseButton: {fileID: 1261396483}
   lowBalPopupObject: {fileID: 40465590}
@@ -6398,6 +6398,7 @@ RectTransform:
   - {fileID: 689411839}
   - {fileID: 1660364958}
   - {fileID: 1856196673}
+  - {fileID: 313279933}
   m_Father: {fileID: 968475194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -11729,7 +11730,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: total bet x0
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11756,7 +11757,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.7
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
