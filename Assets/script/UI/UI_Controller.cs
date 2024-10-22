@@ -48,6 +48,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private GameObject[] freeSpincounts;
     [SerializeField] private Color freeSpinColor;
     [SerializeField] private Button freeSpinStartButton;
+    [SerializeField] private GameObject freeSpinCounterObject;
 
 
     [Header("disconnection Popup")]
@@ -314,8 +315,10 @@ public class UI_Controller : MonoBehaviour
 
     }
 
-    internal void SetFreeSpinCount(int count)
+    internal void SetFreeSpinCount(int count, bool isFreeSpin)
     {
+        if(isFreeSpin)
+        return;
 
         if (count < 0)
         {
@@ -339,6 +342,7 @@ public class UI_Controller : MonoBehaviour
         ClosePopup();
         freeSpinText.text = "";
         freeSpinStartButton.gameObject.SetActive(true);
+        freeSpinCounterObject.SetActive(false);
         bg.sprite = freeSpinBG;
         reeelBg.sprite = freeSpinReel;
         foreach (var item in planets)
@@ -350,6 +354,8 @@ public class UI_Controller : MonoBehaviour
     internal void SetDefaultUI()
     {
         bg.sprite = defaultBG;
+        freeSpinCounterObject.SetActive(true);
+
         reeelBg.sprite = defaultReel;
         foreach (var item in planets)
         {
