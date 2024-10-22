@@ -364,12 +364,11 @@ public class Slot_Manager : MonoBehaviour
                 // freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
 
             }
-            else
-            {
-                uI_Controller.ShowFreeSpinPopup(freeSpinCount);
+
+             uI_Controller.ShowFreeSpinPopup(freeSpinCount);
 
 
-            }
+            
 
         }
 
