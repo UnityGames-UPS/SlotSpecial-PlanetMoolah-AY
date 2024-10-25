@@ -129,16 +129,17 @@ public class Slot_Manager : MonoBehaviour
 
     IEnumerator FreeSpinRoutine()
     {
-        if (! isFreeSpin)
+        if (!isFreeSpin)
             yield break;
 
         audioController.playBgAudio("FP");
         // isFreeSpin = true;
-        if(autoStop_Button.gameObject.activeSelf)
-        autoStop_Button.gameObject.SetActive(false);
-        if(!autoStart_Button.gameObject.activeSelf){
-            autoStart_Button.interactable=false;
-        autoStart_Button.gameObject.SetActive(true);
+        if (autoStop_Button.gameObject.activeSelf)
+            autoStop_Button.gameObject.SetActive(false);
+        if (!autoStart_Button.gameObject.activeSelf)
+        {
+            autoStart_Button.interactable = false;
+            autoStart_Button.gameObject.SetActive(true);
         }
         uI_Controller.SetFreeSpinUI();
         while (freeSpinCount > 0)
@@ -176,7 +177,18 @@ public class Slot_Manager : MonoBehaviour
             yield return OnSpin(socketManager.socketModel.resultGameData.resultSymbols);
 
         }
-        yield return OnSpinEnd();
+        else
+        {
+
+            yield return OnSpinEnd(true);
+            if (isAutoSpin)
+            {
+                isAutoSpin = false;
+                autoStop_Button.interactable = false;
+                StartCoroutine(AutoSpinStopRoutine());
+            }
+        }
+
 
 
 
@@ -195,13 +207,10 @@ public class Slot_Manager : MonoBehaviour
         winHighlight = null;
         uI_Controller.ResetWin();
         ToggleButtonGrp(false);
-        if (currentBalance < currentTotalBet && !isFreeSpin)
+        if (!CompareBalance())
         {
-            uI_Controller.ShowLowBalPopup();
-            isSpinning = false;
-            autoStart_Button.interactable = false;
-            start_Button.interactable = false;
             return false;
+
         }
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
 
@@ -243,10 +252,10 @@ public class Slot_Manager : MonoBehaviour
 
                 uI_Controller.UpdatePlayerInfo(cascadeData[k].currentWining);
 
-                if(isFreeSpin)
-                spinInfoText.text = $"free spin left {freeSpinCount} You Won {cascadeData[k].currentWining} ";
+                if (isFreeSpin)
+                    spinInfoText.text = $"free spin left {freeSpinCount} You Won {cascadeData[k].currentWining} ";
                 else
-                spinInfoText.text = $"You Won {cascadeData[k].currentWining} ";
+                    spinInfoText.text = $"You Won {cascadeData[k].currentWining} ";
 
 
                 for (int i = 0; i < cascadeData[k].lineToEmit.Count; i++)
@@ -317,60 +326,62 @@ public class Slot_Manager : MonoBehaviour
 
 
     }
-    IEnumerator OnSpinEnd()
+    IEnumerator OnSpinEnd(bool lowbal = false)
     {
-
-        var playerData = socketManager.socketModel.playerData;
-        uI_Controller.UpdatePlayerInfo(playerData.CurrentWining, playerData.Balance);
-        double winAmount = playerData.CurrentWining;
-        int winType = -1;
-        if (winAmount > 0)
-            spinInfoText.text = $"Total Winnings {winAmount} !";
-        else
-            spinInfoText.text = $"Better Luck Next Time";
-
-
-        Debug.Log("before checking -" + playerData.CurrentWining);
-
-        if (socketManager.socketModel.resultGameData.jackpot > 0)
+        if (!lowbal)
         {
-            winAmount = socketManager.socketModel.resultGameData.jackpot;
-            winType = 3;
-        }
-        else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount) winType = 0;
+            var playerData = socketManager.socketModel.playerData;
 
-        else if (winAmount >= currentTotalBet * 15 && currentTotalBet * 20 > winAmount) winType = 1;
+            currentBalance = playerData.Balance;
 
-        else if (winAmount >= currentTotalBet * 20) winType = 2;
+            uI_Controller.UpdatePlayerInfo(playerData.CurrentWining, playerData.Balance);
+            double winAmount = playerData.CurrentWining;
+            int winType = -1;
+            if (winAmount > 0)
+                spinInfoText.text = $"Total Winnings {winAmount} !";
+            else
+                spinInfoText.text = $"Better Luck Next Time";
 
-        yield return uI_Controller.ShowWinPopup(winType, winAmount);
 
-        if (socketManager.socketModel.resultGameData.isFreeSpin)
-        {
+            Debug.Log("before checking -" + playerData.CurrentWining);
+
+            if (socketManager.socketModel.resultGameData.jackpot > 0)
+            {
+                winAmount = socketManager.socketModel.resultGameData.jackpot;
+                winType = 3;
+            }
+            else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount) winType = 0;
+
+            else if (winAmount >= currentTotalBet * 15 && currentTotalBet * 20 > winAmount) winType = 1;
+
+            else if (winAmount >= currentTotalBet * 20) winType = 2;
+
+            yield return uI_Controller.ShowWinPopup(winType, winAmount);
+
+            if (socketManager.socketModel.resultGameData.isFreeSpin)
+            {
                 isFreeSpin = true;
 
-            isAutoSpin = false;
-            if (autoSpinCoroutine != null)
-                StopCoroutine(autoSpinCoroutine);
-            freeSpinCount = socketManager.socketModel.resultGameData.freeSpinCount;
+                isAutoSpin = false;
+                if (autoSpinCoroutine != null)
+                    StopCoroutine(autoSpinCoroutine);
+                freeSpinCount = socketManager.socketModel.resultGameData.freeSpinCount;
 
-            if (freeSpinRoutine != null)
-            {
-                isFreeSpin = false;
-                StopCoroutine(freeSpinRoutine);
-                freeSpinRoutine = null;
-                // uI_Controller.ShowFreeSpinPopup(freeSpinCount, false);
-                // yield return new WaitForSeconds(3f);
-                // freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
+                if (freeSpinRoutine != null)
+                {
+                    isFreeSpin = false;
+                    StopCoroutine(freeSpinRoutine);
+                    freeSpinRoutine = null;
+                    // uI_Controller.ShowFreeSpinPopup(freeSpinCount, false);
+                    // yield return new WaitForSeconds(3f);
+                    // freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
 
+                }
+
+                uI_Controller.ShowFreeSpinPopup(freeSpinCount);
             }
-
-             uI_Controller.ShowFreeSpinPopup(freeSpinCount);
-
-
-            
-
         }
+
 
         uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData.CurrentWining, socketManager.socketModel.playerData.Balance);
         if (!isAutoSpin && !isFreeSpin)
@@ -434,8 +445,7 @@ public class Slot_Manager : MonoBehaviour
         spinInfoText.text = $"Total lines: {totalLines} x Bet per line: {socketManager.socketModel.initGameData.Bets[betCounter]} = Total bet: {currentTotalBet}";
         uI_Controller.UpdateBetInfo(socketManager.socketModel.initGameData.Bets[betCounter], currentTotalBet, totalLines);
 
-        if (currentBalance < currentTotalBet)
-            uI_Controller.ShowLowBalPopup();
+        CompareBalance();
 
 
     }
@@ -447,6 +457,7 @@ public class Slot_Manager : MonoBehaviour
             return;
 
         }
+        CompareBalance();
         uI_Controller.InitUI(uiData, freeSpinData);
         uI_Controller.UpdatePlayerInfo(0, playerData.Balance);
         currentBalance = playerData.Balance;
@@ -457,10 +468,28 @@ public class Slot_Manager : MonoBehaviour
         inititated = true;
         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
 
-        if (currentBalance < currentTotalBet)
-            uI_Controller.ShowLowBalPopup();
 
     }
+
+    private bool CompareBalance()
+    {
+
+        if (currentBalance < currentTotalBet)
+        {
+            uI_Controller.ShowLowBalPopup();
+            if (autoStart_Button) autoStart_Button.interactable = false;
+            if (start_Button) start_Button.interactable = false;
+            return false;
+        }
+        else
+        {
+            if (autoStart_Button) autoStart_Button.interactable = true;
+            if (start_Button) start_Button.interactable = true;
+            return true;
+
+        }
+    }
+
     void ToggleButtonGrp(bool toggle)
     {
 
