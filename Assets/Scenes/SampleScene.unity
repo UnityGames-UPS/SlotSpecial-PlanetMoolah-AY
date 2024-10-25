@@ -6137,7 +6137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf35609696994112abfb50e0e4234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzI5NTkyNjQzLCJleHAiOjE3MzAxOTc0NDN9.pDET0HWfZkC8TALUNBfcmfG7lKKxE_N4DCf992bNJ5w
+  TestToken: 
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0
@@ -6183,8 +6183,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings_button: {fileID: 1856196673}
-  info_button: {fileID: 0}
-  Menu_Button: {fileID: 0}
   betPerLineText: {fileID: 91673311}
   totalBetText: {fileID: 22154272}
   totalLineText: {fileID: 741686421}
