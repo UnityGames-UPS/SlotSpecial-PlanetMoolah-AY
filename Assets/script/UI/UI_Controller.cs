@@ -237,7 +237,7 @@ public class UI_Controller : MonoBehaviour
         if (lowbalCloseButton) lowbalCloseButton.onClick.RemoveAllListeners();
         if (lowbalCloseButton) lowbalCloseButton.onClick.AddListener(() =>
         {
-            Exitgame();
+            ClosePopup();
         });
 
     }
@@ -303,7 +303,7 @@ public class UI_Controller : MonoBehaviour
         //if (audioController) audioController.PlayButtonAudio();
         if (currentPopup != null)
         {
-            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP" || currentPopup.name.ToUpper() == "LOWBALANCEPOPUP")
+            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP")
                 return;
 
             currentPopup.SetActive(false);
@@ -401,7 +401,6 @@ public class UI_Controller : MonoBehaviour
             if (MusicOn_Object) MusicOn_Object.SetActive(true);
             if (MusicOff_Object) MusicOff_Object.SetActive(false);
             OnToggleAudio(false, "bg");
-
         }
         else
         {

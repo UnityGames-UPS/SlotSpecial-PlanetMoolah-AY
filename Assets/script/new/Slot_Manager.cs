@@ -195,13 +195,9 @@ public class Slot_Manager : MonoBehaviour
         winHighlight = null;
         uI_Controller.ResetWin();
         ToggleButtonGrp(false);
-        if (currentBalance < currentTotalBet && !isFreeSpin)
-        {
-            uI_Controller.ShowLowBalPopup();
-            isSpinning = false;
-            autoStart_Button.interactable = false;
-            start_Button.interactable = false;
+        if(!CompareBalance()){
             return false;
+
         }
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
 
@@ -319,8 +315,10 @@ public class Slot_Manager : MonoBehaviour
     }
     IEnumerator OnSpinEnd()
     {
-
         var playerData = socketManager.socketModel.playerData;
+        
+        currentBalance=playerData.Balance;
+
         uI_Controller.UpdatePlayerInfo(playerData.CurrentWining, playerData.Balance);
         double winAmount = playerData.CurrentWining;
         int winType = -1;
@@ -434,8 +432,7 @@ public class Slot_Manager : MonoBehaviour
         spinInfoText.text = $"Total lines: {totalLines} x Bet per line: {socketManager.socketModel.initGameData.Bets[betCounter]} = Total bet: {currentTotalBet}";
         uI_Controller.UpdateBetInfo(socketManager.socketModel.initGameData.Bets[betCounter], currentTotalBet, totalLines);
 
-        if (currentBalance < currentTotalBet)
-            uI_Controller.ShowLowBalPopup();
+        CompareBalance();
 
 
     }
@@ -447,6 +444,7 @@ public class Slot_Manager : MonoBehaviour
             return;
 
         }
+        CompareBalance();
         uI_Controller.InitUI(uiData, freeSpinData);
         uI_Controller.UpdatePlayerInfo(0, playerData.Balance);
         currentBalance = playerData.Balance;
@@ -457,10 +455,28 @@ public class Slot_Manager : MonoBehaviour
         inititated = true;
         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
 
-        if (currentBalance < currentTotalBet)
-            uI_Controller.ShowLowBalPopup();
 
     }
+
+    private bool CompareBalance()
+    {
+
+        if (currentBalance < currentTotalBet)
+        {
+             uI_Controller.ShowLowBalPopup();
+            if (autoStart_Button) autoStart_Button.interactable = false;
+            if (start_Button) start_Button.interactable = false;
+            return false;
+        }
+        else
+        {
+            if (autoStart_Button) autoStart_Button.interactable = true;
+            if (start_Button) start_Button.interactable = true;
+            return true;
+
+        }
+    }
+
     void ToggleButtonGrp(bool toggle)
     {
 
