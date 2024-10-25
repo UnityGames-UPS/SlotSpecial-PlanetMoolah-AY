@@ -175,6 +175,7 @@ public class Slot_Manager : MonoBehaviour
             yield return new WaitUntil(() => socketManager.isResultdone);
 
             yield return OnSpin(socketManager.socketModel.resultGameData.resultSymbols);
+            yield return OnSpinEnd();
 
         }
         else
@@ -206,17 +207,16 @@ public class Slot_Manager : MonoBehaviour
         if (winHighlight != null) winHighlight.Kill();
         winHighlight = null;
         uI_Controller.ResetWin();
-        ToggleButtonGrp(false);
-        if (!CompareBalance())
-        {
-            return false;
-
-        }
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
 
         if (!isFreeSpin)
+        {
+            bool start = CompareBalance();
+            ToggleButtonGrp(false);
             uI_Controller.DeductBalance(currentTotalBet);
-
+            return start;
+        }
+            ToggleButtonGrp(false);
 
         return true;
     }
@@ -492,7 +492,7 @@ public class Slot_Manager : MonoBehaviour
 
     void ToggleButtonGrp(bool toggle)
     {
-
+        Debug.Log("enetered here");
         start_Button.interactable = toggle;
         autoStart_Button.interactable = toggle;
         betMinus_Button.interactable = toggle;
