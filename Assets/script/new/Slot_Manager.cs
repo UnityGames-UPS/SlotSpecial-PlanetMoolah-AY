@@ -195,13 +195,10 @@ public class Slot_Manager : MonoBehaviour
         winHighlight = null;
         uI_Controller.ResetWin();
         ToggleButtonGrp(false);
-        if (currentBalance < currentTotalBet && !isFreeSpin)
-        {
-            uI_Controller.ShowLowBalPopup();
-            isSpinning = false;
-            autoStart_Button.interactable = false;
-            start_Button.interactable = false;
+        currentBalance=socketManager.socketModel.playerData.Balance;
+        if(!CompareBalance()){
             return false;
+
         }
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
 
@@ -447,6 +444,7 @@ public class Slot_Manager : MonoBehaviour
             return;
 
         }
+        CompareBalance();
         uI_Controller.InitUI(uiData, freeSpinData);
         uI_Controller.UpdatePlayerInfo(0, playerData.Balance);
         currentBalance = playerData.Balance;
@@ -457,10 +455,28 @@ public class Slot_Manager : MonoBehaviour
         inititated = true;
         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
 
-        if (currentBalance < currentTotalBet)
-            uI_Controller.ShowLowBalPopup();
 
     }
+
+    private bool CompareBalance()
+    {
+
+        if (currentBalance < currentTotalBet)
+        {
+             uI_Controller.ShowLowBalPopup();
+            if (autoStart_Button) autoStart_Button.interactable = false;
+            if (start_Button) start_Button.interactable = false;
+            return false;
+        }
+        else
+        {
+            if (autoStart_Button) autoStart_Button.interactable = true;
+            if (start_Button) start_Button.interactable = true;
+            return true;
+
+        }
+    }
+
     void ToggleButtonGrp(bool toggle)
     {
 
