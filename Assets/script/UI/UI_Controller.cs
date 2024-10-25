@@ -17,7 +17,7 @@ public class UI_Controller : MonoBehaviour
 
     [Header("Menu UI")]
     [SerializeField] private Transform settings_button;
-    [SerializeField] private Transform info_button;
+    // [SerializeField] private Transform info_button;
     // [SerializeField] private Button Menu_Button;
 
     [Header("Bet info")]
@@ -250,32 +250,32 @@ public class UI_Controller : MonoBehaviour
             playerWinning.text = currentWinning.ToString();
 
     }
-    private void OpenMenu()
-    {
-        if (!isMenuOpen)
-        {
-            settings_button.gameObject.SetActive(true);
-            info_button.gameObject.SetActive(true);
-            settings_button.transform.DOLocalMoveY(-135, 0.2f);
-            info_button.transform.DOLocalMoveY(-270, 0.5f);
-            isMenuOpen = true;
-        }
-        else
-        {
-            settings_button.DOLocalMoveY(0, 0.2f);
-            info_button.DOLocalMoveY(0, 0.2f);
+    // private void OpenMenu()
+    // {
+    //     if (!isMenuOpen)
+    //     {
+    //         settings_button.gameObject.SetActive(true);
+    //         info_button.gameObject.SetActive(true);
+    //         settings_button.transform.DOLocalMoveY(-135, 0.2f);
+    //         info_button.transform.DOLocalMoveY(-270, 0.5f);
+    //         isMenuOpen = true;
+    //     }
+    //     else
+    //     {
+    //         settings_button.DOLocalMoveY(0, 0.2f);
+    //         info_button.DOLocalMoveY(0, 0.2f);
 
-            DOVirtual.DelayedCall(0.1f, () =>
-            {
-                settings_button.gameObject.SetActive(false);
-                info_button.gameObject.SetActive(false);
-                isMenuOpen = false;
-            });
+    //         DOVirtual.DelayedCall(0.1f, () =>
+    //         {
+    //             settings_button.gameObject.SetActive(false);
+    //             info_button.gameObject.SetActive(false);
+    //             isMenuOpen = false;
+    //         });
 
 
-        }
+    //     }
 
-    }
+    // }
 
 
 
