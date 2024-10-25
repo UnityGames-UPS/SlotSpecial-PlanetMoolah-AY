@@ -18,7 +18,6 @@ public class SocketController : MonoBehaviour
 
     internal SocketModel socketModel = new SocketModel();
 
-    private Helper helper = new Helper();
 
     //WebSocket currentSocket = null;
     internal bool isResultdone = false;
@@ -29,8 +28,9 @@ public class SocketController : MonoBehaviour
     protected string SocketURI = null;
 
     // TODO: PM to be changed
-    // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-    protected string TestSocketURI = "http://localhost:5000";
+    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+    // protected string TestSocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
+    // protected string TestSocketURI = "http://localhost:5000";
     // protected string SocketURI = "http://localhost:5000";
 
     [SerializeField]

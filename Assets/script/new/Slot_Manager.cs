@@ -160,27 +160,8 @@ public class Slot_Manager : MonoBehaviour
     IEnumerator SpinRoutine()
     {
         bool start = OnSpinStart();
-        if (start)
+        if (!start)
         {
-            var spinData = new { data = new { currentBet = betCounter, currentLines = totalLines, spins = 1 }, id = "SPIN" };
-            socketManager.SendData("message", spinData);
-            // yield return new WaitForSeconds(0.4f);
-            reel_Controller.ClearReel();
-            // audioController.StopButtonAudio();
-            audioController.PlaySpinAudio();
-            // if (!start)
-            //     yield break;
-            yield return new WaitForSeconds(1.6f);
-
-            yield return new WaitUntil(() => socketManager.isResultdone);
-
-            yield return OnSpin(socketManager.socketModel.resultGameData.resultSymbols);
-            yield return OnSpinEnd();
-
-        }
-        else
-        {
-
             yield return OnSpinEnd(true);
             if (isAutoSpin)
             {
@@ -188,10 +169,24 @@ public class Slot_Manager : MonoBehaviour
                 autoStop_Button.interactable = false;
                 StartCoroutine(AutoSpinStopRoutine());
             }
+            isSpinning=false;
+            yield break;
         }
 
+        var spinData = new { data = new { currentBet = betCounter, currentLines = totalLines, spins = 1 }, id = "SPIN" };
+        socketManager.SendData("message", spinData);
+        // yield return new WaitForSeconds(0.4f);
+        reel_Controller.ClearReel();
+        // audioController.StopButtonAudio();
+        audioController.PlaySpinAudio();
+        // if (!start)
+        //     yield break;
+        yield return new WaitForSeconds(1.6f);
 
+        yield return new WaitUntil(() => socketManager.isResultdone);
 
+        yield return OnSpin(socketManager.socketModel.resultGameData.resultSymbols);
+        yield return OnSpinEnd();
 
 
     }
@@ -209,15 +204,14 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.ResetWin();
         uI_Controller.UpdatePlayerInfo(0, socketManager.socketModel.playerData.Balance);
 
+        ToggleButtonGrp(false);
         if (!isFreeSpin)
         {
             bool start = CompareBalance();
-            ToggleButtonGrp(false);
+            if(start)
             uI_Controller.DeductBalance(currentTotalBet);
             return start;
         }
-            ToggleButtonGrp(false);
-
         return true;
     }
 
@@ -477,16 +471,12 @@ public class Slot_Manager : MonoBehaviour
         if (currentBalance < currentTotalBet)
         {
             uI_Controller.ShowLowBalPopup();
-            if (autoStart_Button) autoStart_Button.interactable = false;
-            if (start_Button) start_Button.interactable = false;
+
             return false;
         }
         else
         {
-            if (autoStart_Button) autoStart_Button.interactable = true;
-            if (start_Button) start_Button.interactable = true;
             return true;
-
         }
     }
 
