@@ -18,7 +18,7 @@ public class UI_Controller : MonoBehaviour
     [Header("Menu UI")]
     [SerializeField] private Transform settings_button;
     [SerializeField] private Transform info_button;
-    [SerializeField] private Button Menu_Button;
+    // [SerializeField] private Button Menu_Button;
 
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
@@ -174,8 +174,8 @@ public class UI_Controller : MonoBehaviour
         });
 
 
-        if (Menu_Button) Menu_Button.onClick.RemoveAllListeners();
-        if (Menu_Button) Menu_Button.onClick.AddListener(OpenMenu);
+        // if (Menu_Button) Menu_Button.onClick.RemoveAllListeners();
+        // if (Menu_Button) Menu_Button.onClick.AddListener(OpenMenu);
 
         if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
         if (Sound_Button) Sound_Button.onClick.AddListener(delegate
@@ -567,7 +567,6 @@ public class UI_Controller : MonoBehaviour
 
         Paytable_Button.interactable = toggle;
         Settings_Button.interactable = toggle;
-        Menu_Button.interactable = toggle; ;
         Sound_Button.interactable = toggle;
         Music_Button.interactable = toggle;
     }
