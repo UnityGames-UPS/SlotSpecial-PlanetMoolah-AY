@@ -17,8 +17,8 @@ public class UI_Controller : MonoBehaviour
 
     [Header("Menu UI")]
     [SerializeField] private Transform settings_button;
-    [SerializeField] private Transform info_button;
-    [SerializeField] private Button Menu_Button;
+    // [SerializeField] private Transform info_button;
+    // [SerializeField] private Button Menu_Button;
 
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
@@ -48,6 +48,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private GameObject[] freeSpincounts;
     [SerializeField] private Color freeSpinColor;
     [SerializeField] private Button freeSpinStartButton;
+    [SerializeField] private GameObject freeSpinCounterObject;
 
 
     [Header("disconnection Popup")]
@@ -173,8 +174,8 @@ public class UI_Controller : MonoBehaviour
         });
 
 
-        if (Menu_Button) Menu_Button.onClick.RemoveAllListeners();
-        if (Menu_Button) Menu_Button.onClick.AddListener(OpenMenu);
+        // if (Menu_Button) Menu_Button.onClick.RemoveAllListeners();
+        // if (Menu_Button) Menu_Button.onClick.AddListener(OpenMenu);
 
         if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
         if (Sound_Button) Sound_Button.onClick.AddListener(delegate
@@ -236,7 +237,7 @@ public class UI_Controller : MonoBehaviour
         if (lowbalCloseButton) lowbalCloseButton.onClick.RemoveAllListeners();
         if (lowbalCloseButton) lowbalCloseButton.onClick.AddListener(() =>
         {
-            Exitgame();
+            ClosePopup();
         });
 
     }
@@ -249,32 +250,32 @@ public class UI_Controller : MonoBehaviour
             playerWinning.text = currentWinning.ToString();
 
     }
-    private void OpenMenu()
-    {
-        if (!isMenuOpen)
-        {
-            settings_button.gameObject.SetActive(true);
-            info_button.gameObject.SetActive(true);
-            settings_button.transform.DOLocalMoveY(-135, 0.2f);
-            info_button.transform.DOLocalMoveY(-270, 0.5f);
-            isMenuOpen = true;
-        }
-        else
-        {
-            settings_button.DOLocalMoveY(0, 0.2f);
-            info_button.DOLocalMoveY(0, 0.2f);
+    // private void OpenMenu()
+    // {
+    //     if (!isMenuOpen)
+    //     {
+    //         settings_button.gameObject.SetActive(true);
+    //         info_button.gameObject.SetActive(true);
+    //         settings_button.transform.DOLocalMoveY(-135, 0.2f);
+    //         info_button.transform.DOLocalMoveY(-270, 0.5f);
+    //         isMenuOpen = true;
+    //     }
+    //     else
+    //     {
+    //         settings_button.DOLocalMoveY(0, 0.2f);
+    //         info_button.DOLocalMoveY(0, 0.2f);
 
-            DOVirtual.DelayedCall(0.1f, () =>
-            {
-                settings_button.gameObject.SetActive(false);
-                info_button.gameObject.SetActive(false);
-                isMenuOpen = false;
-            });
+    //         DOVirtual.DelayedCall(0.1f, () =>
+    //         {
+    //             settings_button.gameObject.SetActive(false);
+    //             info_button.gameObject.SetActive(false);
+    //             isMenuOpen = false;
+    //         });
 
 
-        }
+    //     }
 
-    }
+    // }
 
 
 
@@ -302,7 +303,7 @@ public class UI_Controller : MonoBehaviour
         //if (audioController) audioController.PlayButtonAudio();
         if (currentPopup != null)
         {
-            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP" || currentPopup.name.ToUpper() == "LOWBALANCEPOPUP")
+            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP")
                 return;
 
             currentPopup.SetActive(false);
@@ -314,8 +315,10 @@ public class UI_Controller : MonoBehaviour
 
     }
 
-    internal void SetFreeSpinCount(int count)
+    internal void SetFreeSpinCount(int count, bool isFreeSpin)
     {
+        if(isFreeSpin)
+        return;
 
         if (count < 0)
         {
@@ -339,6 +342,7 @@ public class UI_Controller : MonoBehaviour
         ClosePopup();
         freeSpinText.text = "";
         freeSpinStartButton.gameObject.SetActive(true);
+        freeSpinCounterObject.SetActive(false);
         bg.sprite = freeSpinBG;
         reeelBg.sprite = freeSpinReel;
         foreach (var item in planets)
@@ -350,6 +354,8 @@ public class UI_Controller : MonoBehaviour
     internal void SetDefaultUI()
     {
         bg.sprite = defaultBG;
+        freeSpinCounterObject.SetActive(true);
+
         reeelBg.sprite = defaultReel;
         foreach (var item in planets)
         {
@@ -395,7 +401,6 @@ public class UI_Controller : MonoBehaviour
             if (MusicOn_Object) MusicOn_Object.SetActive(true);
             if (MusicOff_Object) MusicOff_Object.SetActive(false);
             OnToggleAudio(false, "bg");
-
         }
         else
         {
@@ -562,7 +567,6 @@ public class UI_Controller : MonoBehaviour
 
         Paytable_Button.interactable = toggle;
         Settings_Button.interactable = toggle;
-        Menu_Button.interactable = toggle; ;
         Sound_Button.interactable = toggle;
         Music_Button.interactable = toggle;
     }

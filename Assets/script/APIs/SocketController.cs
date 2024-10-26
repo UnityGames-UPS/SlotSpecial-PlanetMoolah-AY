@@ -18,7 +18,6 @@ public class SocketController : MonoBehaviour
 
     internal SocketModel socketModel = new SocketModel();
 
-    private Helper helper = new Helper();
 
     //WebSocket currentSocket = null;
     internal bool isResultdone = false;
@@ -30,8 +29,9 @@ public class SocketController : MonoBehaviour
 
     // TODO: PM to be changed
     protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+    // protected string TestSocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
     // protected string TestSocketURI = "http://localhost:5000";
-    //protected string SocketURI = "http://localhost:5000";
+    // protected string SocketURI = "http://localhost:5000";
 
     [SerializeField]
     private string TestToken;
@@ -45,9 +45,9 @@ public class SocketController : MonoBehaviour
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-    internal Action<List<Symbol>,List<List<int>>,PlayerData> InitiateUI;
-    internal Action ShowDisconnectionPopUp=null;
-    internal Action ShowAnotherDevicePopUp=null;
+    internal Action<List<Symbol>, List<List<int>>, PlayerData> InitiateUI;
+    internal Action ShowDisconnectionPopUp = null;
+    internal Action ShowAnotherDevicePopUp = null;
 
     internal bool isExit;
 
@@ -194,8 +194,8 @@ public class SocketController : MonoBehaviour
     {
         Debug.Log("Disconnected from the server");
         StopAllCoroutines();
-        if(!isExit)
-        ShowDisconnectionPopUp?.Invoke();
+        if (!isExit)
+            ShowDisconnectionPopUp?.Invoke();
         // uIManager.DisconnectionPopup();
     }
 
@@ -236,15 +236,15 @@ public class SocketController : MonoBehaviour
 
     internal void InitRequest(string eventName)
     {
-        var initmessage=new { Data= new { GameID=gameID }, id="Auth" };
+        var initmessage = new { Data = new { GameID = gameID }, id = "Auth" };
         SendData(eventName, initmessage);
     }
 
     internal void CloseSocket()
     {
-        isExit=true;
+        isExit = true;
         SendData("EXIT");
-        
+
         Application.ExternalCall("window.parent.postMessage", "onExit", "*");
 
         DOVirtual.DelayedCall(0.1f, () =>
@@ -273,9 +273,9 @@ public class SocketController : MonoBehaviour
         {
             socketModel.uIData.symbols = message["UIData"]["paylines"]["symbols"].ToObject<List<Symbol>>();
             socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
-            socketModel.initGameData.lineData=gameData["linesApiData"].ToObject<List<List<int>>>();
-            socketModel.initGameData.freeSpinData=gameData["freeSpinData"].ToObject<List<List<int>>>();
-            InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData,socketModel.playerData);
+            socketModel.initGameData.lineData = gameData["linesApiData"].ToObject<List<List<int>>>();
+            socketModel.initGameData.freeSpinData = gameData["freeSpinData"].ToObject<List<List<int>>>();
+            InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData, socketModel.playerData);
 
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // [x]: PM multiple parsheet
@@ -289,6 +289,15 @@ public class SocketController : MonoBehaviour
             // socketModel.resultGameData.linesToEmit = gameData["linestoemit"].ToObject<List<int>>();
             isResultdone = true;
 
+        }
+        else if (messageId == "ExitUser")
+        {
+            if (this.manager != null)
+            {
+                Debug.Log("Dispose my Socket");
+                this.manager.Close();
+            }
+            Application.ExternalCall("window.parent.postMessage", "onExit", "*");
         }
     }
 
