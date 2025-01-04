@@ -16,6 +16,7 @@ public class AudioController : MonoBehaviour
     [Header("clips")]
     [SerializeField] private AudioClip SpinButtonClip;
     [SerializeField] private AudioClip SpinClip;
+    [SerializeField] private AudioClip SpinStopClip;
     [SerializeField] private AudioClip Button;
     [SerializeField] private AudioClip Win_Audio;
     [SerializeField] private AudioClip NormalBg_Audio;
@@ -45,11 +46,19 @@ public class AudioController : MonoBehaviour
 
     }
 
-    internal void PlaySpinAudio()
-    {
+    internal void PlaySpinAudio(string type="spin")
+    {       
+
+        if(type=="spin"){
             audioPlayer_Spin.clip = SpinClip;
 
             audioPlayer_Spin.Play();
+        }
+        else if(type=="stop"){
+            audioPlayer_Spin.clip = SpinStopClip;
+            audioPlayer_Spin.Play();
+            Invoke(nameof(StopSpinAudio),0.1f);
+        }
 
     }
 
