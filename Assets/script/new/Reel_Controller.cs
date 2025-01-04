@@ -4,8 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using System.Linq;
-using Newtonsoft.Json;
-using Unity.Mathematics;
+
 
 public class Reel_Controller : MonoBehaviour
 {
@@ -17,7 +16,7 @@ public class Reel_Controller : MonoBehaviour
     [SerializeField] private Sprite[] wildAnimationSprite1;
     [SerializeField] private Sprite[] wildAnimationSprite2;
 
-    [SerializeField] private float minClearDuration;
+    [SerializeField] internal float minClearDuration;
     [SerializeField] private int iconSize;
 
     [SerializeField] private List<Slot_col> slot_matrix;
@@ -28,7 +27,6 @@ public class Reel_Controller : MonoBehaviour
     public class Slot_col
     {
         public List<Slot_Item> row;
-
     }
     internal void PopulateSlot()
     {
@@ -46,24 +44,32 @@ public class Reel_Controller : MonoBehaviour
         }
     }
 
-    internal void ClearReel()
+    internal IEnumerator ClearReel()
     {
+        float maxDuration = 0;
+        float animationDuration=0;
         for (int i = 0; i < slot_matrix.Count; i++)
         {
             for (int j = 0; j < slot_matrix[i].row.Count; j++)
             {
-                slot_matrix[i].row[j].transform.DOLocalMoveY(-4 * iconSize, (minClearDuration + UnityEngine.Random.Range(0, 0.2f)) * (2 - j + 1)).SetEase(Ease.Linear);
+                animationDuration = (minClearDuration + UnityEngine.Random.Range(0, 0.1f)) * (2 - j + 1);
+                maxDuration = Mathf.Max(maxDuration, animationDuration);
+                slot_matrix[i].row[j].transform.DOLocalMoveY(-4 * iconSize, animationDuration).SetEase(Ease.Linear);
             }
         }
-
+        Debug.Log("clear reel, "+maxDuration);
+        yield return new WaitForSeconds(maxDuration);
 
     }
 
-    internal IEnumerator FillReel1(List<List<int>> result)
+    internal IEnumerator FillReel1(List<List<int>> result, Action playFallAudio)
     {
-
+        float maxDuration = 0;
+        float animationDuration=0;
         for (int i = 0; i < 5; i++)
         {
+            bool shouldStopImmediate=Slot_Manager.immediateStop;
+
             for (int j = slot_matrix[i].row.Count - 1; j >= 0; j--)
             {
                 slot_matrix[i].row[j].transform.localPosition = new Vector2(0, 5 * iconSize);
@@ -81,14 +87,17 @@ public class Reel_Controller : MonoBehaviour
                     slot_matrix[i].row[j].image.sprite = iconList[id];
                 }
 
-
-                slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration * (2 - j + 1)).SetEase(Ease.Linear);
+                animationDuration=minClearDuration * (2 - j + 1);
+                if(shouldStopImmediate)
+                animationDuration=minClearDuration;
+                maxDuration = Mathf.Max(maxDuration, animationDuration);
+                slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, animationDuration).SetEase(Ease.Linear);
             }
-
+            if(!shouldStopImmediate)
             yield return new WaitForSeconds(minClearDuration);
-
+            playFallAudio?.Invoke();
         }
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(Mathf.Abs(maxDuration-minClearDuration)+0.1f);
     }
 
 

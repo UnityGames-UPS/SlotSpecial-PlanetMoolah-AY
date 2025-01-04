@@ -6,8 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using System;
-using Newtonsoft.Json.Linq;
-using Unity.VisualScripting;
+
 
 public class UI_Controller : MonoBehaviour
 {
@@ -31,6 +30,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] private GameObject winPopUpObject;
     [SerializeField] private TMP_Text winTitle;
     [SerializeField] private TMP_Text winAmountText;
+    [SerializeField] private Button skipWin_Button;
 
     [Header("Free Spin Info")]
     [SerializeField] private TMP_Text[] freeSpinCounters;
@@ -173,10 +173,6 @@ public class UI_Controller : MonoBehaviour
 
         });
 
-
-        // if (Menu_Button) Menu_Button.onClick.RemoveAllListeners();
-        // if (Menu_Button) Menu_Button.onClick.AddListener(OpenMenu);
-
         if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
         if (Sound_Button) Sound_Button.onClick.AddListener(delegate
         {
@@ -240,6 +236,9 @@ public class UI_Controller : MonoBehaviour
             ClosePopup();
         });
 
+        skipWin_Button.onClick.RemoveAllListeners();
+        skipWin_Button.onClick.AddListener(CloseWinPopup);
+
     }
 
     internal void UpdatePlayerInfo(double currentWinning = -1, double balance = -1)
@@ -286,7 +285,7 @@ public class UI_Controller : MonoBehaviour
         if (currentPopup != null)
         {
 
-            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP" || currentPopup.name.ToUpper() == "LOWBALANCEPOPUP")
+            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP")
                 return;
             currentPopup.SetActive(false);
         }
@@ -314,6 +313,7 @@ public class UI_Controller : MonoBehaviour
 
 
     }
+
 
     internal void SetFreeSpinCount(int count, bool isFreeSpin)
     {
@@ -384,13 +384,13 @@ public class UI_Controller : MonoBehaviour
         OpenPopup(lowBalPopupObject);
     }
 
-    internal void ShowFreeSpinPopup(int value, bool showStart=true)
+    internal void ShowFreeSpinPopup(int value)
     {
-        freeSpinText.text = $"You are awarded {value} free plays Press start to play.";
-        freeSpinStartButton.gameObject.SetActive(showStart);
+        freeSpinText.text = $"You are awarded {value} free plays.";
+        // freeSpinStartButton.gameObject.SetActive(showStart);
         OpenPopup(freeSpinObject);
-        if(!showStart)
-        Invoke("SetFreeSpinUI",3f);
+        // if(!showStart)
+        // Invoke(nameof(SetFreeSpinUI),3f);
     }
     private void ToggleMusic()
     {
@@ -457,21 +457,26 @@ public class UI_Controller : MonoBehaviour
         OpenPopup(winPopUpObject);
         double currentValue = 0;
         DOTween.To(() => currentValue, x => currentValue = x, amount, 2f)
-    .OnUpdate(() =>
-    {
-        winAmountText.text = currentValue.ToString("f3");
-    })
-    .OnComplete(() =>
-    {
-        winAmountText.text = amount.ToString();
-    });
-
-
+            .OnUpdate(() =>
+            {
+                winAmountText.text = currentValue.ToString("f3");
+            })
+            .OnComplete(() =>
+            {
+                winAmountText.text = amount.ToString();
+            });
         yield return new WaitForSeconds(3f);
-        ClosePopup();
+        CloseWinPopup();
 
     }
 
+   void CloseWinPopup(){
+        Debug.Log("pressed");
+        ClosePopup();
+        Slot_Manager.checkPopUpCompletion=true;
+        DOTween.Kill(winAmountText);
+        winAmountText.text="";
+    }
     internal void DeductBalance(double bet)
     {
 
@@ -556,7 +561,7 @@ public class UI_Controller : MonoBehaviour
         string info = "";
         for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
         {
-            info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString() + "\n";
+            info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString()+"X" + "\n";
         }
         if (SymbolsText[k]) SymbolsText[k].text = info;
 
