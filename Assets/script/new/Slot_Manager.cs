@@ -96,9 +96,9 @@ public class Slot_Manager : MonoBehaviour
         betPlus_Button.onClick.AddListener(delegate { ChangeBet(true); });
         betMinus_Button.onClick.AddListener(delegate { ChangeBet(false); });
 
-        StopSpin_Button.onClick.AddListener(() => StartCoroutine(StopSpin()));
+        StopSpin_Button.onClick.AddListener(() => {audioController.PlayButtonAudio(); StartCoroutine(StopSpin());});
 
-        Turbo_Button.onClick.AddListener(ToggleTurboMode);
+        Turbo_Button.onClick.AddListener(()=>{audioController.PlayButtonAudio(); ToggleTurboMode();});
 
     }
 
@@ -187,12 +187,13 @@ public class Slot_Manager : MonoBehaviour
             freeSpinCount--;
             yield return SpinRoutine();
             yield return new WaitForSeconds(1f);
-
         }
+
         isSpinning = false;
         isFreeSpin = false;
         uI_Controller.SetDefaultUI();
         freeSpinRoutine = null;
+
         if (wasAutoSpinOn)
         {
             if (autoSpinCoroutine != null)
@@ -201,6 +202,7 @@ public class Slot_Manager : MonoBehaviour
         }
         else
             ToggleButtonGrp(true);
+
 
     }
 
@@ -375,7 +377,6 @@ public class Slot_Manager : MonoBehaviour
             }
             // yield return new WaitForSeconds(1f);
 
-
         }
 
         var playerData = socketManager.socketModel.playerData;
@@ -423,6 +424,7 @@ public class Slot_Manager : MonoBehaviour
                 StopCoroutine(autoSpinCoroutine);
                 wasAutoSpinOn = true;
             }
+
             freeSpinCount = socketManager.socketModel.resultGameData.freeSpinCount;
 
             if (freeSpinRoutine != null)
@@ -433,7 +435,6 @@ public class Slot_Manager : MonoBehaviour
                 // uI_Controller.ShowFreeSpinPopup(freeSpinCount, false);
                 // yield return new WaitForSeconds(3f);
                 // freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
-
             }
 
             uI_Controller.ShowFreeSpinPopup(freeSpinCount);
