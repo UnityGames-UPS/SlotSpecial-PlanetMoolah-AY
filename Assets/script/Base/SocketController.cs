@@ -76,6 +76,7 @@ public class SocketController : MonoBehaviour
         // Parse the JSON data
         var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
         SocketURI = data.socketURL;
+        Debug.Log("socekt url: "+data.socketURL);
         myAuth = data.cookie;
         // Proceed with connecting to the server using myAuth and socketURL
     }

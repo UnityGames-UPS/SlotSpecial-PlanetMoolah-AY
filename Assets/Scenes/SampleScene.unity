@@ -2765,8 +2765,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.4004, y: 3.5842}
-  m_SizeDelta: {x: 195.1993, y: 83.4524}
+  m_AnchoredPosition: {x: -2.08, y: 1.05}
+  m_SizeDelta: {x: 193.19, y: 103.53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &215759150
 MonoBehaviour:
@@ -2825,7 +2825,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -7
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -6137,7 +6137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf35609696994112abfb50e0e4234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZDgzY2U1YTI3YmY5MDI0NDNlYjRjMCIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzM2NDkyMjMwLCJleHAiOjE3MzcwOTcwMzB9.2wU3WBZ8PNxRzqmq-wnVXOMchnnwNcKXIO_atVyJrkY
+  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NDAwYjAwYjAxNmMwMDFhMGQ3MmQwYiIsInVzZXJuYW1lIjoic2F5YW4iLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzQwNTQ1MDY1LCJleHAiOjE3NDExNDk4NjV9.-xFzbEl7UAKgRcgPXUxuytHYEpQ110GZKlE1Us5c6q4
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0
@@ -6182,7 +6182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6bdeb18cb33847438f6b41c0588ebac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings_button: {fileID: 1856196673}
   betPerLineText: {fileID: 91673311}
   totalBetText: {fileID: 22154272}
   totalLineText: {fileID: 741686421}
@@ -6952,7 +6951,7 @@ GameObject:
   m_Component:
   - component: {fileID: 544919939}
   m_Layer: 5
-  m_Name: BeamTransForm
+  m_Name: BeamT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

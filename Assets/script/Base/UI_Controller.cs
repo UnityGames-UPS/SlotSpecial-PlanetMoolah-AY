@@ -12,13 +12,6 @@ public class UI_Controller : MonoBehaviour
 {
 
 
-    // [SerializeField] private SocketIOManager socketIOManager;
-
-    [Header("Menu UI")]
-    [SerializeField] private Transform settings_button;
-    // [SerializeField] private Transform info_button;
-    // [SerializeField] private Button Menu_Button;
-
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
     [SerializeField] private TMP_Text totalBetText;
@@ -103,7 +96,6 @@ public class UI_Controller : MonoBehaviour
 
     [SerializeField] private bool isMusic = true;
     [SerializeField] private bool isSound = true;
-    private bool isMenuOpen = false;
     [SerializeField] private GameObject[] pageList;
     [SerializeField] private int currentPage = 0;
 
@@ -111,12 +103,12 @@ public class UI_Controller : MonoBehaviour
     [Header("player Info")]
     [SerializeField] private TMP_Text playerBalance;
     [SerializeField] private TMP_Text playerWinning;
-
     [SerializeField] GameObject currentPopup = null;
-
     internal Action<bool, string> OnToggleAudio;
     internal Action<string> OnPlayButton;
     internal Action Exitgame;
+
+    Tween balanceTween;
     private void Start()
     {
 
@@ -243,40 +235,13 @@ public class UI_Controller : MonoBehaviour
 
     internal void UpdatePlayerInfo(double currentWinning = -1, double balance = -1)
     {
+        balanceTween?.Kill();
         if (balance >= 0)
-            playerBalance.text = balance.ToString();
+            playerBalance.text = balance.ToString("f3");
         if (currentWinning >= 0)
-            playerWinning.text = currentWinning.ToString();
+            playerWinning.text = currentWinning.ToString("f3");
 
     }
-    // private void OpenMenu()
-    // {
-    //     if (!isMenuOpen)
-    //     {
-    //         settings_button.gameObject.SetActive(true);
-    //         info_button.gameObject.SetActive(true);
-    //         settings_button.transform.DOLocalMoveY(-135, 0.2f);
-    //         info_button.transform.DOLocalMoveY(-270, 0.5f);
-    //         isMenuOpen = true;
-    //     }
-    //     else
-    //     {
-    //         settings_button.DOLocalMoveY(0, 0.2f);
-    //         info_button.DOLocalMoveY(0, 0.2f);
-
-    //         DOVirtual.DelayedCall(0.1f, () =>
-    //         {
-    //             settings_button.gameObject.SetActive(false);
-    //             info_button.gameObject.SetActive(false);
-    //             isMenuOpen = false;
-    //         });
-
-
-    //     }
-
-    // }
-
-
 
     private void OpenPopup(GameObject Popup)
     {
@@ -432,7 +397,7 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
-    internal IEnumerator ShowWinPopup(int type, double amount)
+    internal void ShowWinPopup(int type, double amount)
     {
 
         switch (type)
@@ -450,7 +415,8 @@ public class UI_Controller : MonoBehaviour
                 winTitle.text = "Jackpot";
                 break;
             default:
-                yield break;
+                CloseWinPopup();
+                return;
 
         }
 
@@ -463,14 +429,15 @@ public class UI_Controller : MonoBehaviour
             })
             .OnComplete(() =>
             {
-                winAmountText.text = amount.ToString();
+                winAmountText.text = amount.ToString("f3");
             });
-        yield return new WaitForSeconds(3f);
-        CloseWinPopup();
+
+        Invoke(nameof(CloseWinPopup),3f);
 
     }
 
    void CloseWinPopup(){
+        CancelInvoke(nameof(CloseWinPopup));
         Debug.Log("pressed");
         ClosePopup();
         Slot_Manager.checkPopUpCompletion=true;
@@ -482,7 +449,7 @@ public class UI_Controller : MonoBehaviour
 
         double balance = Double.Parse(playerBalance.text);
         double currentValue = balance;
-        DOTween.To(() => currentValue, x => currentValue = x, (balance - bet), 0.4f)
+        balanceTween=DOTween.To(() => currentValue, x => currentValue = x, (balance - bet), 0.4f)
         .OnUpdate(() =>
         {
             playerBalance.text = currentValue.ToString("f3");
@@ -579,7 +546,7 @@ public class UI_Controller : MonoBehaviour
     internal Tweener HighLightWin()
     {
 
-        Tweener winTween = playerWinning.transform.DOScale(1.2f, 1f).SetLoops(-1, LoopType.Yoyo);
+        Tweener winTween = playerWinning.transform.DOScale(0.8f, 1f).SetLoops(-1, LoopType.Yoyo);
 
         return winTween;
 
