@@ -62,7 +62,7 @@ public class Reel_Controller : MonoBehaviour
 
     }
 
-    internal IEnumerator FillReel1(List<List<int>> result, Action playFallAudio)
+    internal IEnumerator FillReelv1(List<List<int>> result, Action playFallAudio)
     {
         float maxDuration = 0;
         float animationDuration=0;
@@ -239,22 +239,20 @@ public class Reel_Controller : MonoBehaviour
 
     }
 
-    internal void HighlightIcon(List<int> payline, List<string> symbols, Color highlightColor)
+    internal void HighlightIconByLine(List<int> payline, List<string> symbols, Color highlightColor)
     {
 
 
         // [x]: PM adding highlight
-        for (int i = 0; i < symbols.Count; i++)
-        {
-            // string cord = $"{i},{payline[i]}";
-            // if (symbols.Contains(cord))
-            // {
+        for (int i = 0; i < slot_matrix.Count; i++)
+        {   
+            if(symbols.Contains($"{i},{payline[i]}")){
             slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
             slot_matrix[i].row[payline[i]].boder.color = highlightColor;
-            // }
-
+            }
         }
     }
+
 
     internal void StopHighlightIcon(List<int> payline)
     {
