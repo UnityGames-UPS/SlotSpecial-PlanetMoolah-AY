@@ -165,13 +165,6 @@ public class UI_Controller : MonoBehaviour
 
         });
 
-        if (Sound_Button) Sound_Button.onClick.RemoveAllListeners();
-        if (Sound_Button) Sound_Button.onClick.AddListener(delegate
-        {
-            ToggleMusic();
-            OnPlayButton("default");
-
-        });
 
         if (Music_Button) Music_Button.onClick.RemoveAllListeners();
         if (Music_Button) Music_Button.onClick.AddListener(delegate

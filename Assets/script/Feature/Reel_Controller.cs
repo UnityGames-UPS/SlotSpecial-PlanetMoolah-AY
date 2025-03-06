@@ -44,6 +44,7 @@ public class Reel_Controller : MonoBehaviour
         }
     }
 
+    //falling aniamtion
     internal IEnumerator ClearReel()
     {
         float maxDuration = 0;
@@ -66,6 +67,7 @@ public class Reel_Controller : MonoBehaviour
     {
         float maxDuration = 0;
         float animationDuration=0;
+
         for (int i = 0; i < 5; i++)
         {
             bool shouldStopImmediate=Slot_Manager.immediateStop;
@@ -75,6 +77,7 @@ public class Reel_Controller : MonoBehaviour
                 slot_matrix[i].row[j].transform.localPosition = new Vector2(0, 5 * iconSize);
                 int id = result[j][i];
                 slot_matrix[i].row[j].id = id;
+                //IF IT IS WILD
                 if (id == 12)
                 {
                     int randomWild = UnityEngine.Random.Range(0, wildIconList.Length);
@@ -90,6 +93,7 @@ public class Reel_Controller : MonoBehaviour
                 animationDuration=minClearDuration * (2 - j + 1);
                 if(shouldStopImmediate)
                 animationDuration=minClearDuration;
+                
                 maxDuration = Mathf.Max(maxDuration, animationDuration);
                 slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, animationDuration).SetEase(Ease.Linear);
             }

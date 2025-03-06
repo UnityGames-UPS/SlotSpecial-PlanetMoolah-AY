@@ -7,15 +7,9 @@ public class Payline_controller : MonoBehaviour
 {
     [SerializeField] internal Image[] paylines;
     [SerializeField] internal Color[] paylineColor;
-    void Start()
-    {
-
-    }
 
     internal Color GeneratePayline(int id)
     {
-
-
             paylines[id].gameObject.SetActive(true);
             paylines[id].color=paylineColor[id];
             return paylineColor[id];
@@ -25,13 +19,5 @@ public class Payline_controller : MonoBehaviour
     internal void DestroyPayline(int id){
             paylines[id].gameObject.SetActive(false);
 
-    }
-    internal void ResetPayline()
-    {
-        for (int i = 0; i < paylines.Length; i++)
-        {
-            if (paylines[i].gameObject.activeSelf)
-                paylines[i].gameObject.SetActive(false);
-        }
     }
 }
