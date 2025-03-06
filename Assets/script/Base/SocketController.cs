@@ -32,8 +32,8 @@ public class SocketController : MonoBehaviour
     private string TestToken;
 
     // [x]: PM to be added
-    protected string gameID = "";
-    // protected string gameID = "SL-PM";
+    // protected string gameID = "";
+    protected string gameID = "SL-PM";
 
     internal bool isLoading;
     internal bool SetInit = false;
