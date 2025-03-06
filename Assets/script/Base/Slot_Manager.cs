@@ -68,7 +68,6 @@ public class Slot_Manager : MonoBehaviour
     }
     void Start()
     {
-        // uI_Controller.UpdatePlayerInfo(socketManager.socketModel.playerData);
         reel_Controller.PopulateSlot();
 
         start_Button.onClick.AddListener(() => StartCoroutine(SpinRoutine()));
@@ -89,10 +88,6 @@ public class Slot_Manager : MonoBehaviour
             }
         });
 
-        // freeSpin_Button.onClick.AddListener(() =>
-        // {
-        //     freeSpinRoutine = StartCoroutine(FreeSpinRoutine());
-        // });
         betPlus_Button.onClick.AddListener(delegate { ChangeBet(true); });
         betMinus_Button.onClick.AddListener(delegate { ChangeBet(false); });
 
@@ -275,6 +270,7 @@ public class Slot_Manager : MonoBehaviour
         List<string> SymbolsToEmit;
         List<string>[] symbols = new List<string>[2];
         List<int[]> coords = new List<int[]>();
+        
         int lineId = -1;
         var cascadeData = socketManager.socketModel.resultGameData.cascading;
         Color borderColor;
@@ -299,6 +295,7 @@ public class Slot_Manager : MonoBehaviour
                 coords.Clear();
 
                 SymbolsToEmit = Helper.Flatten2DList(cascadeData[k].winingSymbols);
+                //separating which symbols to pull and which to blast
                 symbols = SeparateSymbols(SymbolsToEmit);
 
                 uI_Controller.UpdatePlayerInfo(cascadeData[k].currentWining);
@@ -319,14 +316,14 @@ public class Slot_Manager : MonoBehaviour
                     {
                         lineId = cascadeData[k].lineToEmit[i] - 1;
                         borderColor = payline_Controller.GeneratePayline(lineId);
-                        reel_Controller.HighlightIconByLine(socketManager.socketModel.initGameData.lineData[lineId], Helper.Flatten2DList(cascadeData[k].winingSymbols), borderColor);
+                        reel_Controller.HighlightIconByLine(socketManager.socketModel.initGameData.lineData[lineId],cascadeData[k].winingSymbols[i], borderColor);
                         yield return new WaitForSeconds(reel_Controller.minClearDuration + 0.2f);
                         reel_Controller.StopHighlightIcon(socketManager.socketModel.initGameData.lineData[lineId]);
                         payline_Controller.DestroyPayline(lineId);
                         yield return new WaitForSeconds(reel_Controller.minClearDuration + 0.2f);
                     }
                 }
-
+                // symbols to blast
                 if (symbols[1].Count > 0)
                 {
                     audioController.PlayShootAudio();
@@ -345,7 +342,7 @@ public class Slot_Manager : MonoBehaviour
                     audioController.PlayBlastAudio();
 
                 }
-
+                // symbols to pull
                 if (symbols[0].Count > 0)
                 {
 
@@ -357,10 +354,11 @@ public class Slot_Manager : MonoBehaviour
                     }
                 }
                 yield return new WaitForSeconds(uFO_Controller.shootSpeed - 0.1f);
+                //to handle blast animation
                 reel_Controller.HanldleSymbols(symbols[1]);
 
                 uI_Controller.UpdatePlayerInfo(cascadeData[k].currentWining);
-
+                //to handle wild animation
                 reel_Controller.HandleWildSymbols(symbols[0]);
                 yield return new WaitForSeconds(1f);
 
@@ -482,6 +480,7 @@ public class Slot_Manager : MonoBehaviour
 
         List<string> wildSymbol = new List<string>();
         List<string> symbol = new List<string>();
+
         for (int i = 0; i < SymbolsToEmit.Count; i++)
         {
             int[] pos = Helper.ConvertSymbolPos(SymbolsToEmit[i]);
@@ -526,7 +525,6 @@ public class Slot_Manager : MonoBehaviour
         spinInfoText.text = $"Total lines: {totalLines} x Bet per line: {socketManager.socketModel.initGameData.Bets[betCounter]} = Total bet: {currentTotalBet}";
         uI_Controller.UpdateBetInfo(socketManager.socketModel.initGameData.Bets[betCounter], currentTotalBet, totalLines);
 
-        // CompareBalance();
 
 
     }
@@ -577,8 +575,5 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.ToggleBtnGrp(toggle);
 
     }
-
-
-
 
 }
