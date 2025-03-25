@@ -22,12 +22,15 @@ public class SocketController : MonoBehaviour
 
     protected string SocketURI = null;
 
+    [SerializeField] internal JSFunctCalls JSManager;
+
     // TODO: PM to be changed
     // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
     // protected string TestSocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
-    protected string TestSocketURI = "http://localhost:5000";
+    protected string TestSocketURI = "http://localhost:5001/";
     // protected string SocketURI = "http://localhost:5000";
-
+    protected string nameSpace = ""; //BackendChanges
+    private Socket gameSocket; //BackendChanges
     [SerializeField]
     private string TestToken;
 
@@ -73,6 +76,7 @@ public class SocketController : MonoBehaviour
         SocketURI = data.socketURL;
         Debug.Log("socekt url: "+data.socketURL);
         myAuth = data.cookie;
+        nameSpace = data.nameSpace;
         // Proceed with connecting to the server using myAuth and socketURL
     }
 
@@ -86,19 +90,12 @@ public class SocketController : MonoBehaviour
         options.ReconnectionDelay = reconnectionDelay;
         options.Reconnection = true;
 
-        Application.ExternalCall("window.parent.postMessage", "authToken", "*");
+        options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket; //BackendChanges
+
+        // Application.ExternalCall("window.parent.postMessage", "authToken", "*");
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        Application.ExternalEval(@"
-            window.addEventListener('message', function(event) {
-                if (event.data.type === 'authToken') {
-                    var combinedData = JSON.stringify({
-                        cookie: event.data.cookie,
-                        socketURL: event.data.socketURL
-                    });
-                    // Send the combined data to Unity
-                    SendMessage('SocketManager', 'ReceiveAuthToken', combinedData);
-                }});");
+        JSManager.SendCustomMessage("authToken");
         StartCoroutine(WaitForAuthToken(options));
 #else
         Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
@@ -213,19 +210,25 @@ public class SocketController : MonoBehaviour
 #else
         this.manager = new SocketManager(new Uri(SocketURI), options);
 #endif
+        if (string.IsNullOrEmpty(nameSpace))
+        {  //BackendChanges Start
+            gameSocket = this.manager.Socket;
+        }
+        else
+        {
+            print("nameSpace: " + nameSpace);
+            gameSocket = this.manager.GetSocket("/" + nameSpace);
+        }
         // Set subscriptions
-        this.manager.Socket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
-        this.manager.Socket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
-        this.manager.Socket.On<string>(SocketIOEventTypes.Error, OnError);
-        this.manager.Socket.On<string>("message", OnListenEvent);
-        this.manager.Socket.On<bool>("socketState", OnSocketState);
-        this.manager.Socket.On<string>("internalError", OnSocketError);
-        this.manager.Socket.On<string>("alert", OnSocketAlert);
-        this.manager.Socket.On<string>("AnotherDevice", OnSocketOtherDevice);
-
-
-        // Start connecting to the server
-        this.manager.Open();
+        gameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
+        gameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
+        gameSocket.On<string>(SocketIOEventTypes.Error, OnError);
+        gameSocket.On<string>("message", OnListenEvent);
+        gameSocket.On<bool>("socketState", OnSocketState);
+        gameSocket.On<string>("internalError", OnSocketError);
+        gameSocket.On<string>("alert", OnSocketAlert);
+        gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice); //BackendChanges Finish
+                                                                     // Start connecting to the server
     }
 
     // Connected event handler implementation
@@ -235,13 +238,20 @@ public class SocketController : MonoBehaviour
         var initmessage = new { Data = new { GameID = gameID }, id = "Auth" };
         SendData(eventName, initmessage);
     }
-
+    internal void closeSocketReactnativeCall()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+    JSManager.SendCustomMessage("onExit");
+#endif
+    }
     internal void CloseSocket()
     {
         isExit = true;
         SendData("EXIT");
 
-        Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+#if UNITY_WEBGL && !UNITY_EDITOR
+                        JSManager.SendCustomMessage("onExit");
+#endif
 
         DOVirtual.DelayedCall(0.1f, () =>
         {
@@ -275,7 +285,9 @@ public class SocketController : MonoBehaviour
 
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // [x]: PM multiple parsheet
-
+#if UNITY_WEBGL && !UNITY_EDITOR
+        JSManager.SendCustomMessage("OnEnter");
+#endif
         }
         else if (messageId == "ResultData")
         {
@@ -293,7 +305,9 @@ public class SocketController : MonoBehaviour
                 Debug.Log("Dispose my Socket");
                 this.manager.Close();
             }
-            Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+#if UNITY_WEBGL && !UNITY_EDITOR
+                        JSManager.SendCustomMessage("onExit");
+#endif
         }
     }
 
@@ -301,19 +315,19 @@ public class SocketController : MonoBehaviour
     internal void SendData(string eventName, object message = null)
     {
 
-        if (this.manager.Socket == null || !this.manager.Socket.IsOpen)
+        if (gameSocket == null || !gameSocket.IsOpen)
         {
             Debug.LogWarning("Socket is not connected.");
             return;
         }
         if (message == null)
         {
-            this.manager.Socket.Emit(eventName);
+            gameSocket.Emit(eventName);
             return;
         }
         isResultdone = false;
         string json = JsonConvert.SerializeObject(message);
-        this.manager.Socket.Emit(eventName, json);
+        gameSocket.Emit(eventName, json);
         Debug.Log("JSON data sent: " + json);
 
     }
