@@ -545,7 +545,7 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.UpdateBetInfo(socketManager.socketModel.initGameData.Bets[betCounter], currentTotalBet, totalLines);
         inititated = true;
         CompareBalance();
-        Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
+
 
 
     }

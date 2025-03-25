@@ -11,7 +11,7 @@ using System;
 public class UI_Controller : MonoBehaviour
 {
 
-
+    [SerializeField] private SocketController socketManager;
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
     [SerializeField] private TMP_Text totalBetText;
@@ -213,6 +213,7 @@ public class UI_Controller : MonoBehaviour
         if (disconnectCloseButton) disconnectCloseButton.onClick.AddListener(() =>
         {
             Exitgame();
+            socketManager.closeSocketReactnativeCall();
         });
 
         if (lowbalCloseButton) lowbalCloseButton.onClick.RemoveAllListeners();
