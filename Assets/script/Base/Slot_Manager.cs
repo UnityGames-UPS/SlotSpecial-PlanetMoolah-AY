@@ -62,14 +62,14 @@ public class Slot_Manager : MonoBehaviour
         uI_Controller.OnPlayButton = audioController.PlayButtonAudio;
         socketManager.ShowDisconnectionPopUp = uI_Controller.ShowDisconnectPopup;
         socketManager.InitiateUI = InitiateUI;
-        socketManager.OpenSocket();
+        
         uFO_Controller.StartUfoVerticalMove();
 
     }
     void Start()
     {
+        socketManager.OpenSocket();
         reel_Controller.PopulateSlot();
-
         start_Button.onClick.AddListener(() => StartCoroutine(SpinRoutine()));
         autoStart_Button.onClick.AddListener(() =>
         {

@@ -289,8 +289,11 @@ public class SocketController : MonoBehaviour
                 socketModel.initGameData.freeSpinData = gameData["freeSpinData"].ToObject<List<List<int>>>();
                 InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData, socketModel.playerData);
 
-                StartCoroutine(DelayedCall());
+               // StartCoroutine(DelayedCall());
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+        JSManager.SendCustomMessage("OnEnter");
+#endif
 
             }
         }
@@ -342,9 +345,7 @@ public class SocketController : MonoBehaviour
         Debug.Log("Start Delay");
         yield return new WaitForSeconds(1f);
         Debug.Log("After Delay");
-#if UNITY_WEBGL && !UNITY_EDITOR
-        JSManager.SendCustomMessage("OnEnter");
-#endif
+
 
     }
 
