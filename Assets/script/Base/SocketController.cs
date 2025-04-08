@@ -48,7 +48,7 @@ public class SocketController : MonoBehaviour
     internal Action ShowAnotherDevicePopUp = null;
 
     internal bool isExit;
-
+    private bool firstTime = true;
     private void Awake()
     {
         isLoading = true;
@@ -277,17 +277,25 @@ public class SocketController : MonoBehaviour
 
         if (messageId == "InitData")
         {
-            socketModel.uIData.symbols = message["UIData"]["paylines"]["symbols"].ToObject<List<Symbol>>();
-            socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
-            socketModel.initGameData.lineData = gameData["linesApiData"].ToObject<List<List<int>>>();
-            socketModel.initGameData.freeSpinData = gameData["freeSpinData"].ToObject<List<List<int>>>();
-            InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData, socketModel.playerData);
-
+            
             // socketModel.initGameData.Lines = gameData["Lines"].ToObject<List<List<int>>>();
             // [x]: PM multiple parsheet
+            if (firstTime)
+            {
+                firstTime = false;
+                socketModel.uIData.symbols = message["UIData"]["paylines"]["symbols"].ToObject<List<Symbol>>();
+                socketModel.initGameData.Bets = gameData["Bets"].ToObject<List<double>>();
+                socketModel.initGameData.lineData = gameData["linesApiData"].ToObject<List<List<int>>>();
+                socketModel.initGameData.freeSpinData = gameData["freeSpinData"].ToObject<List<List<int>>>();
+                InitiateUI?.Invoke(socketModel.uIData.symbols, socketModel.initGameData.freeSpinData, socketModel.playerData);
+
+               // StartCoroutine(DelayedCall());
+
 #if UNITY_WEBGL && !UNITY_EDITOR
         JSManager.SendCustomMessage("OnEnter");
 #endif
+
+            }
         }
         else if (messageId == "ResultData")
         {
@@ -332,7 +340,14 @@ public class SocketController : MonoBehaviour
 
     }
 
+    IEnumerator DelayedCall()
+    {
+        Debug.Log("Start Delay");
+        yield return new WaitForSeconds(1f);
+        Debug.Log("After Delay");
 
+
+    }
 
 }
 
