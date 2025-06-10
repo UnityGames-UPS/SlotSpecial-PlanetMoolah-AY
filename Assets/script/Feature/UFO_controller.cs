@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 
 public class UFO_controller : MonoBehaviour
@@ -33,7 +34,7 @@ public class UFO_controller : MonoBehaviour
     }
 
     // start UFO animation and return the index and position of the UFO to add to "coords" in Slot_Manager
-    internal int[] uFoAnimation(int[] values)
+    internal int[] uFoAnimation(List<int> values)
     {
         int yPos = values[0];
         int xPos = values[1];
@@ -52,7 +53,7 @@ public class UFO_controller : MonoBehaviour
     }
 
     // crearte pull beam and return the pull beam animation for to be reset
-    internal ImageAnimation Pull(int[] values)
+    internal ImageAnimation Pull(List<int> values)
     {
         StopUfoVerticalMove();
 

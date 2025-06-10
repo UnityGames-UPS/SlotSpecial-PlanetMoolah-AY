@@ -42,6 +42,21 @@ public class Helper
         return flatList;
     }
 
+    internal static List<List<int>> FindEmitingSymbol(int lineIndex, List<int> position, List<List<int>> initialLines)
+    {
+        List<List<int>> resultList = new List<List<int>>();
+
+        for (int i = 0; i < position.Count; i++)
+        {
+            List<int> temp = new List<int>();
+            temp.Add(i);                                     // Add index
+            temp.Add(initialLines[lineIndex][position[i]]); // Add symbol value
+
+            resultList.Add(temp); // Add the sublist to the result list
+        }
+
+        return resultList;
+    }
 
 
 }

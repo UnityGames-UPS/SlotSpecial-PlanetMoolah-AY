@@ -63,7 +63,7 @@ public class Reel_Controller : MonoBehaviour
 
     }
 
-    internal IEnumerator FillReelv1(List<List<int>> result, Action playFallAudio)
+    internal IEnumerator FillReelv1(List<List<string>> result, Action playFallAudio)
     {
         float maxDuration = 0;
         float animationDuration=0;
@@ -75,7 +75,7 @@ public class Reel_Controller : MonoBehaviour
             for (int j = slot_matrix[i].row.Count - 1; j >= 0; j--)
             {
                 slot_matrix[i].row[j].transform.localPosition = new Vector2(0, 5 * iconSize);
-                int id = result[j][i];
+                int id = int.Parse(result[j][i]);
                 slot_matrix[i].row[j].id = id;
                 //IF IT IS WILD
                 if (id == 12)
@@ -104,9 +104,79 @@ public class Reel_Controller : MonoBehaviour
         yield return new WaitForSeconds(Mathf.Abs(maxDuration-minClearDuration)+0.1f);
     }
 
-
-    internal IEnumerator ReArrangeMatrix(List<List<int>> iconsToFill)
+    internal IEnumerator ReArrangeMatrix(List<WinningLine> iconsToFill)
     {
+        for (int i = 0; i < slot_matrix.Count; i++)
+        {
+            var negativeOnes = slot_matrix[i].row.Where(x => x.id == -1).ToList();
+
+            var otherValues = slot_matrix[i].row.Where(x => x.id != -1).ToList();
+
+            if (negativeOnes.Count == 0)
+                continue;
+
+            foreach (var item in otherValues)
+            {
+                negativeOnes.Add(item);
+            }
+
+            slot_matrix[i].row.Clear();
+            slot_matrix[i].row.AddRange(negativeOnes);
+
+
+            for (int j = 0; j < slot_matrix[i].row.Count; j++)
+            {
+                if (slot_matrix[i].row[j].id == -1)
+                {
+                    slot_matrix[i].row[j].transform.localPosition = new Vector3(slot_matrix[i].row[j].transform.localPosition.x, 5 * iconSize, slot_matrix[i].row[j].transform.localPosition.z);
+                    slot_matrix[i].row[j].id = iconsToFill[j].positions[i];
+                    if (iconsToFill[j].positions[i] == 12)
+                    {
+                        int randomWild = UnityEngine.Random.Range(0, wildIconList.Length);
+                        slot_matrix[i].row[j].image.sprite = wildIconList[randomWild];
+                        slot_matrix[i].row[j].wildVariation = randomWild;
+                    }
+                    else
+                    {
+
+                        slot_matrix[i].row[j].image.sprite = iconList[iconsToFill[j].positions[i]];
+                    }
+                }
+
+                slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration).SetEase(Ease.InOutQuad);
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
+
+    }
+    List<List<int>> ConvertToInt(List<List<string>> iconsToFill)
+    {
+        List<List<int>> result = new List<List<int>>();
+
+        foreach (var innerList in iconsToFill)
+        {
+            List<int> intList = new List<int>();
+            foreach (var str in innerList)
+            {
+                if (int.TryParse(str, out int number))
+                {
+                    intList.Add(number);
+                }
+                else
+                {
+                    // Handle the case where parsing fails if needed
+                    // For now, we'll just add 0 or skip it
+                     continue;
+                }
+            }
+            result.Add(intList);
+        }
+
+        return result;
+    }
+    internal IEnumerator ReArrangeMatrix(List<List<string>> iconsToFills)
+    {
+        List<List<int>> iconsToFill = ConvertToInt(iconsToFills);
         for (int i = 0; i < slot_matrix.Count; i++)
         {
             var negativeOnes = slot_matrix[i].row.Where(x => x.id == -1).ToList();
@@ -153,14 +223,14 @@ public class Reel_Controller : MonoBehaviour
 
 
 
-    internal void HanldleSymbols(List<string> symbolsToEmit)
+    internal void HanldleSymbols(List<List<int>> symbolsToEmit)
     {
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
 
         for (int i = 0; i < symbolsToEmit.Count; i++)
         {
-            int[] values = Helper.ConvertSymbolPos(symbolsToEmit[i]);
+            List<int> values = symbolsToEmit[i];
 
             yPos.Add(values[0]);
             xPos.Add(values[1]);
@@ -176,14 +246,14 @@ public class Reel_Controller : MonoBehaviour
         }
     }
 
-    internal void StopSymbolAnimation(List<string> symbolsToEmit)
+    internal void StopSymbolAnimation(List<List<int>> symbolsToEmit)
     {
 
         List<int> yPos = new List<int>();
         List<int> xPos = new List<int>();
         for (int i = 0; i < symbolsToEmit.Count; i++)
         {
-            int[] values = Helper.ConvertSymbolPos(symbolsToEmit[i]);
+            List<int> values = symbolsToEmit[i];
 
             yPos.Add(values[0]);
             xPos.Add(values[1]);
@@ -207,7 +277,7 @@ public class Reel_Controller : MonoBehaviour
         }
 
     }
-    internal void HandleWildSymbols(List<string> symbolsToEmit)
+    internal void HandleWildSymbols(List<List<int>> symbolsToEmit)
     {
         //[x]: PM Check wild Animation
         List<int> yPos = new List<int>();
@@ -215,7 +285,7 @@ public class Reel_Controller : MonoBehaviour
 
         for (int i = 0; i < symbolsToEmit.Count; i++)
         {
-            int[] values = Helper.ConvertSymbolPos(symbolsToEmit[i]);
+            List<int> values = symbolsToEmit[i];
 
             yPos.Add(values[0]);
             xPos.Add(values[1]);
@@ -235,14 +305,27 @@ public class Reel_Controller : MonoBehaviour
         }
 
     }
-    internal bool CheckIfWild(int[] value)
+    internal bool CheckIfWild(List<int> value)
     {
 
         if (slot_matrix[value[0]].row[value[1]].id == 12) return true;
         else return false;
 
     }
+    internal void HighlightIconByLine(List<int> payline, List<int> symbols, Color highlightColor)
+    {
 
+
+        // [x]: PM adding highlight
+        for (int i = 0; i < slot_matrix.Count; i++)
+        {
+            if (symbols.Contains(i))
+            {
+                slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+                slot_matrix[i].row[payline[i]].boder.color = highlightColor;
+            }
+        }
+    }
     internal void HighlightIconByLine(List<int> payline, List<string> symbols, Color highlightColor)
     {
 

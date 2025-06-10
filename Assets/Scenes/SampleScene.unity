@@ -6137,8 +6137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf35609696994112abfb50e0e4234ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotManager: {fileID: 1695218390}
   JSManager: {fileID: 1022763964}
-  TestToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU1MTA1MGJjMDc4ODcyMWUxYmEwMSIsInVzZXJuYW1lIjoiZGV2MDEiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzQ0MDkyMDg5LCJleHAiOjE3NDQ2OTY4ODl9.xT0Y9FnIqTW6oCiYCv2Zt9YAq9BD8r57mHIEA323o5c
+  bonusdata: []
+  testToken: b344e7f353284babbcb0d38d66a9e749
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0

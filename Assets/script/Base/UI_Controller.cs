@@ -483,8 +483,8 @@ public class UI_Controller : MonoBehaviour
         for (int i = 0; i < symbolInfo.Count; i++)
         {
 
-            SetSymboltext(symbolInfo[i], i);
-        }
+           // SetSymboltext(symbolInfo[i], i);                                                              //Fix this Ashu
+        } 
 
         for (int i = 0; i < freeSpinCounters.Length; i++)
         {
@@ -503,30 +503,30 @@ public class UI_Controller : MonoBehaviour
 
 
 
-    void SetSymboltext(Symbol symbolInfo, int k)
-    {
-        if (symbolInfo.Name.ToUpper() == "JACKPOT")
-        {
-            jackPotText.text = symbolInfo.description.ToString();
-            return;
-        }
-        else if (symbolInfo.Name.ToUpper() == "WILD")
-        {
+    //void SetSymboltext(Symbol symbolInfo, int k)                                                            //Fix this Ashu
+    //{
+    //    if (symbolInfo.Name.ToUpper() == "JACKPOT")
+    //    {
+    //        jackPotText.text = symbolInfo.description.ToString();
+    //        return;
+    //    }
+    //    else if (symbolInfo.Name.ToUpper() == "WILD")
+    //    {
 
-            wildText.text = symbolInfo.description.ToString();
-            return;
-        }
-        // symbol_texts[i]
+    //        wildText.text = symbolInfo.description.ToString();
+    //        return;
+    //    }
+    //    // symbol_texts[i]
 
-        SymbolsText[k].text = "";
-        string info = "";
-        for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
-        {
-            info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString()+"X" + "\n";
-        }
-        if (SymbolsText[k]) SymbolsText[k].text = info;
+    //    SymbolsText[k].text = "";
+    //    string info = "";
+    //    for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
+    //    {
+    //        info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString()+"X" + "\n";
+    //    }
+    //    if (SymbolsText[k]) SymbolsText[k].text = info;
 
-    }
+    //}
 
     internal void ToggleBtnGrp(bool toggle)
     {
