@@ -14,6 +14,7 @@ public class SocketController : MonoBehaviour
     internal SocketModel socketModel = new SocketModel();
 
     [SerializeField] private Slot_Manager slotManager;
+    [SerializeField] private UI_Controller uiManager;
     //WebSocket currentSocket = null;
     internal bool isResultdone = false;
 
@@ -28,6 +29,7 @@ public class SocketController : MonoBehaviour
     internal UiData UIData = null;
     internal Root ResultData = null;
     internal Player PlayerData = null;
+    internal Features FreeSpinInit = null;
     [SerializeField]
     internal List<string> bonusdata = null;
 
@@ -35,7 +37,7 @@ public class SocketController : MonoBehaviour
     // TODO: PM to be changed
     // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
     // protected string TestSocketURI = "https://7p68wzhv-5000.inc1.devtunnels.ms/";
-    protected string TestSocketURI = "https://m88wskhs-5001.inc1.devtunnels.ms/";
+    [SerializeField] protected string TestSocketURI = "https://m88wskhs-5001.inc1.devtunnels.ms/";
     // protected string SocketURI = "http://localhost:5000";
     protected string nameSpace = "playground"; //BackendChanges
     private Socket gameSocket; //BackendChanges
@@ -44,19 +46,32 @@ public class SocketController : MonoBehaviour
 
     // [x]: PM to be added
     // protected string gameID = "";
-    protected string gameID = "SL-PM";
+    protected string gameID = "SL-PML";
 
     internal bool isLoading;
     internal bool SetInit = false;
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-   // internal Action<List<Symbol>, List<List<int>>, PlayerData> InitiateUI;
+    // internal Action<List<Symbol>, List<List<int>>, PlayerData> InitiateUI;
     internal Action ShowDisconnectionPopUp = null;
     internal Action ShowAnotherDevicePopUp = null;
 
     internal bool isExit;
     private bool firstTime = true;
+
+    private bool isConnected = false; //Back2 Start
+    private bool hasEverConnected = false;
+    private const int MaxReconnectAttempts = 5;
+    private const float ReconnectDelaySeconds = 2f;
+
+    private float lastPongTime = 0f;
+    private float pingInterval = 2f;
+    private float pongTimeout = 3f;
+    private bool waitingForPong = false;
+    private int missedPongs = 0;
+    private const int MaxMissedPongs = 5;
+    private Coroutine PingRoutine; //Back2 end
     private void Awake()
     {
         isLoading = true;
@@ -68,53 +83,42 @@ public class SocketController : MonoBehaviour
 
     private void Start()
     {
-       
-         OpenSocket();
+
+        OpenSocket();
     }
 
 
 
 
-    //void ReceiveAuthToken(string jsonData)
-    //{
-    //    Debug.Log("Received data: " + jsonData);
+    void ReceiveAuthToken(string jsonData)
+    {
+        Debug.Log("Received data: " + jsonData);
 
-    //    // Parse the JSON data
-    //    var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
-    //    SocketURI = data.socketURL;
-    //    Debug.Log("socekt url: "+data.socketURL);
-    //    myAuth = data.cookie;
-    //    nameSpace = data.nameSpace;
-    //    // Proceed with connecting to the server using myAuth and socketURL
-    //}
+        // Parse the JSON data
+        var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
+        SocketURI = data.socketURL;
+        Debug.Log("socekt url: " + data.socketURL);
+        myAuth = data.cookie;
+        nameSpace = data.nameSpace;
+        // Proceed with connecting to the server using myAuth and socketURL
+    }
 
     string myAuth = null;
 
     internal void OpenSocket()
     {
-        // Create and setup SocketOptions
-        SocketOptions options = new SocketOptions();
-        options.ReconnectionAttempts = maxReconnectionAttempts;
-        options.ReconnectionDelay = reconnectionDelay;
-        options.Reconnection = true;
+        SocketOptions options = new SocketOptions(); //Back2 Start
+        options.AutoConnect = false;
+        options.Reconnection = false;
+        options.Timeout = TimeSpan.FromSeconds(3); //Back2 end
 
         options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket; //BackendChanges
 
         // Application.ExternalCall("window.parent.postMessage", "authToken", "*");
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-    string url = Application.absoluteURL;
-    Debug.Log("Unity URL : " + url);
-    ExtractUrlAndToken(url);
-
-    Func<SocketManager, Socket, object> webAuthFunction = (manager, socket) =>
-    {
-      return new
-      {
-        token = testToken,
-      };
-    };
-    options.Auth = webAuthFunction;
+            JSManager.SendCustomMessage("authToken");
+            StartCoroutine(WaitForAuthToken(options));
 #else
         Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
         {
@@ -143,7 +147,7 @@ public class SocketController : MonoBehaviour
             return new
             {
                 token = myAuth,
-                gameId = gameID
+
             };
         };
         options.Auth = authFunction;
@@ -164,6 +168,35 @@ public class SocketController : MonoBehaviour
         {
 
         }
+    }
+    internal void closeSockets()
+    {
+        StartCoroutine(CloseSocket());
+    }
+    internal IEnumerator CloseSocket() //Back2 Start
+    {
+        uiManager.RaycastBlocker.SetActive(true);
+        ResetPingRoutine();
+
+        Debug.Log("Closing Socket");
+
+        manager?.Close();
+        manager = null;
+
+        Debug.Log("Waiting for socket to close");
+
+        yield return new WaitForSeconds(0.5f);
+
+        Debug.Log("Socket Closed");
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    JSManager.SendCustomMessage("OnExit"); //Telling the react platform user wants to quit and go back to homepage
+#endif
+    } //Back2 end
+    void CloseGame()
+    {
+        Debug.Log("Unity: Closing Game");
+        StartCoroutine(CloseSocket());
     }
     private void OnSocketError(string data)
     {
@@ -187,33 +220,100 @@ public class SocketController : MonoBehaviour
         SendData("YES I AM ALIVE");
     }
 
-    void OnConnected(ConnectResponse resp)
+    void OnConnected(ConnectResponse resp) //Back2 Start
     {
-        Debug.Log("Connected!");
+        Debug.Log("✅ Connected to server.");
+
+        if (hasEverConnected)
+        {
+            uiManager.CheckAndClosePopups();
+        }
+
+        isConnected = true;
+        hasEverConnected = true;
+        waitingForPong = false;
+        missedPongs = 0;
+        lastPongTime = Time.time;
         SendPing();
+    } //Back2 end
 
-        //InitRequest("AUTH");
-    }
 
-    private void SendPing()
+
+    private void OnDisconnected() //Back2 Start
     {
-        InvokeRepeating("AliveRequest", 0f, 3f);
-    }
-
-    private void OnDisconnected(string response)
+        Debug.LogWarning("⚠️ Disconnected from server.");
+        isConnected = false;
+        ResetPingRoutine();
+    } //Back2 end
+    private void OnPongReceived(string data) //Back2 Start
     {
-        Debug.Log("Disconnected from the server");
-        StopAllCoroutines();
-        if (!isExit)
-            ShowDisconnectionPopUp?.Invoke();
-        // uIManager.DisconnectionPopup();
+        Debug.Log("✅ Received pong from server.");
+        waitingForPong = false;
+        missedPongs = 0;
+        lastPongTime = Time.time;
+        Debug.Log($"⏱️ Updated last pong time: {lastPongTime}");
+        Debug.Log($"📦 Pong payload: {data}");
+    } //Back2 end
+    private void SendPing() //Back2 Start
+    {
+        ResetPingRoutine();
+        PingRoutine = StartCoroutine(PingCheck());
+    }
+    private IEnumerator PingCheck()
+    {
+        while (true)
+        {
+            Debug.Log($"🟡 PingCheck | waitingForPong: {waitingForPong}, missedPongs: {missedPongs}, timeSinceLastPong: {Time.time - lastPongTime}");
+
+            if (missedPongs == 0)
+            {
+                uiManager.CheckAndClosePopups();
+            }
+
+            // If waiting for pong, and timeout passed
+            if (waitingForPong)
+            {
+                if (missedPongs == 2)
+                {
+                    uiManager.ReconnectionPopup();
+                }
+                missedPongs++;
+                Debug.LogWarning($"⚠️ Pong missed #{missedPongs}/{MaxMissedPongs}");
+
+                if (missedPongs >= MaxMissedPongs)
+                {
+                    Debug.LogError("❌ Unable to connect to server — 5 consecutive pongs missed.");
+                    isConnected = false;
+                    uiManager.DisconnectionPopup();
+                    yield break;
+                }
+            }
+
+            // Send next ping
+            waitingForPong = true;
+            lastPongTime = Time.time;
+            Debug.Log("📤 Sending ping...");
+            SendDataWithNamespace("ping");
+            yield return new WaitForSeconds(pingInterval);
+        }
+    } //Back2 end
+    void ResetPingRoutine()
+    {
+        if (PingRoutine != null)
+        {
+            StopCoroutine(PingRoutine);
+        }
+        PingRoutine = null;
     }
 
     private void OnError(string response)
     {
         Debug.LogError("Error: " + response);
     }
-
+    private void OnError()
+    {
+        Debug.LogError("Socket Error");
+    }
     private void OnListenEvent(string data)
     {
         ParseResponse(data);
@@ -238,14 +338,16 @@ public class SocketController : MonoBehaviour
         }
         // Set subscriptions
         gameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
-        gameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
-        gameSocket.On<string>(SocketIOEventTypes.Error, OnError);
+        gameSocket.On(SocketIOEventTypes.Disconnect, OnDisconnected); //Back2 Start
+        gameSocket.On(SocketIOEventTypes.Error, OnError); //Back2 Start
         gameSocket.On<string>("game:init", OnListenEvent);
-        gameSocket.On<string>("spin:result", OnResult);
+        gameSocket.On<string>("result", OnResult);
         gameSocket.On<bool>("socketState", OnSocketState);
         gameSocket.On<string>("internalError", OnSocketError);
         gameSocket.On<string>("alert", OnSocketAlert);
+        gameSocket.On<string>("pong", OnPongReceived); //Back2 Start
         gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice); //BackendChanges Finish
+        manager.Open();
     }
 
     // Connected event handler implementation
@@ -258,39 +360,31 @@ public class SocketController : MonoBehaviour
     internal void closeSocketReactnativeCall()
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
-    JSManager.SendCustomMessage("onExit");
+    JSManager.SendCustomMessage("OnExit");
 #endif
     }
-    internal void CloseSocket()
-    {
-        isExit = true;
-        SendData("EXIT");
+    //     internal void CloseSocket()
+    //     {
+    //         isExit = true;
+    //         SendData("OnExit");
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-                        JSManager.SendCustomMessage("onExit");
-#endif
+    // #if UNITY_WEBGL && !UNITY_EDITOR
+    //                         JSManager.SendCustomMessage("OnExit");
+    // #endif
 
-        DOVirtual.DelayedCall(0.1f, () =>
-        {
-            if (this.manager != null)
-            {
-                Debug.Log("Dispose my Socket");
-                this.manager.Close();
-            }
-        });
-    }
+    //         DOVirtual.DelayedCall(0.1f, () =>
+    //         {
+    //             if (this.manager != null)
+    //             {
+    //                 Debug.Log("Dispose my Socket");
+    //                 this.manager.Close();
+    //             }
+    //         });
+    //     }
 
     private void ParseResponse(string jsonObject)
     {
-        //Debug.Log(jsonObject);
 
-        //JObject resp = JObject.Parse(jsonObject);
-
-        //string messageId = resp["id"].ToString();
-
-        //var message = resp["message"];
-        //var gameData = message["GameData"];
-        //socketModel.playerData = message["PlayerData"].ToObject<PlayerData>();
 
         Debug.Log(jsonObject);
         Root myData = JsonConvert.DeserializeObject<Root>(jsonObject);
@@ -305,25 +399,33 @@ public class SocketController : MonoBehaviour
                 InitialData = myData.gameData;
                 UIData = myData.uiData;
                 PlayerData = myData.player;
-               // bonusdata = GetBonusData(myData.gameData.spinBonus); 
-                slotManager.InitiateUI(UIData.paylines.symbols, myData.player.balance);
+                FreeSpinInit = myData.features;
+                // bonusdata = GetBonusData(myData.gameData.spinBonus); 
+                slotManager.InitiateUI(UIData.paylines.symbols, myData.player.balance, FreeSpinInit.freeSpin);
 
-            
+
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         JSManager.SendCustomMessage("OnEnter");
 #endif
-
+                uiManager.RaycastBlocker.SetActive(false);
             }
         }
         else if (id == "ResultData")
         {
-            // socketModel.resultGameData = gameData.ToObject<ResultGameData>();
+            // ResultData = myData;
             ResultData = myData;
             PlayerData = myData.player;
             isResultdone = true;
+            foreach (var x in ResultData.payload.cascades)
+            {
+                for (int i = 0; i < x.winnings.Count; i++)
+                {
 
-            Debug.Log(ResultData.cascades.Count);
+                    x.winnings[i].positions = Helper.ConvertSymbolToPos(x.winnings[i].symbolsToEmit);
+                }
+            }
+            // Debug.Log("Dev Test : ggoo" + ResultData.payload.cascades.Count);
         }
         else if (id == "ExitUser")
         {
@@ -333,19 +435,19 @@ public class SocketController : MonoBehaviour
                 this.manager.Close();
             }
 #if UNITY_WEBGL && !UNITY_EDITOR
-                        JSManager.SendCustomMessage("onExit");
+                        JSManager.SendCustomMessage("OnExit");
 #endif
         }
     }
 
     List<string> GetBonusData(List<int> bonusData)
     {
-        Debug.Log("Ashu Test: " + "0000000"+bonusData.Count);
+        Debug.Log("Ashu Test: " + "0000000" + bonusData.Count);
         List<string> bonusDataString = new List<string>();
 
         foreach (int data in bonusData)
         {
-           
+
             bonusDataString.Add(data.ToString());
         }
         return bonusDataString;
@@ -368,7 +470,7 @@ public class SocketController : MonoBehaviour
             }
         }
     }
-        void OnResult(string data)
+    void OnResult(string data)
     {
         ParseResponse(data);
     }
@@ -376,10 +478,13 @@ public class SocketController : MonoBehaviour
     {
         isResultdone = false;
         MessageData message = new MessageData();
-        message.currentBet = currBet;
+        message.payload = new SentDeta();
+        message.type = "SPIN";
+        Debug.Log(slotManager.betCounter);
+        message.payload.betIndex = slotManager.betCounter;
         // Serialize message data to JSON
         string json = JsonUtility.ToJson(message);
-        SendDataWithNamespace("spin:request", json);
+        SendDataWithNamespace("request", json);
     }
     private void SendDataWithNamespace(string eventName, string json = null)
     {
@@ -434,13 +539,24 @@ public class SocketController : MonoBehaviour
 }
 
 
+[Serializable]
+public class SentDeta
+{
+    public int betIndex;
+    public string Event;
+    public double lastWinning;
+    public int index;
+}
 
 
 
 [Serializable]
 public class MessageData
 {
-    public int currentBet;
+    public string type;
+
+    public SentDeta payload;
+
 }
 
 [Serializable]
@@ -472,20 +588,21 @@ public class Root
 {
     //Result Data
     public bool success { get; set; }
-    public List<List<string>> matrix { get; set; }
-    public string name { get; set; }
-    public Payload payload { get; set; }
-    public Bonus bonus { get; set; }
-    public Jackpot jackpot { get; set; }
-    public Scatter scatter { get; set; }
-    public FreeSpins freeSpin { get; set; }
-    public List<Cascade> cascades { get; set; }
-    public double totalWin { get; set; }
-    //Initial Data
     public string id { get; set; }
+    public List<List<string>> matrix { get; set; }
+    public Payload payload { get; set; }
+
+    //Initial Data
+
     public GameData gameData { get; set; }
     public UiData uiData { get; set; }
     public Player player { get; set; }
+    public Features features { get; set; }
+}
+public class Features
+{
+    public FreeSpin freeSpin { get; set; }
+    public Jackpot jackpot { get; set; }
 }
 [Serializable]
 public class Scatter
@@ -495,14 +612,20 @@ public class Scatter
 [Serializable]
 public class Jackpot
 {
-    public bool isTriggered { get; set; }
-    public double amount { get; set; }
+    public bool enabled { get; set; }
+    public int minSymbolCount { get; set; }
+    public int defaultAmount { get; set; }
 }
-[Serializable]
 public class Payload
 {
-    public double winAmount { get; set; }
-    public List<Win> wins { get; set; }
+    public double totalWin { get; set; }
+    public bool isJackpot { get; set; }
+    public int jackpotWin { get; set; }
+    public List<Cascade> cascades { get; set; }
+    public int cascadeCount { get; set; }
+    public double totalCascadeWin { get; set; }
+    public bool isFreeSpin { get; set; }
+    public int freeSpinCount { get; set; }
 }
 
 [Serializable]
@@ -525,7 +648,6 @@ public class Paylines
     public List<Symbol> symbols { get; set; }
 }
 
-[Serializable]
 public class Symbol
 {
     public int id { get; set; }
@@ -553,14 +675,27 @@ public class AuthTokenData
 public class Cascade
 {
     public int cascadeIndex { get; set; }
-    public List<WinningLine> winningLines { get; set; }
-    public List<List<string>> symbolsToFill { get; set; }
+    // public List<Winning> winningLines { get; set; }
+    public List<List<int>> symbolsToFill { get; set; }
     public double currentCascadeWin { get; set; }
+    public int cascadeNumber { get; set; }
+    public List<Winning> winnings { get; set; }
+
 }
 
-public class WinningLine
+
+public class Winning
 {
+    public List<List<string>> newMatrix { get; set; }
     public int lineIndex { get; set; }
-    public string symbols { get; set; }
     public List<int> positions { get; set; }
+    public List<int> line { get; set; }
+    public List<string> symbolsToEmit { get; set; }
+    public double win { get; set; }
+}
+
+public class FreeSpin
+{
+    public bool enabled { get; set; }
+    public List<List<int>> multiplier { get; set; }
 }

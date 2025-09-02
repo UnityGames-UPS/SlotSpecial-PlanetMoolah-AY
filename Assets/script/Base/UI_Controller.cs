@@ -12,6 +12,7 @@ public class UI_Controller : MonoBehaviour
 {
 
     [SerializeField] private SocketController socketManager;
+    [SerializeField] private Slot_Manager slotManager;
     [Header("Bet info")]
     [SerializeField] private TMP_Text betPerLineText;
     [SerializeField] private TMP_Text totalBetText;
@@ -47,6 +48,10 @@ public class UI_Controller : MonoBehaviour
     [Header("disconnection Popup")]
     [SerializeField] private GameObject disconnectPopupObject;
     [SerializeField] private Button disconnectCloseButton;
+
+    [Header("Reconection Popup")]
+    [SerializeField]
+    private GameObject ReconectingPopup_Object;
 
     [Header("Low balance Popup")]
     [SerializeField] private GameObject lowBalPopupObject;
@@ -107,7 +112,9 @@ public class UI_Controller : MonoBehaviour
     internal Action<bool, string> OnToggleAudio;
     internal Action<string> OnPlayButton;
     internal Action Exitgame;
-
+    internal bool isExit = false;
+    [SerializeField]
+    internal GameObject RaycastBlocker;
     Tween balanceTween;
     private void Start()
     {
@@ -213,6 +220,7 @@ public class UI_Controller : MonoBehaviour
         if (disconnectCloseButton) disconnectCloseButton.onClick.AddListener(() =>
         {
             Exitgame();
+            isExit = true;
             socketManager.closeSocketReactnativeCall();
         });
 
@@ -276,8 +284,8 @@ public class UI_Controller : MonoBehaviour
 
     internal void SetFreeSpinCount(int count, bool isFreeSpin)
     {
-        if(isFreeSpin)
-        return;
+        if (isFreeSpin)
+            return;
 
         if (count < 0)
         {
@@ -426,24 +434,25 @@ public class UI_Controller : MonoBehaviour
                 winAmountText.text = amount.ToString("f3");
             });
 
-        Invoke(nameof(CloseWinPopup),3f);
+        Invoke(nameof(CloseWinPopup), 3f);
 
     }
 
-   void CloseWinPopup(){
+    void CloseWinPopup()
+    {
         CancelInvoke(nameof(CloseWinPopup));
         Debug.Log("pressed");
         ClosePopup();
-        Slot_Manager.checkPopUpCompletion=true;
+        Slot_Manager.checkPopUpCompletion = true;
         DOTween.Kill(winAmountText);
-        winAmountText.text="";
+        winAmountText.text = "";
     }
     internal void DeductBalance(double bet)
     {
 
         double balance = Double.Parse(playerBalance.text);
         double currentValue = balance;
-        balanceTween=DOTween.To(() => currentValue, x => currentValue = x, (balance - bet), 0.4f)
+        balanceTween = DOTween.To(() => currentValue, x => currentValue = x, (balance - bet), 0.4f)
         .OnUpdate(() =>
         {
             playerBalance.text = currentValue.ToString("f3");
@@ -477,56 +486,96 @@ public class UI_Controller : MonoBehaviour
     }
 
 
-    internal void InitUI(List<Symbol> symbolInfo, List<List<int>> freeSpinInfo)
+    internal void InitUI(List<Symbol> symbolInfo, FreeSpin freeSpin)
     {
 
         for (int i = 0; i < symbolInfo.Count; i++)
         {
 
-           // SetSymboltext(symbolInfo[i], i);                                                              //Fix this Ashu
-        } 
+            SetSymboltext(symbolInfo[i], i);                                                              //Fix this Ashu
+        }
 
         for (int i = 0; i < freeSpinCounters.Length; i++)
         {
-            freeSpinCounters[i].text = freeSpinInfo[i][0].ToString();
+            freeSpinCounters[i].text = freeSpin.multiplier[i][0].ToString();
         }
 
-        for (int i = 0; i < freeSpinInfo.Count; i++)
+        for (int i = 0; i < freeSpin.multiplier.Count; i++)
         {
             if (i == 0)
-                freeSpinDetails.text += $"{freeSpinInfo[i][0]} or more consecutive cascades trigger the free spins\n\n";
+                freeSpinDetails.text += $"{freeSpin.multiplier[i][0]} or more consecutive cascades trigger the free spins\n\n";
 
-            freeSpinDetails.text += $"{freeSpinInfo[i][0]} consecutive cascades awards {freeSpinInfo[i][1]} free plays\n";
+            freeSpinDetails.text += $"{freeSpin.multiplier[i][0]} consecutive cascades awards {freeSpin.multiplier[i][1]} free plays\n";
         }
 
     }
+    internal void DisconnectionPopup()
+    {
+        //if (isReconnection)
+        //{
+        //    OpenPopup(ReconnectPopup_Object);
+        //}
+        //else
+        //{
+        //    ClosePopup(ReconnectPopup_Object);
+        if (!isExit)
+        {
+            OpenPopup(disconnectPopupObject);
+        }
+        //}
+    }
+    internal void ReconnectionPopup()
+    {
+        OpenPopup(ReconectingPopup_Object);
+    }
+
+    internal void CheckAndClosePopups()
+    {
+
+        if (ReconectingPopup_Object.activeInHierarchy)
+        {
+            ClosePopup(ReconectingPopup_Object);
+        }
+        if (disconnectPopupObject.activeInHierarchy)
+        {
+            ClosePopup(disconnectPopupObject);
+        }
+    }
+    private void ClosePopup(GameObject Popup)
+    {
 
 
+        if (Popup) Popup.SetActive(false);
+        if (!disconnectPopupObject.activeSelf)
+        {
+            if (MainPopup_Object) MainPopup_Object.SetActive(false);
+        }
+    }
+    void SetSymboltext(Symbol symbolInfo, int k)                                                            //Fix this Ashu
+    {
+        double betPerLine = socketManager.InitialData.bets[slotManager.betCounter];
+        if (symbolInfo.name.ToUpper() == "JACKPOT")
+        {
+            jackPotText.text = symbolInfo.description.ToString();
+            return;
+        }
+        else if (symbolInfo.name.ToUpper() == "WILD")
+        {
 
-    //void SetSymboltext(Symbol symbolInfo, int k)                                                            //Fix this Ashu
-    //{
-    //    if (symbolInfo.Name.ToUpper() == "JACKPOT")
-    //    {
-    //        jackPotText.text = symbolInfo.description.ToString();
-    //        return;
-    //    }
-    //    else if (symbolInfo.Name.ToUpper() == "WILD")
-    //    {
+            wildText.text = symbolInfo.description.ToString();
+            return;
+        }
+        // symbol_texts[i]
 
-    //        wildText.text = symbolInfo.description.ToString();
-    //        return;
-    //    }
-    //    // symbol_texts[i]
+        SymbolsText[k].text = "";
+        string info = "";
+        for (int i = 0; i < symbolInfo.multiplier.Count(); i++)
+        {
+            info += $"{5 - i}X - " + (symbolInfo.multiplier[i] * betPerLine).ToString() + "\n";
+        }
+        if (SymbolsText[k]) SymbolsText[k].text = info;
 
-    //    SymbolsText[k].text = "";
-    //    string info = "";
-    //    for (int i = 0; i < symbolInfo.Multiplier.Count(); i++)
-    //    {
-    //        info += $"{5 - i}X - " + symbolInfo.Multiplier[i][0].ToString()+"X" + "\n";
-    //    }
-    //    if (SymbolsText[k]) SymbolsText[k].text = info;
-
-    //}
+    }
 
     internal void ToggleBtnGrp(bool toggle)
     {

@@ -48,7 +48,7 @@ public class Reel_Controller : MonoBehaviour
     internal IEnumerator ClearReel()
     {
         float maxDuration = 0;
-        float animationDuration=0;
+        float animationDuration = 0;
         for (int i = 0; i < slot_matrix.Count; i++)
         {
             for (int j = 0; j < slot_matrix[i].row.Count; j++)
@@ -58,7 +58,7 @@ public class Reel_Controller : MonoBehaviour
                 slot_matrix[i].row[j].transform.DOLocalMoveY(-4 * iconSize, animationDuration).SetEase(Ease.Linear);
             }
         }
-        Debug.Log("clear reel, "+maxDuration);
+        Debug.Log("clear reel, " + maxDuration);
         yield return new WaitForSeconds(maxDuration);
 
     }
@@ -66,11 +66,11 @@ public class Reel_Controller : MonoBehaviour
     internal IEnumerator FillReelv1(List<List<string>> result, Action playFallAudio)
     {
         float maxDuration = 0;
-        float animationDuration=0;
+        float animationDuration = 0;
 
         for (int i = 0; i < 5; i++)
         {
-            bool shouldStopImmediate=Slot_Manager.immediateStop;
+            bool shouldStopImmediate = Slot_Manager.immediateStop;
 
             for (int j = slot_matrix[i].row.Count - 1; j >= 0; j--)
             {
@@ -90,21 +90,67 @@ public class Reel_Controller : MonoBehaviour
                     slot_matrix[i].row[j].image.sprite = iconList[id];
                 }
 
-                animationDuration=minClearDuration * (2 - j + 1);
-                if(shouldStopImmediate)
-                animationDuration=minClearDuration;
-                
+                animationDuration = minClearDuration * (2 - j + 1);
+                if (shouldStopImmediate)
+                    animationDuration = minClearDuration;
+
                 maxDuration = Mathf.Max(maxDuration, animationDuration);
                 slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, animationDuration).SetEase(Ease.Linear);
             }
-            if(!shouldStopImmediate)
-            yield return new WaitForSeconds(minClearDuration);
+            if (!shouldStopImmediate)
+                yield return new WaitForSeconds(minClearDuration);
             playFallAudio?.Invoke();
         }
-        yield return new WaitForSeconds(Mathf.Abs(maxDuration-minClearDuration)+0.1f);
+        yield return new WaitForSeconds(Mathf.Abs(maxDuration - minClearDuration) + 0.1f);
+    }
+    internal IEnumerator ReArrangeMatrix(List<List<int>> iconsToFill)
+    {
+        for (int i = 0; i < slot_matrix.Count; i++)
+        {
+            var negativeOnes = slot_matrix[i].row.Where(x => x.id == -1).ToList();
+
+            var otherValues = slot_matrix[i].row.Where(x => x.id != -1).ToList();
+
+            if (negativeOnes.Count == 0)
+                continue;
+
+            foreach (var item in otherValues)
+            {
+                negativeOnes.Add(item);
+            }
+
+            slot_matrix[i].row.Clear();
+            slot_matrix[i].row.AddRange(negativeOnes);
+
+
+            for (int j = 0; j < slot_matrix[i].row.Count; j++)
+            {
+                if (slot_matrix[i].row[j].id == -1)
+                {
+                    slot_matrix[i].row[j].transform.localPosition = new Vector3(slot_matrix[i].row[j].transform.localPosition.x, 5 * iconSize, slot_matrix[i].row[j].transform.localPosition.z);
+                    slot_matrix[i].row[j].id = Helper.findSymbolID(j, i, iconsToFill);
+                    if (Helper.findSymbolID(j, i, iconsToFill) == 12)
+                    {
+                        int randomWild = UnityEngine.Random.Range(0, wildIconList.Length);
+                        slot_matrix[i].row[j].image.sprite = wildIconList[randomWild];
+                        slot_matrix[i].row[j].wildVariation = randomWild;
+                    }
+                    else
+                    {
+
+                        slot_matrix[i].row[j].image.sprite = iconList[Helper.findSymbolID(j, i, iconsToFill)];
+
+                    }
+                }
+
+                slot_matrix[i].row[j].transform.DOLocalMoveY((2 - j) * iconSize, minClearDuration).SetEase(Ease.InOutQuad);
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
+
     }
 
-    internal IEnumerator ReArrangeMatrix(List<WinningLine> iconsToFill)
+    internal IEnumerator ReArrangeMatrix(List<Winning> iconsToFill)
     {
         for (int i = 0; i < slot_matrix.Count; i++)
         {
@@ -166,7 +212,7 @@ public class Reel_Controller : MonoBehaviour
                 {
                     // Handle the case where parsing fails if needed
                     // For now, we'll just add 0 or skip it
-                     continue;
+                    continue;
                 }
             }
             result.Add(intList);
@@ -307,6 +353,7 @@ public class Reel_Controller : MonoBehaviour
     }
     internal bool CheckIfWild(List<int> value)
     {
+        //  Debug.Log("Check Sym. : id =" + slot_matrix[value[0]].row[value[1]].id + ".  x.  " + value[0] + ".  y.  " + value[1]);
 
         if (slot_matrix[value[0]].row[value[1]].id == 12) return true;
         else return false;
@@ -332,10 +379,11 @@ public class Reel_Controller : MonoBehaviour
 
         // [x]: PM adding highlight
         for (int i = 0; i < slot_matrix.Count; i++)
-        {   
-            if(symbols.Contains($"{i},{payline[i]}")){
-            slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
-            slot_matrix[i].row[payline[i]].boder.color = highlightColor;
+        {
+            if (symbols.Contains($"{i},{payline[i]}"))
+            {
+                slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+                slot_matrix[i].row[payline[i]].boder.color = highlightColor;
             }
         }
     }
@@ -351,6 +399,7 @@ public class Reel_Controller : MonoBehaviour
 
         }
     }
+
 
 
 }
