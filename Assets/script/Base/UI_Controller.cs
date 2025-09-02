@@ -308,7 +308,7 @@ public class UI_Controller : MonoBehaviour
     {
         ClosePopup();
         freeSpinText.text = "";
-        freeSpinStartButton.gameObject.SetActive(true);
+        // freeSpinStartButton.gameObject.SetActive(true);
         freeSpinCounterObject.SetActive(false);
         bg.sprite = freeSpinBG;
         reeelBg.sprite = freeSpinReel;

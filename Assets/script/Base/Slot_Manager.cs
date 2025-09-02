@@ -160,9 +160,10 @@ public class Slot_Manager : MonoBehaviour
 
     IEnumerator FreeSpinRoutine()
     {
+        Debug.Log("Dev Test 222222222222:" + isFreeSpin);
         if (!isFreeSpin)
             yield break;
-
+        Debug.Log("Dev Test 222222222222:" + isFreeSpin);
         audioController.playBgAudio("FP");
         // isFreeSpin = true;
         if (autoStop_Button.gameObject.activeSelf)
@@ -418,11 +419,11 @@ public class Slot_Manager : MonoBehaviour
             winAmount = socketManager.ResultData.payload.jackpotWin;
             winType = 3;
         }
-        else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount) winType = 0;
+        else if (winAmount >= currentTotalBet * 5 && currentTotalBet * 10 > winAmount) winType = 0;
 
-        else if (winAmount >= currentTotalBet * 15 && currentTotalBet * 20 > winAmount) winType = 1;
+        else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount) winType = 1;
 
-        else if (winAmount >= currentTotalBet * 20) winType = 2;
+        else if (winAmount >= currentTotalBet * 15) winType = 2;
 
         if (winType >= 0)
         {
@@ -431,7 +432,7 @@ public class Slot_Manager : MonoBehaviour
             yield return new WaitWhile(() => !checkPopUpCompletion);
 
         }
-
+        Debug.Log("Dev Test :" + socketManager.ResultData.payload.isFreeSpin);
         if (socketManager.ResultData.payload.isFreeSpin)
         {
             isFreeSpin = true;
@@ -446,7 +447,7 @@ public class Slot_Manager : MonoBehaviour
 
             if (freeSpinRoutine != null)
             {
-                isFreeSpin = false;
+                // isFreeSpin = false;
                 StopCoroutine(freeSpinRoutine);
                 freeSpinRoutine = null;
                 // uI_Controller.ShowFreeSpinPopup(freeSpinCount, false);
