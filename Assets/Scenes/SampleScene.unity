@@ -6443,7 +6443,7 @@ MonoBehaviour:
   JSManager: {fileID: 1022763964}
   bonusdata: []
   TestSocketURI: http://localhost:5000/
-  testToken: 801c2f6499a143dd9c805a957bc97e38
+  testToken: cef1bec20827463ab0c1f577685c2898
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0

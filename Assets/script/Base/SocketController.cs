@@ -93,14 +93,11 @@ public class SocketController : MonoBehaviour
     void ReceiveAuthToken(string jsonData)
     {
         Debug.Log("Received data: " + jsonData);
-
-        // Parse the JSON data
+        // Do something with the authToken
         var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
         SocketURI = data.socketURL;
-        Debug.Log("socekt url: " + data.socketURL);
         myAuth = data.cookie;
         nameSpace = data.nameSpace;
-        // Proceed with connecting to the server using myAuth and socketURL
     }
 
     string myAuth = null;
@@ -138,16 +135,22 @@ public class SocketController : MonoBehaviour
         // Wait until myAuth is not null
         while (myAuth == null)
         {
+            Debug.Log("My Auth is null");
+            yield return null;
+        }
+        while (SocketURI == null)
+        {
+            Debug.Log("My Socket is null");
             yield return null;
         }
 
+        Debug.Log("My Auth is not null");
         // Once myAuth is set, configure the authFunction
         Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
         {
             return new
             {
-                token = myAuth,
-
+                token = myAuth
             };
         };
         options.Auth = authFunction;
@@ -306,14 +309,14 @@ public class SocketController : MonoBehaviour
         PingRoutine = null;
     }
 
-    private void OnError(string response)
+    private void OnError(Error err)
     {
-        Debug.LogError("Error: " + response);
+        Debug.LogError("Socket Error Message: " + err);
+#if UNITY_WEBGL && !UNITY_EDITOR
+    JSManager.SendCustomMessage("error");
+#endif
     }
-    private void OnError()
-    {
-        Debug.LogError("Socket Error");
-    }
+
     private void OnListenEvent(string data)
     {
         ParseResponse(data);
@@ -339,7 +342,7 @@ public class SocketController : MonoBehaviour
         // Set subscriptions
         gameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
         gameSocket.On(SocketIOEventTypes.Disconnect, OnDisconnected); //Back2 Start
-        gameSocket.On(SocketIOEventTypes.Error, OnError); //Back2 Start
+        gameSocket.On<Error>(SocketIOEventTypes.Error, OnError);
         gameSocket.On<string>("game:init", OnListenEvent);
         gameSocket.On<string>("result", OnResult);
         gameSocket.On<bool>("socketState", OnSocketState);
