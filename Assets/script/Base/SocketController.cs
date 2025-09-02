@@ -76,9 +76,6 @@ public class SocketController : MonoBehaviour
     {
         isLoading = true;
         SetInit = false;
-        // OpenSocket();
-
-        // Debug.unityLogger.logEnabled = false;
     }
 
     private void Start()
@@ -125,9 +122,9 @@ public class SocketController : MonoBehaviour
             };
         };
         options.Auth = authFunction;
+        SetupSocketManager(options);
 #endif
         // Proceed with connecting to the server
-        SetupSocketManager(options);
     }
 
     private IEnumerator WaitForAuthToken(SocketOptions options)
