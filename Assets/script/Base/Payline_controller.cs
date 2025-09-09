@@ -10,7 +10,7 @@ public class Payline_controller : MonoBehaviour
 
         internal Color GeneratePayline(int id)
         {
-                id = id - 1;
+
                 paylines[id].gameObject.SetActive(true);
                 paylines[id].color = paylineColor[id];
                 return paylineColor[id];
@@ -19,7 +19,7 @@ public class Payline_controller : MonoBehaviour
 
         internal void DestroyPayline(int id)
         {
-                paylines[id - 1].gameObject.SetActive(false);
+                paylines[id].gameObject.SetActive(false);
 
         }
 }

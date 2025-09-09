@@ -242,6 +242,7 @@ public class SocketController : MonoBehaviour
     private void OnDisconnected() //Back2 Start
     {
         Debug.LogWarning("⚠️ Disconnected from server.");
+        uiManager.DisconnectionPopup();
         isConnected = false;
         ResetPingRoutine();
     } //Back2 end
@@ -421,8 +422,8 @@ public class SocketController : MonoBehaviour
             {
                 for (int i = 0; i < x.winnings.Count; i++)
                 {
-
                     x.winnings[i].positions = Helper.ConvertSymbolToPos(x.winnings[i].symbolsToEmit);
+
                 }
             }
             // Debug.Log("Dev Test : ggoo" + ResultData.payload.cascades.Count);
@@ -442,7 +443,7 @@ public class SocketController : MonoBehaviour
 
     List<string> GetBonusData(List<int> bonusData)
     {
-        Debug.Log("Ashu Test: " + "0000000" + bonusData.Count);
+
         List<string> bonusDataString = new List<string>();
 
         foreach (int data in bonusData)

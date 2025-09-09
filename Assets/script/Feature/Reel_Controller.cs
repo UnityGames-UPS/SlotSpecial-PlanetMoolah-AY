@@ -359,19 +359,32 @@ public class Reel_Controller : MonoBehaviour
         else return false;
 
     }
+    // internal void HighlightIconByLine( List<List<int>> symbols, Color highlightColor)
+    // {
+    //     for (int i = 0; i < symbols.Count; i++)
+    //     {
+    //         if (symbols.Contains(i))
+    //         {
+    //             slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+    //             slot_matrix[i].row[payline[i]].boder.color = highlightColor;
+    //         }
+    //     }
+    // }
     internal void HighlightIconByLine(List<int> payline, List<int> symbols, Color highlightColor)
     {
-
-
-        // [x]: PM adding highlight
-        for (int i = 0; i < slot_matrix.Count; i++)
+        for (int i = 0; i < symbols.Count; i++)
         {
-            if (symbols.Contains(i))
-            {
-                slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
-                slot_matrix[i].row[payline[i]].boder.color = highlightColor;
-            }
+            slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+            slot_matrix[i].row[payline[i]].boder.color = highlightColor;
         }
+        // for (int i = 0; i < slot_matrix.Count; i++)
+        // {
+        //     if (symbols.Contains(i))
+        //     {
+        //         slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(true);
+        //         slot_matrix[i].row[payline[i]].boder.color = highlightColor;
+        //     }
+        // }
     }
     internal void HighlightIconByLine(List<int> payline, List<string> symbols, Color highlightColor)
     {
@@ -392,7 +405,7 @@ public class Reel_Controller : MonoBehaviour
     internal void StopHighlightIcon(List<int> payline)
     {
 
-        for (int i = 0; i < slot_matrix.Count; i++)
+        for (int i = 0; i < payline.Count; i++)
         {
             slot_matrix[i].row[payline[i]].boder.gameObject.SetActive(false);
             slot_matrix[i].row[payline[i]].boder.color = Color.white;

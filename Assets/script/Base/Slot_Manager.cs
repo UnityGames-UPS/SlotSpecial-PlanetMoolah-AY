@@ -304,10 +304,18 @@ public class Slot_Manager : MonoBehaviour
                 symbols.Clear();
                 SymbolsToEmit.Clear();
 
+                int m = 0;
+
                 foreach (var item in socketManager.ResultData.payload.cascades[k].winnings)
                 {
+                    m++;
+                    foreach (var p in Helper.ConvertToCoordinates(item.symbolsToEmit))
+                    {
+                        Debug.Log("Dummy :" + m + ".    ," + p[0] + ".      ." + p[1] + ".  count.  " + p.Count);
+                    }
                     //   SymbolsToEmit.AddRange(Helper.FindEmitingSymbol(item.lineIndex - 1, item.positions, socketManager.InitialData.lines));                    // Changed Here Ashu
                     SymbolsToEmit.AddRange(Helper.ConvertToCoordinates(item.symbolsToEmit));                    // Changed Here Ashu
+
 
                 }
 
@@ -333,11 +341,11 @@ public class Slot_Manager : MonoBehaviour
                     {
                         lineId = cascadeData[k].winnings[i].lineIndex;                    // Changed Here Ashu
 
-                        borderColor = payline_Controller.GeneratePayline(lineId);
+                        borderColor = payline_Controller.GeneratePayline(lineId - 1);
                         reel_Controller.HighlightIconByLine(socketManager.InitialData.lines[lineId - 1], cascadeData[k].winnings[i].positions, borderColor);                    // Changed Here Ashu
                         yield return new WaitForSeconds(reel_Controller.minClearDuration + 0.2f);
                         reel_Controller.StopHighlightIcon(socketManager.InitialData.lines[lineId - 1]);
-                        payline_Controller.DestroyPayline(lineId);
+                        payline_Controller.DestroyPayline(lineId - 1);
                         yield return new WaitForSeconds(reel_Controller.minClearDuration + 0.2f);
                     }
                 }
@@ -474,7 +482,7 @@ public class Slot_Manager : MonoBehaviour
         Color borderColor;
         for (int i = 0; i < lineToEmit.Count; i++)
         {
-            borderColor = payline_Controller.GeneratePayline(lineToEmit[i].lineIndex);
+            borderColor = payline_Controller.GeneratePayline(lineToEmit[i].lineIndex - 1);
             reel_Controller.HighlightIconByLine(socketManager.InitialData.lines[lineToEmit[i].lineIndex - 1], lineToEmit[i].positions, borderColor);
         }
 
@@ -496,7 +504,7 @@ public class Slot_Manager : MonoBehaviour
         {
 
             reel_Controller.StopHighlightIcon(socketManager.InitialData.lines[lineToEmit[i].lineIndex - 1]);
-            payline_Controller.DestroyPayline(lineToEmit[i].lineIndex);
+            payline_Controller.DestroyPayline(lineToEmit[i].lineIndex - 1);
 
         }
     }
