@@ -6443,7 +6443,7 @@ MonoBehaviour:
   JSManager: {fileID: 1022763964}
   bonusdata: []
   TestSocketURI: http://localhost:5000/
-  testToken: 7f80a7c4a34e4864ae5fc4e6c6b639db
+  testToken: 5f4bf9d1358e4e2aa71658ce793031dc
 --- !u!4 &470718019
 Transform:
   m_ObjectHideFlags: 0
@@ -7321,9 +7321,9 @@ RectTransform:
   - {fileID: 1693542477}
   - {fileID: 344276126}
   - {fileID: 40465591}
-  - {fileID: 1618674867}
   - {fileID: 37761862}
   - {fileID: 840525049}
+  - {fileID: 1618674867}
   m_Father: {fileID: 2055506908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

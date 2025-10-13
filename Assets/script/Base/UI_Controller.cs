@@ -219,7 +219,9 @@ public class UI_Controller : MonoBehaviour
         if (disconnectCloseButton) disconnectCloseButton.onClick.RemoveAllListeners();
         if (disconnectCloseButton) disconnectCloseButton.onClick.AddListener(() =>
         {
-            Exitgame();
+            // Exitgame();
+            socketManager.closeSockets();
+            Debug.Log("Popup closed----------");
             isExit = true;
             socketManager.closeSocketReactnativeCall();
         });
@@ -249,13 +251,15 @@ public class UI_Controller : MonoBehaviour
     {
         //if (audioController) audioController.PlayButtonAudio();
 
-        if (currentPopup != null)
-        {
+        // if (currentPopup != null)
+        // {
 
-            if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP")
-                return;
-            currentPopup.SetActive(false);
-        }
+        //     if (currentPopup.name.ToUpper() == "DISCONNECTPOPUP")
+        //         return;
+        //     if (currentPopup.name.ToUpper() == "QUITPOPUP")
+        //         return;
+        //     currentPopup.SetActive(false);
+        // }
 
         currentPopup = Popup;
         if (Popup) Popup.SetActive(true);
