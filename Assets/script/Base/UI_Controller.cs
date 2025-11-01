@@ -492,6 +492,7 @@ public class UI_Controller : MonoBehaviour
 
     internal void InitUI(List<Symbol> symbolInfo, FreeSpin freeSpin)
     {
+        freeSpinDetails.text = "";
 
         for (int i = 0; i < symbolInfo.Count; i++)
         {
