@@ -24,18 +24,20 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip LaserShoot_Audio;
     [SerializeField] private AudioClip Blast_Audio;
     [SerializeField] private AudioClip pull_Audio;
+    [SerializeField] private AudioClip megaWinClip;
+    [SerializeField] private AudioClip bigWinClip;
 
     private void Awake()
     {
         playBgAudio();
-        audioPlayer_blast_effect.clip=Blast_Audio;
-        audioPlayer_pull_effect.clip=pull_Audio;
-        audioPlayer_shoot_effect.clip=LaserShoot_Audio;
+        audioPlayer_blast_effect.clip = Blast_Audio;
+        audioPlayer_pull_effect.clip = pull_Audio;
+        audioPlayer_shoot_effect.clip = LaserShoot_Audio;
         //if (bg_adudio) bg_adudio.Play();
         //audioPlayer_button.clip = clips[clips.Length - 1];
     }
 
-    internal void PlayWLAudio( )
+    internal void PlayWLAudio()
     {
         StopWLAaudio();
         // audioPlayer_wl.loop=loop;
@@ -45,19 +47,40 @@ public class AudioController : MonoBehaviour
         audioPlayer_wl.Play();
 
     }
+    internal void PlaybigWinAudio()
+    {
+        StopWLAaudio();
+        // audioPlayer_wl.loop=loop;
 
-    internal void PlaySpinAudio(string type="spin")
-    {       
+        audioPlayer_wl.clip = bigWinClip;
 
-        if(type=="spin"){
+        audioPlayer_wl.Play();
+
+    }
+    internal void PlayMegaWinAudio()
+    {
+        StopWLAaudio();
+        // audioPlayer_wl.loop=loop;
+
+        audioPlayer_wl.clip = megaWinClip;
+
+        audioPlayer_wl.Play();
+
+    }
+    internal void PlaySpinAudio(string type = "spin")
+    {
+
+        if (type == "spin")
+        {
             audioPlayer_Spin.clip = SpinClip;
 
             audioPlayer_Spin.Play();
         }
-        else if(type=="stop"){
+        else if (type == "stop")
+        {
             audioPlayer_Spin.clip = SpinStopClip;
             audioPlayer_Spin.Play();
-            Invoke(nameof(StopSpinAudio),0.1f);
+            Invoke(nameof(StopSpinAudio), 0.1f);
         }
 
     }
@@ -103,7 +126,7 @@ public class AudioController : MonoBehaviour
 
         //int randomIndex = UnityEngine.Random.Range(0, Bg_Audio.Length);
         StopBgAudio();
-        bg_adudio.loop=true;
+        bg_adudio.loop = true;
         if (bg_adudio)
         {
             if (type == "FP")
@@ -151,37 +174,40 @@ public class AudioController : MonoBehaviour
 
     }
 
-    internal void PlayShootAudio(){
+    internal void PlayShootAudio()
+    {
 
         audioPlayer_shoot_effect.Play();
     }
 
-    internal void PlayBlastAudio(){
+    internal void PlayBlastAudio()
+    {
 
         audioPlayer_blast_effect.Play();
     }
-    internal void PlayPullAudio(){
-    audioPlayer_pull_effect.Play();
+    internal void PlayPullAudio()
+    {
+        audioPlayer_pull_effect.Play();
 
     }
 
-    internal void ToggleMute(bool toggle, string type )
+    internal void ToggleMute(bool toggle, string type)
     {
 
         switch (type)
         {
             case "bg":
-                    bg_adudio.mute = toggle;
+                bg_adudio.mute = toggle;
                 break;
             case "button":
                 audioPlayer_button.mute = toggle;
-                audioPlayer_Spin.mute=toggle;
+                audioPlayer_Spin.mute = toggle;
                 break;
             case "wl":
                 audioPlayer_wl.mute = toggle;
-                audioPlayer_pull_effect.mute=toggle;
-                audioPlayer_shoot_effect.mute=toggle;
-                audioPlayer_blast_effect.mute=toggle;
+                audioPlayer_pull_effect.mute = toggle;
+                audioPlayer_shoot_effect.mute = toggle;
+                audioPlayer_blast_effect.mute = toggle;
                 break;
 
         }

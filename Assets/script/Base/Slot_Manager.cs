@@ -426,30 +426,44 @@ public class Slot_Manager : MonoBehaviour
         {
             winAmount = socketManager.ResultData.payload.jackpotWin;
             winType = 3;
+            audioController.PlayMegaWinAudio();
         }
-        else if (winAmount >= currentTotalBet * 5 && currentTotalBet * 10 > winAmount) winType = 0;
+        else if (winAmount >= currentTotalBet * 5 && currentTotalBet * 10 > winAmount)
+        {
+            winType = 0;
+            audioController.PlaybigWinAudio();
+        }
 
-        else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount) winType = 1;
+        else if (winAmount >= currentTotalBet * 10 && currentTotalBet * 15 > winAmount)
+        {
+            winType = 1;
+            audioController.PlaybigWinAudio();
+        }
 
-        else if (winAmount >= currentTotalBet * 15) winType = 2;
+        else if (winAmount >= currentTotalBet * 15)
+        {
+            winType = 2;
+            audioController.PlayMegaWinAudio();
+        }
 
         if (winType >= 0)
         {
             checkPopUpCompletion = false;
             uI_Controller.ShowWinPopup(winType, winAmount);
             yield return new WaitWhile(() => !checkPopUpCompletion);
+            audioController.StopWLAaudio();
 
         }
         Debug.Log("Dev Test :" + socketManager.ResultData.payload.isFreeSpin);
         if (socketManager.ResultData.payload.isFreeSpin)
         {
             isFreeSpin = true;
-            isAutoSpin = false;
             if (autoSpinCoroutine != null)
             {
                 StopCoroutine(autoSpinCoroutine);
-                wasAutoSpinOn = true;
+                if (isAutoSpin) wasAutoSpinOn = true;
             }
+            isAutoSpin = false;
 
             freeSpinCount = socketManager.ResultData.payload.freeSpinCount;
 
